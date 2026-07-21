@@ -1,0 +1,47 @@
+=====================================================
+ KAKKOI NIHONGO — IMPORTANT PROJECT INFORMATION
+=====================================================
+
+PROJECT NAME : Kakkoi Nihongo (かっこい日本語)
+PURPOSE      : A web platform to help learners master JLPT N5
+REPOSITORY   : https://github.com/nikhiltomar2712/Kakkoi-Nihongo
+
+-----------------------------------------------------
+TEAM
+-----------------------------------------------------
+Founder      : NAKUL
+Co-Founder   : NIKHIL
+
+-----------------------------------------------------
+LICENSE
+-----------------------------------------------------
+This project is licensed under the MIT License.
+See the LICENSE file for full terms.
+
+-----------------------------------------------------
+PROJECT SCOPE
+-----------------------------------------------------
+- Hiragana & Katakana character charts
+- 110 N5 Kanji with readings and meanings
+- Vocabulary & Grammar (Minna no Nihongo, Lessons 1-25)
+- Quizzes & Flashcards
+- Listening practice
+- Progress tracking (account-based)
+- Light/Dark theme support
+
+-----------------------------------------------------
+TECH STACK
+-----------------------------------------------------
+Frontend : HTML5, CSS3, vanilla JavaScript
+Backend  : Node.js + Express (planned), MySQL/MongoDB (planned)
+Hosting  : Vercel/Netlify/GitHub Pages (frontend),
+           Render/Railway/Fly.io (backend, planned)
+
+-----------------------------------------------------
+NOTES
+-----------------------------------------------------
+This project is under active early development.
+Contributions, feedback, and suggestions are welcome
+via GitHub Issues.
+
+=====================================================
