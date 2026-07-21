@@ -1,0 +1,3374 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KAKKOI NIHONGO – かっこいい日本語</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            transition: background 0.4s, color 0.4s;
+            scroll-behavior: smooth;
+        }
+        .dark body { background: #0f172a; color: #e2e8f0; }
+        body.light-mode { background: #fefcf5; color: #1e293b; }
+        body.dark-mode { background: #0f172a; color: #e2e8f0; }
+
+        /* Rainbow gradient */
+        .rainbow-text {
+            background: linear-gradient(90deg, #ff6b6b, #feca57, #48dbfb, #ff9ff3, #54a0ff, #5f27cd, #ff6b6b);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: rainbowMove 4s linear infinite;
+        }
+        @keyframes rainbowMove {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+
+        /* Tab buttons */
+        .tab-btn {
+            transition: all 0.3s;
+            position: relative;
+        }
+        .tab-btn.active {
+            background: #6366f1;
+            color: white;
+            box-shadow: 0 4px 14px rgba(99,102,241,0.4);
+        }
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 3px;
+            background: #6366f1;
+            border-radius: 3px;
+        }
+        .dark .tab-btn.active::after { background: #818cf8; }
+
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+        }
+        .dark .card {
+            background: #1e293b;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .dark .card:hover { box-shadow: 0 12px 30px rgba(0,0,0,0.5); }
+
+        /* Kana grid */
+        .kana-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 6px;
+        }
+        .kana-cell {
+            padding: 8px 4px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            background: #f1f5f9;
+            color: #7c3aed;
+            transition: 0.2s;
+            cursor: default;
+        }
+        .kana-cell:hover { background: #e0e7ff; transform: scale(1.05); }
+        .dark .kana-cell { background: #334155; color: #c084fc; }
+        .dark .kana-cell:hover { background: #475569; }
+        .kana-cell .romaji {
+            display: block;
+            font-size: 0.6rem;
+            font-weight: 500;
+            color: #b91c1c;
+            margin-top: 2px;
+        }
+        .dark .kana-cell .romaji { color: #f87171; }
+
+        /* Kanji card */
+        .kanji-char {
+            font-size: 2.5rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        /* Filter buttons */
+        .filter-btn {
+            padding: 4px 12px;
+            border-radius: 999px;
+            font-size: 0.8rem;
+            transition: 0.2s;
+            cursor: pointer;
+            background: #e2e8f0;
+            color: #475569;
+            border: none;
+        }
+        .filter-btn.active {
+            background: #6366f1;
+            color: white;
+        }
+        .dark .filter-btn { background: #334155; color: #cbd5e1; }
+        .dark .filter-btn.active { background: #6366f1; color: white; }
+
+        /* Toggle */
+        .toggle-btn {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 100;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            font-size: 1.4rem;
+            cursor: pointer;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .toggle-btn:hover { transform: scale(1.1); }
+        .dark .toggle-btn { background: #1e293b; color: #fbbf24; }
+
+        /* Section transition */
+        .tab-content { display: none; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Search */
+        .search-input {
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 10px 16px;
+            width: 100%;
+            font-size: 1rem;
+            transition: 0.3s;
+            background: white;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+        }
+        .dark .search-input {
+            background: #1e293b;
+            border-color: #475569;
+            color: #e2e8f0;
+        }
+        .dark .search-input:focus { border-color: #818cf8; }
+
+        /* Grammar block */
+        .grammar-block {
+            border-left: 4px solid #6366f1;
+            padding-left: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        .dark .grammar-block { border-left-color: #818cf8; }
+
+        /* Grammar detail text */
+        .grammar-detail {
+            font-size: 0.9rem;
+            line-height: 1.7;
+            color: #475569;
+            margin: 0.5rem 0 0.75rem 0;
+            padding: 0.75rem 1rem;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+        .dark .grammar-detail {
+            color: #cbd5e1;
+            background: #1e293b;
+        }
+
+        /* Grammar examples table */
+        .grammar-examples {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+        }
+        .grammar-examples th {
+            text-align: left;
+            font-weight: 500;
+            color: #64748b;
+            padding: 4px 8px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .dark .grammar-examples th {
+            color: #94a3b8;
+            border-bottom-color: #475569;
+        }
+        .grammar-examples td {
+            padding: 6px 8px;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: top;
+        }
+        .dark .grammar-examples td {
+            border-bottom-color: #334155;
+        }
+        .grammar-examples tr:hover td {
+            background: #f1f5f9;
+        }
+        .dark .grammar-examples tr:hover td {
+            background: #334155;
+        }
+        .grammar-examples .jp-example {
+            font-weight: 500;
+            color: #1e293b;
+        }
+        .dark .grammar-examples .jp-example {
+            color: #e2e8f0;
+        }
+        .grammar-examples .en-example {
+            color: #64748b;
+        }
+        .dark .grammar-examples .en-example {
+            color: #94a3b8;
+        }
+
+        /* Grammar point card - collapsible */
+        .grammar-point {
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+        .grammar-point-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        .grammar-point-header:hover {
+            background: #eef2ff;
+            border-color: #c7d2fe;
+        }
+        .dark .grammar-point-header {
+            background: #1e293b;
+            border-color: #334155;
+        }
+        .dark .grammar-point-header:hover {
+            background: #334155;
+            border-color: #6366f1;
+        }
+        .grammar-point-header .jp-label {
+            font-weight: 600;
+            font-size: 1.05rem;
+            color: #1e293b;
+        }
+        .dark .grammar-point-header .jp-label {
+            color: #e2e8f0;
+        }
+        .grammar-point-header .en-label {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-left: 0.75rem;
+        }
+        .dark .grammar-point-header .en-label {
+            color: #94a3b8;
+        }
+        .grammar-point-header .toggle-icon {
+            font-size: 0.8rem;
+            color: #94a3b8;
+            transition: transform 0.3s;
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+        .grammar-point-header .toggle-icon.open {
+            transform: rotate(180deg);
+        }
+        .grammar-point-body {
+            display: none;
+            padding: 0.5rem 1rem 1rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-top: none;
+            border-radius: 0 0 10px 10px;
+        }
+        .dark .grammar-point-body {
+            border-color: #334155;
+        }
+        .grammar-point-body.open {
+            display: block;
+        }
+
+        /* Footer */
+        .footer {
+            background: linear-gradient(135deg, #1e1b4b, #312e81);
+            color: white;
+        }
+        .dark .footer { background: linear-gradient(135deg, #0f172a, #1e293b); }
+
+        /* Mobile nav */
+        @media (max-width: 640px) {
+            .tab-btn { font-size: 0.75rem; padding: 6px 10px; }
+            .kana-grid { grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); }
+            .kana-cell { font-size: 1rem; padding: 6px 2px; }
+            .kana-cell .romaji { font-size: 0.5rem; }
+        }
+    </style>
+</head>
+<body class="light-mode">
+
+<!-- Dark/Light Toggle -->
+<button id="themeToggle" class="toggle-btn" aria-label="Toggle dark/light mode">🌙</button>
+
+<!-- ===== NAVIGATION ===== -->
+<header class="sticky top-0 z-50 backdrop-blur-lg bg-white/80 dark:bg-slate-900/80 border-b border-gray-200 dark:border-slate-700">
+    <div class="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between flex-wrap gap-2">
+        <h1 class="text-xl sm:text-2xl font-black rainbow-text">かっこいい日本語</h1>
+        <nav class="flex flex-wrap gap-1 sm:gap-2" id="tabNav">
+            <button class="tab-btn active px-3 py-2 rounded-xl text-sm font-medium" data-tab="home">Home</button>
+            <button class="tab-btn px-3 py-2 rounded-xl text-sm font-medium" data-tab="hiragana">Hiragana</button>
+            <button class="tab-btn px-3 py-2 rounded-xl text-sm font-medium" data-tab="katakana">Katakana</button>
+            <button class="tab-btn px-3 py-2 rounded-xl text-sm font-medium" data-tab="kanji">Kanji</button>
+            <button class="tab-btn px-3 py-2 rounded-xl text-sm font-medium" data-tab="vocab">Vocabulary</button>
+            <button class="tab-btn px-3 py-2 rounded-xl text-sm font-medium" data-tab="grammar">Grammar</button>
+        </nav>
+    </div>
+</header>
+
+<main class="max-w-7xl mx-auto px-4 py-8">
+
+    <!-- ===== HOME ===== -->
+    <section id="tab-home" class="tab-content active">
+        <div class="text-center py-6 md:py-10">
+            <h2 class="text-5xl sm:text-7xl md:text-8xl font-black rainbow-text mb-4 leading-tight">Kakkoi Nihongo</h2>
+            <p class="text-xl sm:text-2xl text-slate-500 dark:text-slate-300 font-light mb-8">KAKKOI NIHONGO</p>
+            <div class="max-w-2xl mx-auto">
+                <p class="text-lg text-slate-600 dark:text-slate-400 mb-6 leading-relaxed">
+                    Your gateway to learning Japanese from zero. Explore Hiragana, Katakana, 110 N5 Kanji,
+                    essential vocabulary from <em>Minna no Nihongo</em> Lessons 1–25, and core grammar — all in one place.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4 mt-8">
+                    <span class="px-6 py-3 rounded-full bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 font-medium">ひらがな</span>
+                    <span class="px-6 py-3 rounded-full bg-pink-100 dark:bg-pink-900/40 text-pink-700 dark:text-pink-300 font-medium">カタカナ</span>
+                    <span class="px-6 py-3 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 font-medium">漢字</span>
+                    <span class="px-6 py-3 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 font-medium">語彙</span>
+                    <span class="px-6 py-3 rounded-full bg-cyan-100 dark:bg-cyan-900/40 text-cyan-700 dark:text-cyan-300 font-medium">文法</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== HIRAGANA ===== -->
+    <section id="tab-hiragana" class="tab-content">
+        <h2 class="text-3xl sm:text-4xl font-black rainbow-text mb-2">Hiragana Chart</h2>
+        <p class="text-slate-500 dark:text-slate-400 mb-6">Basic Japanese syllabary — 46 core characters</p>
+        <div class="card">
+            <div class="kana-grid" id="hiraganaGrid"></div>
+        </div>
+
+        <h3 class="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mt-8 mb-2">Dakuten <span class="text-base font-normal text-slate-500">(Voiced Sounds)</span></h3>
+        <p class="text-slate-500 dark:text-slate-400 mb-4">が・ざ・だ・ば rows — がぎぐげご ざじずぜぞ だぢづでど ばびぶべぼ</p>
+        <div class="card">
+            <div class="kana-grid" id="hiraganaDakutenGrid"></div>
+        </div>
+
+        <h3 class="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mt-8 mb-2">Handakuten <span class="text-base font-normal text-slate-500">(Semi-Voiced Sounds)</span></h3>
+        <p class="text-slate-500 dark:text-slate-400 mb-4">ぱ row — ぱぴぷぺぽ</p>
+        <div class="card">
+            <div class="kana-grid" id="hiraganaHandakutenGrid"></div>
+        </div>
+
+        <h3 class="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mt-8 mb-2">Yōon <span class="text-base font-normal text-slate-500">(Contracted Sounds)</span></h3>
+        <p class="text-slate-500 dark:text-slate-400 mb-4">Combinations with や・ゆ・よ — きゃきゅきょ しゃしゅしょ ちゃちゅちょ etc.</p>
+        <div class="card">
+            <div class="kana-grid" id="hiraganaYoonGrid"></div>
+        </div>
+    </section>
+
+    <!-- ===== KATAKANA ===== -->
+    <section id="tab-katakana" class="tab-content">
+        <h2 class="text-3xl sm:text-4xl font-black rainbow-text mb-2">Katakana Chart</h2>
+        <p class="text-slate-500 dark:text-slate-400 mb-6">Used for foreign words and loanwords</p>
+        <div class="card">
+            <div class="kana-grid" id="katakanaGrid"></div>
+        </div>
+
+        <h3 class="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mt-8 mb-2">Dakuten <span class="text-base font-normal text-slate-500">(Voiced Sounds)</span></h3>
+        <p class="text-slate-500 dark:text-slate-400 mb-4">ガ・ザ・ダ・バ rows</p>
+        <div class="card">
+            <div class="kana-grid" id="katakanaDakutenGrid"></div>
+        </div>
+
+        <h3 class="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mt-8 mb-2">Handakuten <span class="text-base font-normal text-slate-500">(Semi-Voiced Sounds)</span></h3>
+        <p class="text-slate-500 dark:text-slate-400 mb-4">パ row</p>
+        <div class="card">
+            <div class="kana-grid" id="katakanaHandakutenGrid"></div>
+        </div>
+
+        <h3 class="text-2xl font-bold text-indigo-600 dark:text-indigo-400 mt-8 mb-2">Yōon <span class="text-base font-normal text-slate-500">(Contracted Sounds)</span></h3>
+        <p class="text-slate-500 dark:text-slate-400 mb-4">Combinations with ヤ・ユ・ヨ</p>
+        <div class="card">
+            <div class="kana-grid" id="katakanaYoonGrid"></div>
+        </div>
+    </section>
+
+    <!-- ===== KANJI ===== -->
+    <section id="tab-kanji" class="tab-content">
+        <h2 class="text-3xl sm:text-4xl font-black rainbow-text mb-2">JLPT N5 Kanji <span class="text-base font-normal text-slate-500">(110)</span></h2>
+        <p class="text-slate-500 dark:text-slate-400 mb-6">All required kanji for JLPT N5 level</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4" id="kanjiGrid"></div>
+    </section>
+
+    <!-- ===== VOCABULARY ===== -->
+    <section id="tab-vocab" class="tab-content">
+        <h2 class="text-3xl sm:text-4xl font-black rainbow-text mb-2">Vocabulary</h2>
+        <p class="text-slate-500 dark:text-slate-400 mb-4">Minna no Nihongo Lessons 1–25</p>
+
+        <div class="flex flex-col sm:flex-row gap-4 mb-6">
+            <input type="text" id="vocabSearch" class="search-input flex-1" placeholder="🔍 Search vocabulary..." />
+            <div class="flex flex-wrap gap-2 items-center" id="lessonFilters"></div>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="border-b-2 border-indigo-200 dark:border-indigo-800 text-slate-600 dark:text-slate-300">
+                        <th class="py-3 px-2 font-medium">Lesson</th>
+                        <th class="py-3 px-2 font-medium">Japanese</th>
+                        <th class="py-3 px-2 font-medium">English</th>
+                    </tr>
+                </thead>
+                <tbody id="vocabTableBody"></tbody>
+            </table>
+        </div>
+        <p class="text-sm text-slate-400 mt-4" id="vocabCount"></p>
+    </section>
+
+    <!-- ===== GRAMMAR ===== -->
+    <section id="tab-grammar" class="tab-content">
+        <h2 class="text-3xl sm:text-4xl font-black rainbow-text mb-2">Grammar</h2>
+        <p class="text-slate-500 dark:text-slate-400 mb-6">Minna no Nihongo Lessons 1–25 grammar points</p>
+        <div id="grammarContent"></div>
+    </section>
+
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer mt-16 py-10 px-4 text-center">
+    <div class="max-w-4xl mx-auto">
+        <p class="text-3xl font-black rainbow-text mb-2">かっこいい日本語</p>
+        <p class="text-slate-300 mb-6">KAKKOI NIHONGO</p>
+        <div class="flex justify-center gap-10 text-lg">
+            <div>
+                <p class="text-indigo-300 text-sm font-medium">Founder</p>
+                <p class="text-2xl font-bold text-white">NAKUL</p>
+            </div>
+            <div>
+                <p class="text-indigo-300 text-sm font-medium">Co-Founder</p>
+                <p class="text-2xl font-bold text-white">NIKHIL</p>
+            </div>
+        </div>
+        <p class="text-slate-400 text-sm mt-8">© 2025 Kakkoi Nihongo — Built with ❤️ for Japanese learners</p>
+    </div>
+</footer>
+
+<!-- ====================================================================== -->
+<!-- JAVASCRIPT – ALL DATA & LOGIC -->
+<!-- ====================================================================== -->
+<script>
+// ===================== DATA =====================
+
+// --- HIRAGANA ---
+const hiraganaChars = [
+    ['あ','a'], ['い','i'], ['う','u'], ['え','e'], ['お','o'],
+    ['か','ka'], ['き','ki'], ['く','ku'], ['け','ke'], ['こ','ko'],
+    ['さ','sa'], ['し','shi'],['す','su'], ['せ','se'], ['そ','so'],
+    ['た','ta'], ['ち','chi'],['つ','tsu'],['て','te'], ['と','to'],
+    ['な','na'], ['に','ni'], ['ぬ','nu'], ['ね','ne'], ['の','no'],
+    ['は','ha'], ['ひ','hi'], ['ふ','fu'], ['へ','he'], ['ほ','ho'],
+    ['ま','ma'], ['み','mi'], ['む','mu'], ['め','me'], ['も','mo'],
+    ['や','ya'],             ['ゆ','yu'],             ['よ','yo'],
+    ['ら','ra'], ['り','ri'], ['る','ru'], ['れ','re'], ['ろ','ro'],
+    ['わ','wa'],             ['を','wo'],
+    ['ん','n']
+];
+
+// --- KATAKANA ---
+const katakanaChars = [
+    ['ア','a'], ['イ','i'], ['ウ','u'], ['エ','e'], ['オ','o'],
+    ['カ','ka'], ['キ','ki'], ['ク','ku'], ['ケ','ke'], ['コ','ko'],
+    ['サ','sa'], ['シ','shi'],['ス','su'], ['セ','se'], ['ソ','so'],
+    ['タ','ta'], ['チ','chi'],['ツ','tsu'],['テ','te'], ['ト','to'],
+    ['ナ','na'], ['ニ','ni'], ['ヌ','nu'], ['ネ','ne'], ['ノ','no'],
+    ['ハ','ha'], ['ヒ','hi'], ['フ','fu'], ['ヘ','he'], ['ホ','ho'],
+    ['マ','ma'], ['ミ','mi'], ['ム','mu'], ['メ','me'], ['モ','mo'],
+    ['ヤ','ya'],             ['ユ','yu'],             ['ヨ','yo'],
+    ['ラ','ra'], ['リ','ri'], ['ル','ru'], ['レ','re'], ['ロ','ro'],
+    ['ワ','wa'],             ['ヲ','wo'],
+    ['ン','n']
+];
+
+// --- HIRAGANA DAKUTEN ---
+const hiraganaDakuten = [
+    ['が','ga'], ['ぎ','gi'], ['ぐ','gu'], ['げ','ge'], ['ご','go'],
+    ['ざ','za'], ['じ','ji'], ['ず','zu'], ['ぜ','ze'], ['ぞ','zo'],
+    ['だ','da'], ['ぢ','ji'], ['づ','zu'], ['で','de'], ['ど','do'],
+    ['ば','ba'], ['び','bi'], ['ぶ','bu'], ['べ','be'], ['ぼ','bo']
+];
+
+// --- HIRAGANA HANDAKUTEN ---
+const hiraganaHandakuten = [
+    ['ぱ','pa'], ['ぴ','pi'], ['ぷ','pu'], ['ぺ','pe'], ['ぽ','po']
+];
+
+// --- HIRAGANA YOON ---
+const hiraganaYoon = [
+    ['きゃ','kya'], ['きゅ','kyu'], ['きょ','kyo'],
+    ['しゃ','sha'], ['しゅ','shu'], ['しょ','sho'],
+    ['ちゃ','cha'], ['ちゅ','chu'], ['ちょ','cho'],
+    ['にゃ','nya'], ['にゅ','nyu'], ['にょ','nyo'],
+    ['ひゃ','hya'], ['ひゅ','hyu'], ['ひょ','hyo'],
+    ['みゃ','mya'], ['みゅ','myu'], ['みょ','myo'],
+    ['りゃ','rya'], ['りゅ','ryu'], ['りょ','ryo'],
+    ['ぎゃ','gya'], ['ぎゅ','gyu'], ['ぎょ','gyo'],
+    ['じゃ','ja'],  ['じゅ','ju'],  ['じょ','jo'],
+    ['びゃ','bya'], ['びゅ','byu'], ['びょ','byo'],
+    ['ぴゃ','pya'], ['ぴゅ','pyu'], ['ぴょ','pyo']
+];
+
+// --- KATAKANA DAKUTEN ---
+const katakanaDakuten = [
+    ['ガ','ga'], ['ギ','gi'], ['グ','gu'], ['ゲ','ge'], ['ゴ','go'],
+    ['ザ','za'], ['ジ','ji'], ['ズ','zu'], ['ゼ','ze'], ['ゾ','zo'],
+    ['ダ','da'], ['ヂ','ji'], ['ヅ','zu'], ['デ','de'], ['ド','do'],
+    ['バ','ba'], ['ビ','bi'], ['ブ','bu'], ['ベ','be'], ['ボ','bo']
+];
+
+// --- KATAKANA HANDAKUTEN ---
+const katakanaHandakuten = [
+    ['パ','pa'], ['ピ','pi'], ['プ','pu'], ['ペ','pe'], ['ポ','po']
+];
+
+// --- KATAKANA YOON ---
+const katakanaYoon = [
+    ['キャ','kya'], ['キュ','kyu'], ['キョ','kyo'],
+    ['シャ','sha'], ['シュ','shu'], ['ショ','sho'],
+    ['チャ','cha'], ['チュ','chu'], ['チョ','cho'],
+    ['ニャ','nya'], ['ニュ','nyu'], ['ニョ','nyo'],
+    ['ヒャ','hya'], ['ヒュ','hyu'], ['ヒョ','hyo'],
+    ['ミャ','mya'], ['ミュ','myu'], ['ミョ','myo'],
+    ['リャ','rya'], ['リュ','ryu'], ['リョ','ryo'],
+    ['ギャ','gya'], ['ギュ','gyu'], ['ギョ','gyo'],
+    ['ジャ','ja'],  ['ジュ','ju'],  ['ジョ','jo'],
+    ['ビャ','bya'], ['ビュ','byu'], ['ビョ','byo'],
+    ['ピャ','pya'], ['ピュ','pyu'], ['ピョ','pyo']
+];
+
+// --- JLPT N5 KANJI (110) ---
+const n5Kanji = [
+    {char:'一', on:'イチ', kun:'ひと.つ', meaning:'one'},
+    {char:'二', on:'ニ', kun:'ふた.つ', meaning:'two'},
+    {char:'三', on:'サン', kun:'み.つ', meaning:'three'},
+    {char:'四', on:'シ', kun:'よ.つ', meaning:'four'},
+    {char:'五', on:'ゴ', kun:'いつ.つ', meaning:'five'},
+    {char:'六', on:'ロク', kun:'む.つ', meaning:'six'},
+    {char:'七', on:'シチ', kun:'なな.つ', meaning:'seven'},
+    {char:'八', on:'ハチ', kun:'や.つ', meaning:'eight'},
+    {char:'九', on:'キュウ', kun:'ここの.つ', meaning:'nine'},
+    {char:'十', on:'ジュウ', kun:'とお', meaning:'ten'},
+    {char:'百', on:'ヒャク', kun:'もも', meaning:'hundred'},
+    {char:'千', on:'セン', kun:'ち', meaning:'thousand'},
+    {char:'万', on:'マン', kun:'よろず', meaning:'ten thousand'},
+    {char:'円', on:'エン', kun:'まる.い', meaning:'circle, yen'},
+    {char:'日', on:'ニチ', kun:'ひ', meaning:'day, sun'},
+    {char:'月', on:'ゲツ', kun:'つき', meaning:'month, moon'},
+    {char:'火', on:'カ', kun:'ひ', meaning:'fire'},
+    {char:'水', on:'スイ', kun:'みず', meaning:'water'},
+    {char:'木', on:'モク', kun:'き', meaning:'tree, wood'},
+    {char:'金', on:'キン', kun:'かね', meaning:'gold, money'},
+    {char:'土', on:'ド', kun:'つち', meaning:'earth, soil'},
+    {char:'年', on:'ネン', kun:'とし', meaning:'year'},
+    {char:'時', on:'ジ', kun:'とき', meaning:'time, hour'},
+    {char:'間', on:'カン', kun:'あいだ', meaning:'interval, between'},
+    {char:'毎', on:'マイ', kun:'ごと', meaning:'every'},
+    {char:'今', on:'コン', kun:'いま', meaning:'now, present'},
+    {char:'先', on:'セン', kun:'さき', meaning:'previous, ahead'},
+    {char:'来', on:'ライ', kun:'く.る', meaning:'come'},
+    {char:'行', on:'コウ', kun:'い.く', meaning:'go'},
+    {char:'食', on:'ショク', kun:'た.べる', meaning:'eat'},
+    {char:'飲', on:'イン', kun:'の.む', meaning:'drink'},
+    {char:'話', on:'ワ', kun:'はな.す', meaning:'speak, talk'},
+    {char:'見', on:'ケン', kun:'み.る', meaning:'see, look'},
+    {char:'聞', on:'ブン', kun:'き.く', meaning:'hear, ask'},
+    {char:'読', on:'ドク', kun:'よ.む', meaning:'read'},
+    {char:'書', on:'ショ', kun:'か.く', meaning:'write'},
+    {char:'買', on:'バイ', kun:'か.う', meaning:'buy'},
+    {char:'出', on:'シュツ', kun:'で.る', meaning:'exit, put out'},
+    {char:'入', on:'ニュウ', kun:'い.る', meaning:'enter'},
+    {char:'大', on:'ダイ', kun:'おお.きい', meaning:'big'},
+    {char:'小', on:'ショウ', kun:'ちい.さい', meaning:'small'},
+    {char:'高', on:'コウ', kun:'たか.い', meaning:'high, expensive'},
+    {char:'安', on:'アン', kun:'やす.い', meaning:'cheap, peaceful'},
+    {char:'新', on:'シン', kun:'あたら.しい', meaning:'new'},
+    {char:'古', on:'コ', kun:'ふる.い', meaning:'old'},
+    {char:'長', on:'チョウ', kun:'なが.い', meaning:'long, leader'},
+    {char:'白', on:'ハク', kun:'しろ', meaning:'white'},
+    {char:'黒', on:'コク', kun:'くろ', meaning:'black'},
+    {char:'赤', on:'セキ', kun:'あか', meaning:'red'},
+    {char:'青', on:'セイ', kun:'あお', meaning:'blue'},
+    {char:'上', on:'ジョウ', kun:'うえ', meaning:'up, above'},
+    {char:'下', on:'カ', kun:'した', meaning:'down, below'},
+    {char:'中', on:'チュウ', kun:'なか', meaning:'middle, inside'},
+    {char:'外', on:'ガイ', kun:'そと', meaning:'outside'},
+    {char:'前', on:'ゼン', kun:'まえ', meaning:'before, front'},
+    {char:'後', on:'ゴ', kun:'あと', meaning:'after, behind'},
+    {char:'左', on:'サ', kun:'ひだり', meaning:'left'},
+    {char:'右', on:'ウ', kun:'みぎ', meaning:'right'},
+    {char:'北', on:'ホク', kun:'きた', meaning:'north'},
+    {char:'南', on:'ナン', kun:'みなみ', meaning:'south'},
+    {char:'東', on:'トウ', kun:'ひがし', meaning:'east'},
+    {char:'西', on:'セイ', kun:'にし', meaning:'west'},
+    {char:'人', on:'ジン', kun:'ひと', meaning:'person'},
+    {char:'子', on:'シ', kun:'こ', meaning:'child'},
+    {char:'女', on:'ジョ', kun:'おんな', meaning:'woman'},
+    {char:'男', on:'ダン', kun:'おとこ', meaning:'man'},
+    {char:'友', on:'ユウ', kun:'とも', meaning:'friend'},
+    {char:'父', on:'フ', kun:'ちち', meaning:'father'},
+    {char:'母', on:'ボ', kun:'はは', meaning:'mother'},
+    {char:'学', on:'ガク', kun:'まな.ぶ', meaning:'study, learn'},
+    {char:'生', on:'セイ', kun:'い.きる', meaning:'life, birth'},
+    {char:'先', on:'セン', kun:'さき', meaning:'previous'},
+    {char:'気', on:'キ', kun:'いき', meaning:'spirit, energy'},
+    {char:'天', on:'テン', kun:'あめ', meaning:'heaven, sky'},
+    {char:'雨', on:'ウ', kun:'あめ', meaning:'rain'},
+    {char:'電', on:'デン', kun:'いなずま', meaning:'electricity'},
+    {char:'車', on:'シャ', kun:'くるま', meaning:'car, vehicle'},
+    {char:'道', on:'ドウ', kun:'みち', meaning:'road, way'},
+    {char:'店', on:'テン', kun:'みせ', meaning:'shop, store'},
+    {char:'国', on:'コク', kun:'くに', meaning:'country'},
+    {char:'校', on:'コウ', kun:'', meaning:'school'},
+    {char:'山', on:'サン', kun:'やま', meaning:'mountain'},
+    {char:'川', on:'セン', kun:'かわ', meaning:'river'},
+    {char:'花', on:'カ', kun:'はな', meaning:'flower'},
+    {char:'名', on:'メイ', kun:'な', meaning:'name'},
+    {char:'何', on:'カ', kun:'なに', meaning:'what'},
+    {char:'私', on:'シ', kun:'わたし', meaning:'I, me'},
+    {char:'足', on:'ソク', kun:'あし', meaning:'foot, leg'},
+    {char:'手', on:'シュ', kun:'て', meaning:'hand'},
+    {char:'目', on:'モク', kun:'め', meaning:'eye'},
+    {char:'口', on:'コウ', kun:'くち', meaning:'mouth'},
+    {char:'耳', on:'ジ', kun:'みみ', meaning:'ear'},
+    {char:'体', on:'タイ', kun:'からだ', meaning:'body'},
+    {char:'会', on:'カイ', kun:'あ.う', meaning:'meet'},
+    {char:'社', on:'シャ', kun:'やしろ', meaning:'company, society'},
+    {char:'立', on:'リツ', kun:'た.つ', meaning:'stand'},
+    {char:'休', on:'キュウ', kun:'やす.む', meaning:'rest'},
+    {char:'仕', on:'シ', kun:'つか.える', meaning:'serve, do'},
+    {char:'事', on:'ジ', kun:'こと', meaning:'thing, matter'},
+    {char:'多', on:'タ', kun:'おお.い', meaning:'many, much'},
+    {char:'少', on:'ショウ', kun:'すく.ない', meaning:'few, little'},
+    {char:'本', on:'ホン', kun:'もと', meaning:'book, origin'},
+    {char:'半', on:'ハン', kun:'なか.ば', meaning:'half'},
+    {char:'分', on:'ブン', kun:'わ.ける', meaning:'minute, part'},
+    {char:'午', on:'ゴ', kun:'うま', meaning:'noon'},
+    {char:'語', on:'ゴ', kun:'かた.る', meaning:'language, word'},
+    {char:'物', on:'ブツ', kun:'もの', meaning:'thing, object'},
+    {char:'切', on:'セツ', kun:'き.る', meaning:'cut'},
+    {char:'作', on:'サク', kun:'つく.る', meaning:'make, create'},
+    {char:'起', on:'キ', kun:'お.きる', meaning:'get up, wake'},
+    {char:'送', on:'ソウ', kun:'おく.る', meaning:'send'},
+    {char:'待', on:'タイ', kun:'ま.つ', meaning:'wait'},
+    {char:'教', on:'キョウ', kun:'おし.える', meaning:'teach'},
+    {char:'計', on:'ケイ', kun:'はか.る', meaning:'measure, plan'},
+    {char:'近', on:'キン', kun:'ちか.い', meaning:'near'},
+    {char:'通', on:'ツウ', kun:'とお.る', meaning:'pass, commute'}
+];
+
+// --- VOCABULARY (Minna no Nihongo Lessons 1-25) ---
+const vocabData = [
+    // Lesson 1
+    {lesson:1, jp:'わたし', en:'I'},
+    {lesson:1, jp:'わたしたち', en:'we'},
+    {lesson:1, jp:'あなた', en:'you'},
+    {lesson:1, jp:'あのひと', en:'that person'},
+    {lesson:1, jp:'あのかた', en:'that person (polite)'},
+    {lesson:1, jp:'みなさん', en:'everyone'},
+    {lesson:1, jp:'〜さん', en:'Mr./Ms. (suffix)'},
+    {lesson:1, jp:'〜ちゃん', en:'~chan (endearing suffix)'},
+    {lesson:1, jp:'〜くん', en:'~kun (young boy suffix)'},
+    {lesson:1, jp:'〜じん', en:'nationality suffix'},
+    {lesson:1, jp:'せんせい', en:'teacher'},
+    {lesson:1, jp:'きょうし', en:'teacher, instructor'},
+    {lesson:1, jp:'がくせい', en:'student'},
+    {lesson:1, jp:'かいしゃいん', en:'company employee'},
+    {lesson:1, jp:'しゃいん', en:'employee'},
+    {lesson:1, jp:'ぎんこういん', en:'bank employee'},
+    {lesson:1, jp:'いしゃ', en:'doctor'},
+    {lesson:1, jp:'けんきゅうしゃ', en:'researcher'},
+    {lesson:1, jp:'エンジニア', en:'engineer'},
+    {lesson:1, jp:'だいがく', en:'university'},
+    {lesson:1, jp:'びょういん', en:'hospital'},
+    {lesson:1, jp:'でんき', en:'electricity; electric'},
+    {lesson:1, jp:'だれ', en:'who'},
+    {lesson:1, jp:'どなた', en:'who (polite)'},
+    {lesson:1, jp:'〜さい', en:'years old'},
+    {lesson:1, jp:'なんさい', en:'how old'},
+    {lesson:1, jp:'おいくつ', en:'how old (polite)'},
+    {lesson:1, jp:'はい', en:'yes'},
+    {lesson:1, jp:'いいえ', en:'no'},
+    {lesson:1, jp:'はじめまして', en:'nice to meet you'},
+    {lesson:1, jp:'どうぞ　よろしく　おねがいします', en:'pleased to meet you'},
+    {lesson:1, jp:'しつれいします', en:'excuse me; goodbye'},
+    {lesson:1, jp:'おはようございます', en:'good morning'},
+    {lesson:1, jp:'こんにちは', en:'hello'},
+    {lesson:1, jp:'こんばんは', en:'good evening'},
+    {lesson:1, jp:'さようなら', en:'goodbye'},
+    {lesson:1, jp:'ありがとうございます', en:'thank you'},
+    {lesson:1, jp:'すみません', en:'excuse me; sorry'},
+    {lesson:1, jp:'にほん', en:'Japan'},
+    {lesson:1, jp:'アメリカ', en:'America'},
+    {lesson:1, jp:'イギリス', en:'UK, Britain'},
+    {lesson:1, jp:'インド', en:'India'},
+    {lesson:1, jp:'インドネシア', en:'Indonesia'},
+    {lesson:1, jp:'かんこく', en:'South Korea'},
+    {lesson:1, jp:'タイ', en:'Thailand'},
+    {lesson:1, jp:'ちゅうごく', en:'China'},
+    {lesson:1, jp:'ドイツ', en:'Germany'},
+    {lesson:1, jp:'フィリピン', en:'Philippines'},
+    {lesson:1, jp:'フランス', en:'France'},
+    {lesson:1, jp:'ブラジル', en:'Brazil'},
+    {lesson:1, jp:'ベトナム', en:'Vietnam'},
+    
+    // Lesson 2
+    {lesson:2, jp:'これ', en:'this'},
+    {lesson:2, jp:'それ', en:'that'},
+    {lesson:2, jp:'あれ', en:'that over there'},
+    {lesson:2, jp:'どれ', en:'which one'},
+    {lesson:2, jp:'この〜', en:'this ~'},
+    {lesson:2, jp:'その〜', en:'that ~'},
+    {lesson:2, jp:'あの〜', en:'that ~ over there'},
+    {lesson:2, jp:'どの〜', en:'which ~'},
+    {lesson:2, jp:'ほん', en:'book'},
+    {lesson:2, jp:'じしょ', en:'dictionary'},
+    {lesson:2, jp:'ざっし', en:'magazine'},
+    {lesson:2, jp:'しんぶん', en:'newspaper'},
+    {lesson:2, jp:'ノート', en:'notebook'},
+    {lesson:2, jp:'てちょう', en:'pocket notebook'},
+    {lesson:2, jp:'めいし', en:'business card'},
+    {lesson:2, jp:'カード', en:'card'},
+    {lesson:2, jp:'テレホンカード', en:'telephone card'},
+    {lesson:2, jp:'えんぴつ', en:'pencil'},
+    {lesson:2, jp:'ボールペン', en:'ballpoint pen'},
+    {lesson:2, jp:'シャーペン', en:'mechanical pencil'},
+    {lesson:2, jp:'かぎ', en:'key'},
+    {lesson:2, jp:'とけい', en:'watch, clock'},
+    {lesson:2, jp:'かさ', en:'umbrella'},
+    {lesson:2, jp:'かばん', en:'bag'},
+    {lesson:2, jp:'くつ', en:'shoes'},
+    {lesson:2, jp:'テープ', en:'tape'},
+    {lesson:2, jp:'テープレコーダー', en:'tape recorder'},
+    {lesson:2, jp:'テレビ', en:'television'},
+    {lesson:2, jp:'ラジオ', en:'radio'},
+    {lesson:2, jp:'カメラ', en:'camera'},
+    {lesson:2, jp:'コンピューター', en:'computer'},
+    {lesson:2, jp:'くるま', en:'car'},
+    {lesson:2, jp:'つくえ', en:'desk'},
+    {lesson:2, jp:'いす', en:'chair'},
+    {lesson:2, jp:'チョコレート', en:'chocolate'},
+    {lesson:2, jp:'コーヒー', en:'coffee'},
+    {lesson:2, jp:'おみやげ', en:'souvenir, gift'},
+    {lesson:2, jp:'えいご', en:'English language'},
+    {lesson:2, jp:'にほんご', en:'Japanese language'},
+    {lesson:2, jp:'〜ご', en:'~ language'},
+    {lesson:2, jp:'なん', en:'what'},
+    {lesson:2, jp:'そう', en:'so, yes'},
+    {lesson:2, jp:'ちがいます', en:'no, that\'s wrong'},
+    {lesson:2, jp:'そうですか', en:'is that so?'},
+    {lesson:2, jp:'あのう', en:'well... (hesitation)'},
+    {lesson:2, jp:'ほんのきもちです', en:'a small token of appreciation'},
+    {lesson:2, jp:'どうぞ', en:'please, here you go'},
+    {lesson:2, jp:'どうも', en:'thanks'},
+    {lesson:2, jp:'どうもありがとうございます', en:'thank you very much'},
+    {lesson:2, jp:'これから　おせわになります', en:'I look forward to working with you'},
+    {lesson:2, jp:'こちらこそ', en:'the pleasure is mine'},
+    {lesson:2, jp:'〜を　おねがいします', en:'please give me ~'},
+    
+    // Lesson 3
+    {lesson:3, jp:'ここ', en:'here'},
+    {lesson:3, jp:'そこ', en:'there'},
+    {lesson:3, jp:'あそこ', en:'over there'},
+    {lesson:3, jp:'どこ', en:'where'},
+    {lesson:3, jp:'こちら', en:'this way (polite)'},
+    {lesson:3, jp:'そちら', en:'that way (polite)'},
+    {lesson:3, jp:'あちら', en:'that way over there (polite)'},
+    {lesson:3, jp:'どちら', en:'which way (polite)'},
+    {lesson:3, jp:'きょうしつ', en:'classroom'},
+    {lesson:3, jp:'しょくどう', en:'dining hall'},
+    {lesson:3, jp:'じむしょ', en:'office'},
+    {lesson:3, jp:'かいぎしつ', en:'meeting room'},
+    {lesson:3, jp:'うけつけ', en:'reception desk'},
+    {lesson:3, jp:'ロビー', en:'lobby'},
+    {lesson:3, jp:'へや', en:'room'},
+    {lesson:3, jp:'トイレ', en:'toilet, restroom'},
+    {lesson:3, jp:'おてあらい', en:'restroom (polite)'},
+    {lesson:3, jp:'かいだん', en:'stairs'},
+    {lesson:3, jp:'エレベーター', en:'elevator'},
+    {lesson:3, jp:'エスカレーター', en:'escalator'},
+    {lesson:3, jp:'じどうはんばいき', en:'vending machine'},
+    {lesson:3, jp:'でんわ', en:'telephone'},
+    {lesson:3, jp:'くに', en:'country'},
+    {lesson:3, jp:'かいしゃ', en:'company'},
+    {lesson:3, jp:'うち', en:'house, home'},
+    {lesson:3, jp:'でぐち', en:'exit'},
+    {lesson:3, jp:'いりぐち', en:'entrance'},
+    {lesson:3, jp:'まど', en:'window'},
+    {lesson:3, jp:'ドア', en:'door'},
+    {lesson:3, jp:'〜かい', en:'~ floor'},
+    {lesson:3, jp:'〜えん', en:'~ yen'},
+    {lesson:3, jp:'いくら', en:'how much'},
+    {lesson:3, jp:'ひゃく', en:'hundred'},
+    {lesson:3, jp:'せん', en:'thousand'},
+    {lesson:3, jp:'まん', en:'ten thousand'},
+    {lesson:3, jp:'すみません', en:'excuse me'},
+    {lesson:3, jp:'〜を　ください', en:'please give me ~'},
+    {lesson:3, jp:'〜を　みせてください', en:'please show me ~'},
+    {lesson:3, jp:'じゃあ', en:'well then'},
+    {lesson:3, jp:'〜を　ありがとうございます', en:'thank you for ~'},
+    
+    // Lesson 4
+    {lesson:4, jp:'おきます', en:'get up'},
+    {lesson:4, jp:'ねます', en:'sleep, go to bed'},
+    {lesson:4, jp:'はたらきます', en:'work'},
+    {lesson:4, jp:'やすみます', en:'rest, take a break'},
+    {lesson:4, jp:'べんきょうします', en:'study'},
+    {lesson:4, jp:'おわります', en:'finish'},
+    {lesson:4, jp:'デパート', en:'department store'},
+    {lesson:4, jp:'ぎんこう', en:'bank'},
+    {lesson:4, jp:'ゆうびんきょく', en:'post office'},
+    {lesson:4, jp:'としょかん', en:'library'},
+    {lesson:4, jp:'びじゅつかん', en:'art museum'},
+    {lesson:4, jp:'かいしゃ', en:'company'},
+    {lesson:4, jp:'がっこう', en:'school'},
+    {lesson:4, jp:'スーパー', en:'supermarket'},
+    {lesson:4, jp:'コンビニ', en:'convenience store'},
+    {lesson:4, jp:'えき', en:'station'},
+    {lesson:4, jp:'ひこうき', en:'airplane'},
+    {lesson:4, jp:'ふね', en:'ship, boat'},
+    {lesson:4, jp:'でんしゃ', en:'train'},
+    {lesson:4, jp:'ちかてつ', en:'subway'},
+    {lesson:4, jp:'しんかんせん', en:'bullet train'},
+    {lesson:4, jp:'バス', en:'bus'},
+    {lesson:4, jp:'タクシー', en:'taxi'},
+    {lesson:4, jp:'じてんしゃ', en:'bicycle'},
+    {lesson:4, jp:'あるいて', en:'on foot'},
+    {lesson:4, jp:'いま', en:'now'},
+    {lesson:4, jp:'ごぜん', en:'AM'},
+    {lesson:4, jp:'ごご', en:'PM'},
+    {lesson:4, jp:'〜じ', en:"~ o'clock"},
+    {lesson:4, jp:'〜ふん/ぷん', en:'~ minute'},
+    {lesson:4, jp:'〜はん', en:'~ half past'},
+    {lesson:4, jp:'まいあさ', en:'every morning'},
+    {lesson:4, jp:'まいばん', en:'every night'},
+    {lesson:4, jp:'まいにち', en:'every day'},
+    {lesson:4, jp:'けさ', en:'this morning'},
+    {lesson:4, jp:'こんばん', en:'this evening, tonight'},
+    {lesson:4, jp:'やすみ', en:'holiday, day off'},
+    {lesson:4, jp:'ひるやすみ', en:'lunch break'},
+    {lesson:4, jp:'なんじ', en:'what time'},
+    {lesson:4, jp:'なんぷん', en:'how many minutes'},
+    {lesson:4, jp:'おととい', en:'day before yesterday'},
+    {lesson:4, jp:'きのう', en:'yesterday'},
+    {lesson:4, jp:'きょう', en:'today'},
+    {lesson:4, jp:'あした', en:'tomorrow'},
+    {lesson:4, jp:'あさって', en:'day after tomorrow'},
+    {lesson:4, jp:'せんしゅう', en:'last week'},
+    {lesson:4, jp:'こんしゅう', en:'this week'},
+    {lesson:4, jp:'らいしゅう', en:'next week'},
+    {lesson:4, jp:'たいへんですね', en:'that\'s tough, isn\'t it'},
+    {lesson:4, jp:'ばんごう', en:'number'},
+    {lesson:4, jp:'なんばん', en:'what number'},
+    
+    // Lesson 5
+    {lesson:5, jp:'いきます', en:'go'},
+    {lesson:5, jp:'きます', en:'come'},
+    {lesson:5, jp:'かえります', en:'return, go back'},
+    {lesson:5, jp:'がっこう', en:'school'},
+    {lesson:5, jp:'スーパー', en:'supermarket'},
+    {lesson:5, jp:'えき', en:'station'},
+    {lesson:5, jp:'ひこうき', en:'airplane'},
+    {lesson:5, jp:'ふね', en:'ship, boat'},
+    {lesson:5, jp:'でんしゃ', en:'train'},
+    {lesson:5, jp:'ちかてつ', en:'subway'},
+    {lesson:5, jp:'しんかんせん', en:'bullet train'},
+    {lesson:5, jp:'バス', en:'bus'},
+    {lesson:5, jp:'タクシー', en:'taxi'},
+    {lesson:5, jp:'じてんしゃ', en:'bicycle'},
+    {lesson:5, jp:'あるいて', en:'on foot'},
+    {lesson:5, jp:'ひと', en:'person'},
+    {lesson:5, jp:'ともだち', en:'friend'},
+    {lesson:5, jp:'かれ', en:'he, boyfriend'},
+    {lesson:5, jp:'かのじょ', en:'she, girlfriend'},
+    {lesson:5, jp:'かぞく', en:'family'},
+    {lesson:5, jp:'ひとりで', en:'alone, by oneself'},
+    {lesson:5, jp:'せんしゅう', en:'last week'},
+    {lesson:5, jp:'こんしゅう', en:'this week'},
+    {lesson:5, jp:'らいしゅう', en:'next week'},
+    {lesson:5, jp:'せんげつ', en:'last month'},
+    {lesson:5, jp:'こんげつ', en:'this month'},
+    {lesson:5, jp:'らいげつ', en:'next month'},
+    {lesson:5, jp:'きょねん', en:'last year'},
+    {lesson:5, jp:'ことし', en:'this year'},
+    {lesson:5, jp:'らいねん', en:'next year'},
+    {lesson:5, jp:'〜がつ', en:'~ month'},
+    {lesson:5, jp:'なんがつ', en:'which month'},
+    {lesson:5, jp:'ついたち', en:'1st'},
+    {lesson:5, jp:'ふつか', en:'2nd'},
+    {lesson:5, jp:'みっか', en:'3rd'},
+    {lesson:5, jp:'よっか', en:'4th'},
+    {lesson:5, jp:'いつか', en:'5th'},
+    {lesson:5, jp:'むいか', en:'6th'},
+    {lesson:5, jp:'なのか', en:'7th'},
+    {lesson:5, jp:'ようか', en:'8th'},
+    {lesson:5, jp:'ここのか', en:'9th'},
+    {lesson:5, jp:'とおか', en:'10th'},
+    {lesson:5, jp:'じゅうよっか', en:'14th'},
+    {lesson:5, jp:'はつか', en:'20th'},
+    {lesson:5, jp:'にじゅうよっか', en:'24th'},
+    {lesson:5, jp:'〜にち', en:'~ day'},
+    {lesson:5, jp:'なんにち', en:'which day'},
+    {lesson:5, jp:'いつ', en:'when'},
+    {lesson:5, jp:'いっしょに', en:'together'},
+    {lesson:5, jp:'どうして', en:'why'},
+    {lesson:5, jp:'おそい', en:'late'},
+    {lesson:5, jp:'たいへん', en:'terrible, serious'},
+    {lesson:5, jp:'きっぷ', en:'ticket'},
+    {lesson:5, jp:'かいすうけん', en:'book of tickets'},
+    {lesson:5, jp:'のみもの', en:'drink, beverage'},
+    {lesson:5, jp:'たべもの', en:'food'},
+    {lesson:5, jp:'おかし', en:'snacks, sweets'},
+    {lesson:5, jp:'たんじょうび', en:'birthday'},
+    {lesson:5, jp:'プレゼント', en:'present, gift'},
+    
+    // Lesson 6
+    {lesson:6, jp:'たべます', en:'eat'},
+    {lesson:6, jp:'のみます', en:'drink'},
+    {lesson:6, jp:'すいます', en:'smoke'},
+    {lesson:6, jp:'みます', en:'see, watch, look'},
+    {lesson:6, jp:'ききます', en:'hear, listen'},
+    {lesson:6, jp:'よみます', en:'read'},
+    {lesson:6, jp:'かきます', en:'write, draw'},
+    {lesson:6, jp:'かいます', en:'buy'},
+    {lesson:6, jp:'とります', en:'take (photo)'},
+    {lesson:6, jp:'します', en:'do'},
+    {lesson:6, jp:'あいます', en:'meet'},
+    {lesson:6, jp:'ごはん', en:'meal, cooked rice'},
+    {lesson:6, jp:'あさごはん', en:'breakfast'},
+    {lesson:6, jp:'ひるごはん', en:'lunch'},
+    {lesson:6, jp:'ばんごはん', en:'dinner'},
+    {lesson:6, jp:'パン', en:'bread'},
+    {lesson:6, jp:'たまご', en:'egg'},
+    {lesson:6, jp:'にく', en:'meat'},
+    {lesson:6, jp:'さかな', en:'fish'},
+    {lesson:6, jp:'やさい', en:'vegetables'},
+    {lesson:6, jp:'くだもの', en:'fruit'},
+    {lesson:6, jp:'みず', en:'water'},
+    {lesson:6, jp:'おちゃ', en:'tea, green tea'},
+    {lesson:6, jp:'こうちゃ', en:'black tea'},
+    {lesson:6, jp:'ぎゅうにゅう', en:'milk'},
+    {lesson:6, jp:'ジュース', en:'juice'},
+    {lesson:6, jp:'ビール', en:'beer'},
+    {lesson:6, jp:'さけ', en:'alcohol, sake'},
+    {lesson:6, jp:'コーヒー', en:'coffee'},
+    {lesson:6, jp:'コーラ', en:'cola'},
+    {lesson:6, jp:'えいが', en:'movie'},
+    {lesson:6, jp:'てがみ', en:'letter'},
+    {lesson:6, jp:'レポート', en:'report'},
+    {lesson:6, jp:'しゃしん', en:'photograph'},
+    {lesson:6, jp:'みせ', en:'shop, store'},
+    {lesson:6, jp:'レストラン', en:'restaurant'},
+    {lesson:6, jp:'にわ', en:'garden'},
+    {lesson:6, jp:'しゅくだい', en:'homework'},
+    {lesson:6, jp:'テニス', en:'tennis'},
+    {lesson:6, jp:'サッカー', en:'soccer, football'},
+    {lesson:6, jp:'おはなみ', en:'cherry blossom viewing'},
+    {lesson:6, jp:'なに', en:'what'},
+    {lesson:6, jp:'いっしょに', en:'together'},
+    {lesson:6, jp:'ちょっと', en:'a little, somewhat'},
+    {lesson:6, jp:'いつも', en:'always'},
+    {lesson:6, jp:'ときどき', en:'sometimes'},
+    {lesson:6, jp:'よく', en:'often, well'},
+    {lesson:6, jp:'たいてい', en:'usually'},
+    {lesson:6, jp:'それから', en:'and then'},
+    {lesson:6, jp:'はい、そうです', en:'yes, that\'s right'},
+    {lesson:6, jp:'いいですね', en:'sounds good'},
+    {lesson:6, jp:'わかりました', en:'I understand'},
+    {lesson:6, jp:'なんですか', en:'what is it?'},
+    {lesson:6, jp:'じゃあ、また', en:'see you later'},
+    
+    // Lesson 7
+    {lesson:7, jp:'きります', en:'cut'},
+    {lesson:7, jp:'おくります', en:'send'},
+    {lesson:7, jp:'もらいます', en:'receive'},
+    {lesson:7, jp:'あげます', en:'give'},
+    {lesson:7, jp:'かします', en:'lend'},
+    {lesson:7, jp:'かりります', en:'borrow'},
+    {lesson:7, jp:'ならいます', en:'learn'},
+    {lesson:7, jp:'おしえます', en:'teach, tell'},
+    {lesson:7, jp:'かけます', en:'make a phone call'},
+    {lesson:7, jp:'て', en:'hand'},
+    {lesson:7, jp:'はし', en:'chopsticks'},
+    {lesson:7, jp:'スプーン', en:'spoon'},
+    {lesson:7, jp:'フォーク', en:'fork'},
+    {lesson:7, jp:'ナイフ', en:'knife'},
+    {lesson:7, jp:'はさみ', en:'scissors'},
+    {lesson:7, jp:'パソコン', en:'personal computer'},
+    {lesson:7, jp:'ケータイ', en:'mobile phone'},
+    {lesson:7, jp:'メール', en:'email'},
+    {lesson:7, jp:'ねんがじょう', en:'New Year\'s card'},
+    {lesson:7, jp:'パンチ', en:'hole punch'},
+    {lesson:7, jp:'ホッチキス', en:'stapler'},
+    {lesson:7, jp:'セロテープ', en:'cellophane tape'},
+    {lesson:7, jp:'けしゴム', en:'eraser'},
+    {lesson:7, jp:'かみ', en:'paper'},
+    {lesson:7, jp:'はな', en:'flower'},
+    {lesson:7, jp:'シャツ', en:'shirt'},
+    {lesson:7, jp:'プレゼント', en:'present, gift'},
+    {lesson:7, jp:'にもつ', en:'luggage'},
+    {lesson:7, jp:'おかね', en:'money'},
+    {lesson:7, jp:'きっぷ', en:'ticket'},
+    {lesson:7, jp:'クリスマス', en:'Christmas'},
+    {lesson:7, jp:'ちち', en:'father (my)'},
+    {lesson:7, jp:'はは', en:'mother (my)'},
+    {lesson:7, jp:'おとうさん', en:'father (other\'s)'},
+    {lesson:7, jp:'おかあさん', en:'mother (other\'s)'},
+    {lesson:7, jp:'もう', en:'already'},
+    {lesson:7, jp:'まだ', en:'not yet'},
+    {lesson:7, jp:'これから', en:'from now'},
+    {lesson:7, jp:'すてきですね', en:'how wonderful'},
+    {lesson:7, jp:'いらっしゃい', en:'welcome'},
+    {lesson:7, jp:'どうぞ　あがってください', en:'please come in'},
+    {lesson:7, jp:'しつれいします', en:'excuse me (when entering/leaving)'},
+    {lesson:7, jp:'どうも', en:'thanks'},
+    {lesson:7, jp:'〜に　〜を　あげます', en:'give ~ to ~'},
+    {lesson:7, jp:'〜に　〜を　もらいます', en:'receive ~ from ~'},
+    
+    // Lesson 8
+    {lesson:8, jp:'ハンサム', en:'handsome'},
+    {lesson:8, jp:'きれい', en:'beautiful, clean'},
+    {lesson:8, jp:'しずか', en:'quiet'},
+    {lesson:8, jp:'にぎやか', en:'lively, bustling'},
+    {lesson:8, jp:'ゆうめい', en:'famous'},
+    {lesson:8, jp:'しんせつ', en:'kind'},
+    {lesson:8, jp:'げんき', en:'healthy, energetic'},
+    {lesson:8, jp:'ひま', en:'free (time)'},
+    {lesson:8, jp:'べんり', en:'convenient'},
+    {lesson:8, jp:'すてき', en:'wonderful, lovely'},
+    {lesson:8, jp:'おおきい', en:'big'},
+    {lesson:8, jp:'ちいさい', en:'small'},
+    {lesson:8, jp:'あたらしい', en:'new'},
+    {lesson:8, jp:'ふるい', en:'old'},
+    {lesson:8, jp:'いい', en:'good'},
+    {lesson:8, jp:'わるい', en:'bad'},
+    {lesson:8, jp:'あつい', en:'hot'},
+    {lesson:8, jp:'さむい', en:'cold'},
+    {lesson:8, jp:'つめたい', en:'cold (to touch)'},
+    {lesson:8, jp:'むずかしい', en:'difficult'},
+    {lesson:8, jp:'やさしい', en:'easy, kind'},
+    {lesson:8, jp:'たかい', en:'expensive, high'},
+    {lesson:8, jp:'やすい', en:'cheap'},
+    {lesson:8, jp:'ひくい', en:'low'},
+    {lesson:8, jp:'おもしろい', en:'interesting, funny'},
+    {lesson:8, jp:'おいしい', en:'delicious'},
+    {lesson:8, jp:'いそがしい', en:'busy'},
+    {lesson:8, jp:'たのしい', en:'enjoyable, fun'},
+    {lesson:8, jp:'しろい', en:'white'},
+    {lesson:8, jp:'くろい', en:'black'},
+    {lesson:8, jp:'あかい', en:'red'},
+    {lesson:8, jp:'あおい', en:'blue'},
+    {lesson:8, jp:'さくら', en:'cherry blossom'},
+    {lesson:8, jp:'やま', en:'mountain'},
+    {lesson:8, jp:'まち', en:'town, city'},
+    {lesson:8, jp:'たべもの', en:'food'},
+    {lesson:8, jp:'くるま', en:'car'},
+    {lesson:8, jp:'ところ', en:'place'},
+    {lesson:8, jp:'りょう', en:'dormitory'},
+    {lesson:8, jp:'べんきょう', en:'study'},
+    {lesson:8, jp:'せいかつ', en:'life, living'},
+    {lesson:8, jp:'しごと', en:'work, job'},
+    {lesson:8, jp:'どう', en:'how'},
+    {lesson:8, jp:'どんな', en:'what kind of'},
+    {lesson:8, jp:'とても', en:'very'},
+    {lesson:8, jp:'あまり', en:'not very (with negative)'},
+    {lesson:8, jp:'そして', en:'and, also'},
+    {lesson:8, jp:'〜が、〜', en:'but'},
+    {lesson:8, jp:'〜よ', en:'~ (emphasis)'},
+    {lesson:8, jp:'すみません、もういちど', en:'sorry, once more'},
+    {lesson:8, jp:'いろいろ', en:'various'},
+    {lesson:8, jp:'さあ', en:'well, let\'s see'},
+    {lesson:8, jp:'ふじさん', en:'Mt. Fuji'},
+    {lesson:8, jp:'どうぞ', en:'here you go'},
+    
+    // Lesson 9
+    {lesson:9, jp:'わかります', en:'understand'},
+    {lesson:9, jp:'あります', en:'have, own'},
+    {lesson:9, jp:'すき', en:'like'},
+    {lesson:9, jp:'きらい', en:'dislike'},
+    {lesson:9, jp:'じょうず', en:'skilled, good at'},
+    {lesson:9, jp:'へた', en:'unskilled, poor at'},
+    {lesson:9, jp:'りょうり', en:'cooking, dish'},
+    {lesson:9, jp:'のみもの', en:'drink, beverage'},
+    {lesson:9, jp:'スポーツ', en:'sports'},
+    {lesson:9, jp:'やきゅう', en:'baseball'},
+    {lesson:9, jp:'ダンス', en:'dance'},
+    {lesson:9, jp:'おんがく', en:'music'},
+    {lesson:9, jp:'うた', en:'song'},
+    {lesson:9, jp:'クラシック', en:'classical music'},
+    {lesson:9, jp:'ジャズ', en:'jazz'},
+    {lesson:9, jp:'コンサート', en:'concert'},
+    {lesson:9, jp:'カラオケ', en:'karaoke'},
+    {lesson:9, jp:'かぶき', en:'Kabuki'},
+    {lesson:9, jp:'え', en:'picture, painting'},
+    {lesson:9, jp:'じ', en:'character, letter'},
+    {lesson:9, jp:'かんじ', en:'kanji'},
+    {lesson:9, jp:'ひらがな', en:'hiragana'},
+    {lesson:9, jp:'かたかな', en:'katakana'},
+    {lesson:9, jp:'ローマじ', en:'roman alphabet'},
+    {lesson:9, jp:'こまかいおかね', en:'small change'},
+    {lesson:9, jp:'チケット', en:'ticket'},
+    {lesson:9, jp:'じかん', en:'time'},
+    {lesson:9, jp:'ようじ', en:'business, errand'},
+    {lesson:9, jp:'やくそく', en:'promise, appointment'},
+    {lesson:9, jp:'ごしゅじん', en:'husband (other\'s)'},
+    {lesson:9, jp:'おっと', en:'husband (my)'},
+    {lesson:9, jp:'おくさん', en:'wife (other\'s)'},
+    {lesson:9, jp:'つま', en:'wife (my)'},
+    {lesson:9, jp:'こども', en:'child'},
+    {lesson:9, jp:'よく', en:'well, often'},
+    {lesson:9, jp:'だいたい', en:'mostly, roughly'},
+    {lesson:9, jp:'たくさん', en:'a lot, many'},
+    {lesson:9, jp:'すこし', en:'a little, few'},
+    {lesson:9, jp:'ぜんぜん', en:'not at all (with negative)'},
+    {lesson:9, jp:'はやく', en:'quickly, early'},
+    {lesson:9, jp:'〜から', en:'because ~'},
+    {lesson:9, jp:'どうして', en:'why'},
+    {lesson:9, jp:'ざんねんですね', en:'that\'s too bad'},
+    {lesson:9, jp:'すみません', en:'I\'m sorry, excuse me'},
+    {lesson:9, jp:'もしもし', en:'hello (on phone)'},
+    {lesson:9, jp:'ああ', en:'oh, ah'},
+    {lesson:9, jp:'いっしょにいかがですか', en:'won\'t you join us?'},
+    {lesson:9, jp:'〜はちょっと', en:'~ is a bit... (polite refusal)'},
+    {lesson:9, jp:'だめですか', en:'is it no good?'},
+    {lesson:9, jp:'またこんどおねがいします', en:'next time please'},
+    
+    // Lesson 10
+    {lesson:10, jp:'います', en:'there is (living things)'},
+    {lesson:10, jp:'あります', en:'there is (non-living things)'},
+    {lesson:10, jp:'いろいろ', en:'various'},
+    {lesson:10, jp:'おとこのひと', en:'man'},
+    {lesson:10, jp:'おんなのひと', en:'woman'},
+    {lesson:10, jp:'おとこのこ', en:'boy'},
+    {lesson:10, jp:'おんなのこ', en:'girl'},
+    {lesson:10, jp:'いぬ', en:'dog'},
+    {lesson:10, jp:'ねこ', en:'cat'},
+    {lesson:10, jp:'き', en:'tree'},
+    {lesson:10, jp:'もの', en:'thing, object'},
+    {lesson:10, jp:'フィルム', en:'film'},
+    {lesson:10, jp:'でんち', en:'battery'},
+    {lesson:10, jp:'はこ', en:'box'},
+    {lesson:10, jp:'スイッチ', en:'switch'},
+    {lesson:10, jp:'れいぞうこ', en:'refrigerator'},
+    {lesson:10, jp:'テーブル', en:'table'},
+    {lesson:10, jp:'ベッド', en:'bed'},
+    {lesson:10, jp:'たな', en:'shelf'},
+    {lesson:10, jp:'ドア', en:'door'},
+    {lesson:10, jp:'まど', en:'window'},
+    {lesson:10, jp:'ポスト', en:'postbox, mailbox'},
+    {lesson:10, jp:'ビル', en:'building'},
+    {lesson:10, jp:'こうえん', en:'park'},
+    {lesson:10, jp:'きっさてん', en:'coffee shop, cafe'},
+    {lesson:10, jp:'ほんや', en:'bookstore'},
+    {lesson:10, jp:'〜や', en:'~ shop'},
+    {lesson:10, jp:'のりば', en:'boarding place'},
+    {lesson:10, jp:'けん', en:'prefecture'},
+    {lesson:10, jp:'うえ', en:'above, on'},
+    {lesson:10, jp:'した', en:'below, under'},
+    {lesson:10, jp:'まえ', en:'front'},
+    {lesson:10, jp:'うしろ', en:'behind'},
+    {lesson:10, jp:'みぎ', en:'right'},
+    {lesson:10, jp:'ひだり', en:'left'},
+    {lesson:10, jp:'なか', en:'inside'},
+    {lesson:10, jp:'そと', en:'outside'},
+    {lesson:10, jp:'となり', en:'next to'},
+    {lesson:10, jp:'ちかく', en:'near'},
+    {lesson:10, jp:'あいだ', en:'between'},
+    {lesson:10, jp:'〜や〜など', en:'~ and ~ etc.'},
+    {lesson:10, jp:'いちばん', en:'most, number one'},
+    {lesson:10, jp:'〜だんめ', en:'~ shelf/row'},
+    {lesson:10, jp:'まっすぐ', en:'straight ahead'},
+    {lesson:10, jp:'すみませんが', en:'excuse me, but'},
+    {lesson:10, jp:'チリソース', en:'chili sauce'},
+    {lesson:10, jp:'いらっしゃいませ', en:'welcome (in shops)'},
+    {lesson:10, jp:'すみません', en:'excuse me'},
+    {lesson:10, jp:'〜は　どこですか', en:'where is ~?'},
+    {lesson:10, jp:'〜を　みせてください', en:'please show me ~'},
+    
+    // Lesson 11
+    {lesson:11, jp:'います', en:'have (children, siblings)'},
+    {lesson:11, jp:'かかります', en:'take (time, money)'},
+    {lesson:11, jp:'やすみます', en:'take a day off'},
+    {lesson:11, jp:'ひとつ', en:'one (generic counter)'},
+    {lesson:11, jp:'ふたつ', en:'two'},
+    {lesson:11, jp:'みっつ', en:'three'},
+    {lesson:11, jp:'よっつ', en:'four'},
+    {lesson:11, jp:'いつつ', en:'five'},
+    {lesson:11, jp:'むっつ', en:'six'},
+    {lesson:11, jp:'ななつ', en:'seven'},
+    {lesson:11, jp:'やっつ', en:'eight'},
+    {lesson:11, jp:'ここのつ', en:'nine'},
+    {lesson:11, jp:'とお', en:'ten'},
+    {lesson:11, jp:'いくつ', en:'how many'},
+    {lesson:11, jp:'ひとり', en:'one person'},
+    {lesson:11, jp:'ふたり', en:'two people'},
+    {lesson:11, jp:'〜にん', en:'~ people'},
+    {lesson:11, jp:'〜だい', en:'~ (counter for machines/cars)'},
+    {lesson:11, jp:'〜まい', en:'~ (counter for flat objects)'},
+    {lesson:11, jp:'〜かい', en:'~ times'},
+    {lesson:11, jp:'りんご', en:'apple'},
+    {lesson:11, jp:'みかん', en:'mandarin orange'},
+    {lesson:11, jp:'サンドイッチ', en:'sandwich'},
+    {lesson:11, jp:'カレーライス', en:'curry rice'},
+    {lesson:11, jp:'アイスクリーム', en:'ice cream'},
+    {lesson:11, jp:'きって', en:'postage stamp'},
+    {lesson:11, jp:'はがき', en:'postcard'},
+    {lesson:11, jp:'ふうとう', en:'envelope'},
+    {lesson:11, jp:'そくたつ', en:'express mail'},
+    {lesson:11, jp:'かきとめ', en:'registered mail'},
+    {lesson:11, jp:'エアメール', en:'airmail'},
+    {lesson:11, jp:'ふなびん', en:'surface mail'},
+    {lesson:11, jp:'おかあさん', en:'mother'},
+    {lesson:11, jp:'おとうさん', en:'father'},
+    {lesson:11, jp:'あに', en:'older brother (my)'},
+    {lesson:11, jp:'おにいさん', en:'older brother (other\'s)'},
+    {lesson:11, jp:'あね', en:'older sister (my)'},
+    {lesson:11, jp:'おねえさん', en:'older sister (other\'s)'},
+    {lesson:11, jp:'おとうと', en:'younger brother'},
+    {lesson:11, jp:'いもうと', en:'younger sister'},
+    {lesson:11, jp:'きょうだい', en:'siblings'},
+    {lesson:11, jp:'がいこく', en:'foreign country'},
+    {lesson:11, jp:'〜じかん', en:'~ hours'},
+    {lesson:11, jp:'〜しゅうかん', en:'~ weeks'},
+    {lesson:11, jp:'〜かげつ', en:'~ months'},
+    {lesson:11, jp:'〜ねん', en:'~ years'},
+    {lesson:11, jp:'〜ぐらい', en:'about ~, approximately'},
+    {lesson:11, jp:'どのくらい', en:'how long, how much'},
+    {lesson:11, jp:'ぜんぶで', en:'in total, altogether'},
+    {lesson:11, jp:'みんな', en:'all, everyone'},
+    {lesson:11, jp:'〜だけ', en:'only ~'},
+    {lesson:11, jp:'いらっしゃいませ', en:'welcome (in shops)'},
+    {lesson:11, jp:'すみません', en:'excuse me'},
+    {lesson:11, jp:'またいらっしゃってください', en:'please come again'},
+    
+    // Lesson 12
+    {lesson:12, jp:'きせつ', en:'season'},
+    {lesson:12, jp:'はる', en:'spring'},
+    {lesson:12, jp:'なつ', en:'summer'},
+    {lesson:12, jp:'あき', en:'autumn, fall'},
+    {lesson:12, jp:'ふゆ', en:'winter'},
+    {lesson:12, jp:'てんき', en:'weather'},
+    {lesson:12, jp:'あめ', en:'rain'},
+    {lesson:12, jp:'ゆき', en:'snow'},
+    {lesson:12, jp:'くもり', en:'cloudy weather'},
+    {lesson:12, jp:'かぜ', en:'wind'},
+    {lesson:12, jp:'きおん', en:'temperature (air)'},
+    {lesson:12, jp:'さむい', en:'cold (weather)'},
+    {lesson:12, jp:'あつい', en:'hot (weather)'},
+    {lesson:12, jp:'すずしい', en:'cool'},
+    {lesson:12, jp:'あたたかい', en:'warm'},
+    {lesson:12, jp:'むしあつい', en:'humid, muggy'},
+    {lesson:12, jp:'きのう', en:'yesterday'},
+    {lesson:12, jp:'きょう', en:'today'},
+    {lesson:12, jp:'あした', en:'tomorrow'},
+    {lesson:12, jp:'おととい', en:'day before yesterday'},
+    {lesson:12, jp:'あさって', en:'day after tomorrow'},
+    {lesson:12, jp:'しゅうまつ', en:'weekend'},
+    {lesson:12, jp:'おしょうがつ', en:'New Year'},
+    {lesson:12, jp:'ひ', en:'day'},
+    {lesson:12, jp:'〜より', en:'than ~'},
+    {lesson:12, jp:'〜のほうが', en:'more ~'},
+    {lesson:12, jp:'いちばん', en:'the most, number one'},
+    {lesson:12, jp:'ずっと', en:'much more, by far'},
+    {lesson:12, jp:'どちら', en:'which'},
+    {lesson:12, jp:'でも', en:'but'},
+    {lesson:12, jp:'あまり', en:'not very (with negative)'},
+    {lesson:12, jp:'そうですね', en:'let me see, well...'},
+    {lesson:12, jp:'いいてんきですね', en:'nice weather, isn\'t it'},
+    {lesson:12, jp:'ほんとうですか', en:'really?'},
+    {lesson:12, jp:'ああ、そうですか', en:'oh, I see'},
+    
+    // Lesson 13
+    {lesson:13, jp:'あそびます', en:'play, have fun'},
+    {lesson:13, jp:'およぎます', en:'swim'},
+    {lesson:13, jp:'むかえにいきます', en:'go to pick up'},
+    {lesson:13, jp:'つかれます', en:'get tired'},
+    {lesson:13, jp:'だします', en:'send, post'},
+    {lesson:13, jp:'はいります', en:'enter'},
+    {lesson:13, jp:'でます', en:'go out, exit'},
+    {lesson:13, jp:'けっこんします', en:'get married'},
+    {lesson:13, jp:'かいものします', en:'go shopping'},
+    {lesson:13, jp:'しょくじします', en:'have a meal'},
+    {lesson:13, jp:'さんぽします', en:'take a walk'},
+    {lesson:13, jp:'たいへんな', en:'tough, hard'},
+    {lesson:13, jp:'ほしい', en:'want'},
+    {lesson:13, jp:'〜たい', en:'want to ~'},
+    {lesson:13, jp:'プール', en:'swimming pool'},
+    {lesson:13, jp:'かわ', en:'river'},
+    {lesson:13, jp:'つり', en:'fishing'},
+    {lesson:13, jp:'やま', en:'mountain'},
+    {lesson:13, jp:'え', en:'picture, painting'},
+    {lesson:13, jp:'つき', en:'moon'},
+    {lesson:13, jp:'ほし', en:'star'},
+    {lesson:13, jp:'うみ', en:'sea, ocean'},
+    {lesson:13, jp:'りょこう', en:'travel'},
+    {lesson:13, jp:'ハイキング', en:'hiking'},
+    {lesson:13, jp:'パーティー', en:'party'},
+    {lesson:13, jp:'ホテル', en:'hotel'},
+    {lesson:13, jp:'レストラン', en:'restaurant'},
+    {lesson:13, jp:'こうえん', en:'park'},
+    {lesson:13, jp:'きっさてん', en:'cafe'},
+    {lesson:13, jp:'しゃしんてん', en:'photo shop'},
+    {lesson:13, jp:'にほんりょうり', en:'Japanese cuisine'},
+    {lesson:13, jp:'ひろしま', en:'Hiroshima'},
+    {lesson:13, jp:'なごや', en:'Nagoya'},
+    {lesson:13, jp:'おおさか', en:'Osaka'},
+    {lesson:13, jp:'きょうと', en:'Kyoto'},
+    {lesson:13, jp:'ほっかいどう', en:'Hokkaido'},
+    {lesson:13, jp:'どこか', en:'somewhere'},
+    {lesson:13, jp:'いっしょに', en:'together'},
+    {lesson:13, jp:'おなかがすきました', en:'I\'m hungry'},
+    {lesson:13, jp:'のどがかわきました', en:'I\'m thirsty'},
+    {lesson:13, jp:'そうしましょう', en:'let\'s do that'},
+    {lesson:13, jp:'ごちゅうもんは？', en:'your order?'},
+    {lesson:13, jp:'ていしょく', en:'set meal'},
+    {lesson:13, jp:'うどん', en:'udon noodles'},
+    {lesson:13, jp:'おこのみやき', en:'Japanese savory pancake'},
+    {lesson:13, jp:'しょうがつ', en:'New Year'},
+    
+    // Lesson 14
+    {lesson:14, jp:'つけます', en:'turn on'},
+    {lesson:14, jp:'けします', en:'turn off'},
+    {lesson:14, jp:'あけます', en:'open'},
+    {lesson:14, jp:'しめます', en:'close, shut'},
+    {lesson:14, jp:'いそぎます', en:'hurry'},
+    {lesson:14, jp:'まちます', en:'wait'},
+    {lesson:14, jp:'もちます', en:'carry, hold'},
+    {lesson:14, jp:'とります', en:'take, pass through'},
+    {lesson:14, jp:'てつだいます', en:'help, assist'},
+    {lesson:14, jp:'よびます', en:'call, invite'},
+    {lesson:14, jp:'はなします', en:'speak, talk'},
+    {lesson:14, jp:'みせます', en:'show'},
+    {lesson:14, jp:'おしえます', en:'tell, teach'},
+    {lesson:14, jp:'はじめます', en:'begin, start'},
+    {lesson:14, jp:'ふります', en:'rain (降ります)'},
+    {lesson:14, jp:'コピーします', en:'copy'},
+    {lesson:14, jp:'でんき', en:'electricity, light'},
+    {lesson:14, jp:'エアコン', en:'air conditioner'},
+    {lesson:14, jp:'パスポート', en:'passport'},
+    {lesson:14, jp:'なまえ', en:'name'},
+    {lesson:14, jp:'じゅうしょ', en:'address'},
+    {lesson:14, jp:'ちず', en:'map'},
+    {lesson:14, jp:'しお', en:'salt'},
+    {lesson:14, jp:'さとう', en:'sugar'},
+    {lesson:14, jp:'みそ', en:'miso'},
+    {lesson:14, jp:'しょうゆ', en:'soy sauce'},
+    {lesson:14, jp:'のみかた', en:'how to drink/take'},
+    {lesson:14, jp:'よみかた', en:'how to read'},
+    {lesson:14, jp:'つかいかた', en:'how to use'},
+    {lesson:14, jp:'とりかた', en:'how to take'},
+    {lesson:14, jp:'これ', en:'this'},
+    {lesson:14, jp:'まっすぐ', en:'straight'},
+    {lesson:14, jp:'みぎ', en:'right'},
+    {lesson:14, jp:'ひだり', en:'left'},
+    {lesson:14, jp:'つぎ', en:'next'},
+    {lesson:14, jp:'かど', en:'corner'},
+    {lesson:14, jp:'こうさてん', en:'intersection'},
+    {lesson:14, jp:'しんごう', en:'traffic light'},
+    {lesson:14, jp:'おうだんほどう', en:'pedestrian crossing'},
+    {lesson:14, jp:'みち', en:'road, street'},
+    {lesson:14, jp:'とおり', en:'avenue, street'},
+    {lesson:14, jp:'〜め', en:'~th (ordinal)'},
+    {lesson:14, jp:'おつり', en:'change (money)'},
+    {lesson:14, jp:'すみません', en:'excuse me'},
+    {lesson:14, jp:'どうやって', en:'how'},
+    {lesson:14, jp:'どの〜', en:'which ~'},
+    {lesson:14, jp:'ありがとうございました', en:'thank you very much'},
+    
+    // Lesson 15
+    {lesson:15, jp:'おきます', en:'put, place'},
+    {lesson:15, jp:'すわります', en:'sit down'},
+    {lesson:15, jp:'つくります', en:'make, create'},
+    {lesson:15, jp:'うります', en:'sell'},
+    {lesson:15, jp:'しります', en:'get to know'},
+    {lesson:15, jp:'すみます', en:'live, reside'},
+    {lesson:15, jp:'けんきゅうします', en:'research'},
+    {lesson:15, jp:'しっています', en:'know'},
+    {lesson:15, jp:'すんでいます', en:'live, be living'},
+    {lesson:15, jp:'もっています', en:'have, possess'},
+    {lesson:15, jp:'おもいで', en:'memory'},
+    {lesson:15, jp:'しなもの', en:'goods, products'},
+    {lesson:15, jp:'せいひん', en:'products'},
+    {lesson:15, jp:'ソフト', en:'software'},
+    {lesson:15, jp:'でんしじしょ', en:'electronic dictionary'},
+    {lesson:15, jp:'まち', en:'town, city'},
+    {lesson:15, jp:'レポート', en:'report'},
+    {lesson:15, jp:'もんだい', en:'problem, question'},
+    {lesson:15, jp:'こたえ', en:'answer'},
+    {lesson:15, jp:'ことば', en:'word, language'},
+    {lesson:15, jp:'いみ', en:'meaning'},
+    {lesson:15, jp:'せいかつ', en:'life, living'},
+    {lesson:15, jp:'かいぎ', en:'meeting'},
+    {lesson:15, jp:'しごと', en:'work, job'},
+    {lesson:15, jp:'けっこん', en:'marriage'},
+    {lesson:15, jp:'どくしん', en:'single, unmarried'},
+    {lesson:15, jp:'かいしゃ', en:'company'},
+    {lesson:15, jp:'だいがく', en:'university'},
+    {lesson:15, jp:'びょういん', en:'hospital'},
+    {lesson:15, jp:'こうじょう', en:'factory'},
+    {lesson:15, jp:'スーパー', en:'supermarket'},
+    {lesson:15, jp:'デパート', en:'department store'},
+    {lesson:15, jp:'ぎんこう', en:'bank'},
+    {lesson:15, jp:'ゆうびんきょく', en:'post office'},
+    {lesson:15, jp:'としょかん', en:'library'},
+    {lesson:15, jp:'しゃくしょ', en:'city hall'},
+    {lesson:15, jp:'こうばん', en:'police box'},
+    {lesson:15, jp:'えき', en:'station'},
+    {lesson:15, jp:'くうこう', en:'airport'},
+    {lesson:15, jp:'みなと', en:'port, harbor'},
+    {lesson:15, jp:'りょこうしゃ', en:'travel agency'},
+    {lesson:15, jp:'〜に　すんでいます', en:'live in ~'},
+    {lesson:15, jp:'〜に　つとめています', en:'work at ~'},
+    
+    // Lesson 16
+    {lesson:16, jp:'のります', en:'ride, get on'},
+    {lesson:16, jp:'おります', en:'get off'},
+    {lesson:16, jp:'のりかえます', en:'transfer, change'},
+    {lesson:16, jp:'あびます', en:'take (shower)'},
+    {lesson:16, jp:'いれます', en:'put in'},
+    {lesson:16, jp:'だします', en:'take out'},
+    {lesson:16, jp:'やめます', en:'quit, stop'},
+    {lesson:16, jp:'おします', en:'push'},
+    {lesson:16, jp:'ひきます', en:'pull'},
+    {lesson:16, jp:'ひらきます', en:'open'},
+    {lesson:16, jp:'しめます', en:'close'},
+    {lesson:16, jp:'つきます', en:'turn on'},
+    {lesson:16, jp:'けします', en:'turn off'},
+    {lesson:16, jp:'おぼえます', en:'remember'},
+    {lesson:16, jp:'わすれます', en:'forget'},
+    {lesson:16, jp:'でかけます', en:'go out'},
+    {lesson:16, jp:'ぬぎます', en:'take off (shoes/clothes)'},
+    {lesson:16, jp:'もっていきます', en:'take (something)'},
+    {lesson:16, jp:'もってきます', en:'bring (something)'},
+    {lesson:16, jp:'わかい', en:'young'},
+    {lesson:16, jp:'ながい', en:'long'},
+    {lesson:16, jp:'みじかい', en:'short'},
+    {lesson:16, jp:'あかるい', en:'bright, light'},
+    {lesson:16, jp:'くらい', en:'dark'},
+    {lesson:16, jp:'せがたかい', en:'tall (person)'},
+    {lesson:16, jp:'せがひくい', en:'short (person)'},
+    {lesson:16, jp:'あたまがいい', en:'smart, intelligent'},
+    {lesson:16, jp:'からだ', en:'body'},
+    {lesson:16, jp:'あたま', en:'head'},
+    {lesson:16, jp:'かみ', en:'hair'},
+    {lesson:16, jp:'かお', en:'face'},
+    {lesson:16, jp:'め', en:'eye'},
+    {lesson:16, jp:'みみ', en:'ear'},
+    {lesson:16, jp:'くち', en:'mouth'},
+    {lesson:16, jp:'は', en:'tooth'},
+    {lesson:16, jp:'おなか', en:'stomach'},
+    {lesson:16, jp:'あし', en:'leg, foot'},
+    {lesson:16, jp:'うで', en:'arm'},
+    {lesson:16, jp:'て', en:'hand'},
+    {lesson:16, jp:'ゆび', en:'finger'},
+    {lesson:16, jp:'サービス', en:'service'},
+    {lesson:16, jp:'ジョギング', en:'jogging'},
+    {lesson:16, jp:'シャワー', en:'shower'},
+    {lesson:16, jp:'みどり', en:'green, greenery'},
+    {lesson:16, jp:'おてら', en:'temple'},
+    {lesson:16, jp:'じんじゃ', en:'shrine'},
+    {lesson:16, jp:'りゅうがくせい', en:'international student'},
+    {lesson:16, jp:'〜くん', en:'~kun (suffix for boys/young men)'},
+    {lesson:16, jp:'〜ちゃん', en:'~chan (endearing suffix)'},
+    {lesson:16, jp:'どうぞ', en:'please'},
+    {lesson:16, jp:'〜ばん', en:'number ~'},
+    {lesson:16, jp:'〜せん', en:'line ~ (train line)'},
+    {lesson:16, jp:'どうしましたか', en:'what\'s the matter?'},
+    {lesson:16, jp:'おだいじに', en:'take care of yourself'},
+    {lesson:16, jp:'いたい', en:'painful, sore'},
+    
+    // Lesson 17
+    {lesson:17, jp:'おぼえます', en:'remember, memorize'},
+    {lesson:17, jp:'わすれます', en:'forget'},
+    {lesson:17, jp:'なくします', en:'lose'},
+    {lesson:17, jp:'だします', en:'pay (money), submit'},
+    {lesson:17, jp:'かえします', en:'return, give back'},
+    {lesson:17, jp:'でかけます', en:'go out'},
+    {lesson:17, jp:'ぬぎます', en:'take off (clothes/shoes)'},
+    {lesson:17, jp:'もっていきます', en:'take (something)'},
+    {lesson:17, jp:'もってきます', en:'bring (something)'},
+    {lesson:17, jp:'しんぱいします', en:'worry'},
+    {lesson:17, jp:'ざんぎょうします', en:'work overtime'},
+    {lesson:17, jp:'かいものします', en:'go shopping'},
+    {lesson:17, jp:'しょくじします', en:'have a meal'},
+    {lesson:17, jp:'さんぽします', en:'take a walk'},
+    {lesson:17, jp:'たいせつな', en:'important, precious'},
+    {lesson:17, jp:'だいじょうぶ', en:'okay, all right'},
+    {lesson:17, jp:'あぶない', en:'dangerous'},
+    {lesson:17, jp:'もんだい', en:'problem'},
+    {lesson:17, jp:'こたえ', en:'answer'},
+    {lesson:17, jp:'きんえん', en:'no smoking'},
+    {lesson:17, jp:'ほけんしょう', en:'insurance card'},
+    {lesson:17, jp:'かぜ', en:'cold (illness)'},
+    {lesson:17, jp:'ねつ', en:'fever'},
+    {lesson:17, jp:'びょうき', en:'illness, sickness'},
+    {lesson:17, jp:'くすり', en:'medicine'},
+    {lesson:17, jp:'おふろ', en:'bath'},
+    {lesson:17, jp:'うわぎ', en:'jacket, coat'},
+    {lesson:17, jp:'したぎ', en:'underwear'},
+    {lesson:17, jp:'せんせい', en:'teacher, doctor'},
+    {lesson:17, jp:'でんき', en:'electricity'},
+    {lesson:17, jp:'エアコン', en:'air conditioner'},
+    {lesson:17, jp:'まど', en:'window'},
+    {lesson:17, jp:'ドア', en:'door'},
+    {lesson:17, jp:'かぎ', en:'key'},
+    {lesson:17, jp:'おかね', en:'money'},
+    {lesson:17, jp:'パスポート', en:'passport'},
+    {lesson:17, jp:'さいふ', en:'wallet'},
+    {lesson:17, jp:'かばん', en:'bag'},
+    {lesson:17, jp:'にもつ', en:'luggage'},
+    {lesson:17, jp:'でんわ', en:'telephone'},
+    {lesson:17, jp:'ケータイ', en:'mobile phone'},
+    {lesson:17, jp:'しゅくだい', en:'homework'},
+    {lesson:17, jp:'レポート', en:'report'},
+    {lesson:17, jp:'てがみ', en:'letter'},
+    {lesson:17, jp:'〜までに', en:'by ~ (deadline)'},
+    {lesson:17, jp:'〜ないでください', en:'please don\'t ~'},
+    {lesson:17, jp:'〜なければなりません', en:'must ~'},
+    {lesson:17, jp:'〜なくてもいいです', en:'don\'t need to ~'},
+    
+    // Lesson 18
+    {lesson:18, jp:'できます', en:'can do, be able to'},
+    {lesson:18, jp:'あらいます', en:'wash'},
+    {lesson:18, jp:'ひきます', en:'play (piano, string instrument)'},
+    {lesson:18, jp:'うたいます', en:'sing'},
+    {lesson:18, jp:'あつめます', en:'collect, gather'},
+    {lesson:18, jp:'すてます', en:'throw away'},
+    {lesson:18, jp:'りょうがえします', en:'exchange money'},
+    {lesson:18, jp:'うんてんします', en:'drive'},
+    {lesson:18, jp:'よやくします', en:'reserve, book'},
+    {lesson:18, jp:'しゅうりします', en:'repair'},
+    {lesson:18, jp:'ピアノ', en:'piano'},
+    {lesson:18, jp:'ギター', en:'guitar'},
+    {lesson:18, jp:'メートル', en:'meter'},
+    {lesson:18, jp:'こくさい', en:'international'},
+    {lesson:18, jp:'おかね', en:'money'},
+    {lesson:18, jp:'げんきん', en:'cash'},
+    {lesson:18, jp:'しゅみ', en:'hobby'},
+    {lesson:18, jp:'にっき', en:'diary'},
+    {lesson:18, jp:'いのり', en:'prayer'},
+    {lesson:18, jp:'かちょう', en:'section manager'},
+    {lesson:18, jp:'ぶちょう', en:'department manager'},
+    {lesson:18, jp:'しゃちょう', en:'company president'},
+    {lesson:18, jp:'どうぶつ', en:'animal'},
+    {lesson:18, jp:'ペット', en:'pet'},
+    {lesson:18, jp:'こと', en:'thing (abstract)'},
+    {lesson:18, jp:'〜まえ', en:'before ~'},
+    {lesson:18, jp:'〜てから', en:'after doing ~'},
+    {lesson:18, jp:'なかなか', en:'considerably, quite'},
+    {lesson:18, jp:'もちろん', en:'of course'},
+    {lesson:18, jp:'ぜひ', en:'by all means'},
+    {lesson:18, jp:'だいじ', en:'important, serious'},
+    {lesson:18, jp:'すごい', en:'amazing, great'},
+    {lesson:18, jp:'かんたん', en:'easy, simple'},
+    {lesson:18, jp:'ふくざつ', en:'complicated'},
+    {lesson:18, jp:'〜ことができます', en:'can do ~'},
+    {lesson:18, jp:'わたしのしゅみは〜です', en:'my hobby is ~'},
+    
+    // Lesson 19
+    {lesson:19, jp:'のぼります', en:'climb'},
+    {lesson:19, jp:'とまります', en:'stay (at hotel)'},
+    {lesson:19, jp:'そうじします', en:'clean'},
+    {lesson:19, jp:'せんたくします', en:'do laundry'},
+    {lesson:19, jp:'れんしゅうします', en:'practice'},
+    {lesson:19, jp:'なります', en:'become'},
+    {lesson:19, jp:'ねむい', en:'sleepy'},
+    {lesson:19, jp:'つよい', en:'strong'},
+    {lesson:19, jp:'よわい', en:'weak'},
+    {lesson:19, jp:'ちょうし', en:'condition, state'},
+    {lesson:19, jp:'ちょうしがいい', en:'in good condition'},
+    {lesson:19, jp:'ちょうしがわるい', en:'in bad condition'},
+    {lesson:19, jp:'ダイエット', en:'diet'},
+    {lesson:19, jp:'ダイエットします', en:'go on a diet'},
+    {lesson:19, jp:'たいじゅう', en:'body weight'},
+    {lesson:19, jp:'からだ', en:'body'},
+    {lesson:19, jp:'けが', en:'injury'},
+    {lesson:19, jp:'びょういん', en:'hospital'},
+    {lesson:19, jp:'くすり', en:'medicine'},
+    {lesson:19, jp:'かぜ', en:'cold (illness)'},
+    {lesson:19, jp:'おいしゃさん', en:'doctor'},
+    {lesson:19, jp:'しょくじ', en:'meal'},
+    {lesson:19, jp:'やさい', en:'vegetables'},
+    {lesson:19, jp:'くだもの', en:'fruit'},
+    {lesson:19, jp:'にく', en:'meat'},
+    {lesson:19, jp:'さかな', en:'fish'},
+    {lesson:19, jp:'おさけ', en:'alcohol'},
+    {lesson:19, jp:'おちゃ', en:'tea'},
+    {lesson:19, jp:'たばこ', en:'cigarette, tobacco'},
+    {lesson:19, jp:'すいます', en:'smoke'},
+    {lesson:19, jp:'やめます', en:'quit, stop'},
+    {lesson:19, jp:'うんどう', en:'exercise'},
+    {lesson:19, jp:'うんどうします', en:'exercise'},
+    {lesson:19, jp:'きんえん', en:'no smoking'},
+    {lesson:19, jp:'たちいりきんし', en:'no entry'},
+    {lesson:19, jp:'きけん', en:'danger'},
+    {lesson:19, jp:'あぶない', en:'dangerous'},
+    {lesson:19, jp:'かならず', en:'without fail, certainly'},
+    {lesson:19, jp:'ぜったいに', en:'absolutely'},
+    {lesson:19, jp:'〜すぎる', en:'too much ~'},
+    {lesson:19, jp:'〜ほうがいい', en:'had better ~'},
+    {lesson:19, jp:'〜でしょう', en:'probably ~'},
+    {lesson:19, jp:'そうしましょう', en:'let\'s do that'},
+    {lesson:19, jp:'おだいじに', en:'take care'},
+    
+    // Lesson 20
+    {lesson:20, jp:'いります', en:'need, be necessary'},
+    {lesson:20, jp:'しらべます', en:'investigate, check'},
+    {lesson:20, jp:'しゅうりします', en:'repair'},
+    {lesson:20, jp:'れんらくします', en:'contact'},
+    {lesson:20, jp:'しょうかいします', en:'introduce'},
+    {lesson:20, jp:'あんないします', en:'guide, show around'},
+    {lesson:20, jp:'せつめいします', en:'explain'},
+    {lesson:20, jp:'ひろいます', en:'pick up'},
+    {lesson:20, jp:'おくります', en:'send (person)'},
+    {lesson:20, jp:'こまります', en:'be troubled, worried'},
+    {lesson:20, jp:'たります', en:'be enough, sufficient'},
+    {lesson:20, jp:'いります', en:'need'},
+    {lesson:20, jp:'しんごう', en:'traffic light'},
+    {lesson:20, jp:'かど', en:'corner'},
+    {lesson:20, jp:'はし', en:'bridge'},
+    {lesson:20, jp:'ちかく', en:'near, vicinity'},
+    {lesson:20, jp:'むこう', en:'opposite side'},
+    {lesson:20, jp:'てまえ', en:'this side'},
+    {lesson:20, jp:'となり', en:'next to'},
+    {lesson:20, jp:'め', en:'eye'},
+    {lesson:20, jp:'は', en:'tooth'},
+    {lesson:20, jp:'いたい', en:'painful'},
+    {lesson:20, jp:'かゆい', en:'itchy'},
+    {lesson:20, jp:'じょうぶ', en:'sturdy, durable'},
+    {lesson:20, jp:'しんせつ', en:'kind'},
+    {lesson:20, jp:'べんり', en:'convenient'},
+    {lesson:20, jp:'きょうみ', en:'interest'},
+    {lesson:20, jp:'〜にきょうみがあります', en:'be interested in ~'},
+    {lesson:20, jp:'ぶんか', en:'culture'},
+    {lesson:20, jp:'れきし', en:'history'},
+    {lesson:20, jp:'ことば', en:'language, words'},
+    {lesson:20, jp:'けんがく', en:'observation, field trip'},
+    {lesson:20, jp:'しゃいんりょこう', en:'company trip'},
+    {lesson:20, jp:'パソコン', en:'personal computer'},
+    {lesson:20, jp:'プリンター', en:'printer'},
+    {lesson:20, jp:'コピーき', en:'copy machine'},
+    {lesson:20, jp:'ファックス', en:'fax'},
+    {lesson:20, jp:'おゆ', en:'hot water'},
+    {lesson:20, jp:'おちゃ', en:'tea'},
+    {lesson:20, jp:'じしょ', en:'dictionary'},
+    {lesson:20, jp:'かみ', en:'paper'},
+    {lesson:20, jp:'〜て　いただけませんか', en:'could you please ~?'},
+    {lesson:20, jp:'〜ましょうか', en:'shall I ~?'},
+    {lesson:20, jp:'どうも', en:'thanks'},
+    {lesson:20, jp:'たすかります', en:'that helps a lot'},
+    
+    // Lesson 21
+    {lesson:21, jp:'おもいます', en:'think'},
+    {lesson:21, jp:'いいます', en:'say'},
+    {lesson:21, jp:'たります', en:'be enough'},
+    {lesson:21, jp:'かちます', en:'win'},
+    {lesson:21, jp:'まけます', en:'lose'},
+    {lesson:21, jp:'あります', en:'have (event)'},
+    {lesson:21, jp:'やくにたちます', en:'be useful'},
+    {lesson:21, jp:'うごきます', en:'move'},
+    {lesson:21, jp:'やめます', en:'stop, quit'},
+    {lesson:21, jp:'きをつけます', en:'be careful'},
+    {lesson:21, jp:'むり', en:'impossible, unreasonable'},
+    {lesson:21, jp:'しあい', en:'match, game'},
+    {lesson:21, jp:'かいぎ', en:'meeting'},
+    {lesson:21, jp:'けいかく', en:'plan'},
+    {lesson:21, jp:'よてい', en:'schedule, plan'},
+    {lesson:21, jp:'しゅっちょう', en:'business trip'},
+    {lesson:21, jp:'けんしゅう', en:'training'},
+    {lesson:21, jp:'けっこんしき', en:'wedding ceremony'},
+    {lesson:21, jp:'おそうしき', en:'funeral'},
+    {lesson:21, jp:'なつやすみ', en:'summer vacation'},
+    {lesson:21, jp:'〜かい', en:'~ (meeting/gathering)'},
+    {lesson:21, jp:'〜しき', en:'~ ceremony'},
+    {lesson:21, jp:'じゅう', en:'sufficient, enough'},
+    {lesson:21, jp:'ふじゅう', en:'insufficient, not enough'},
+    {lesson:21, jp:'むり', en:'impossible'},
+    {lesson:21, jp:'ことば', en:'word, language'},
+    {lesson:21, jp:'いみ', en:'meaning'},
+    {lesson:21, jp:'ことわざ', en:'proverb'},
+    {lesson:21, jp:'あき', en:'autumn'},
+    {lesson:21, jp:'スポーツのあき', en:'autumn of sports'},
+    {lesson:21, jp:'しょくよくのあき', en:'autumn of appetite'},
+    {lesson:21, jp:'どくしょのあき', en:'autumn of reading'},
+    {lesson:21, jp:'ちかてつ', en:'subway'},
+    {lesson:21, jp:'〜ほう', en:'~ way, direction'},
+    {lesson:21, jp:'ぶっか', en:'prices'},
+    {lesson:21, jp:'じんこう', en:'population'},
+    {lesson:21, jp:'せいかつ', en:'life, living'},
+    {lesson:21, jp:'じょうほう', en:'information'},
+    {lesson:21, jp:'ニュース', en:'news'},
+    {lesson:21, jp:'ばんぐみ', en:'TV program'},
+    {lesson:21, jp:'しゅうかん', en:'custom, habit'},
+    {lesson:21, jp:'〜とおもいます', en:'I think ~'},
+    {lesson:21, jp:'〜といいます', en:'called ~'},
+    {lesson:21, jp:'なるほど', en:'I see, indeed'},
+    
+    // Lesson 22
+    {lesson:22, jp:'きます', en:'wear (clothes)'},
+    {lesson:22, jp:'はきます', en:'wear (shoes, pants)'},
+    {lesson:22, jp:'かぶります', en:'wear (hat)'},
+    {lesson:22, jp:'かけます', en:'wear (glasses)'},
+    {lesson:22, jp:'します', en:'wear (accessories)'},
+    {lesson:22, jp:'うまれます', en:'be born'},
+    {lesson:22, jp:'しゅっしん', en:'hometown, origin'},
+    {lesson:22, jp:'そつぎょうします', en:'graduate'},
+    {lesson:22, jp:'にゅうがくします', en:'enter school'},
+    {lesson:22, jp:'しゅうしょくします', en:'get a job'},
+    {lesson:22, jp:'て', en:'hand'},
+    {lesson:22, jp:'うで', en:'arm'},
+    {lesson:22, jp:'くび', en:'neck'},
+    {lesson:22, jp:'ゆび', en:'finger'},
+    {lesson:22, jp:'ゆびわ', en:'ring'},
+    {lesson:22, jp:'めがね', en:'glasses'},
+    {lesson:22, jp:'とけい', en:'watch, clock'},
+    {lesson:22, jp:'スーツ', en:'suit'},
+    {lesson:22, jp:'セーター', en:'sweater'},
+    {lesson:22, jp:'コート', en:'coat'},
+    {lesson:22, jp:'ジャケット', en:'jacket'},
+    {lesson:22, jp:'ズボン', en:'pants, trousers'},
+    {lesson:22, jp:'スカート', en:'skirt'},
+    {lesson:22, jp:'くつ', en:'shoes'},
+    {lesson:22, jp:'くつした', en:'socks'},
+    {lesson:22, jp:'ぼうし', en:'hat'},
+    {lesson:22, jp:'ネクタイ', en:'necktie'},
+    {lesson:22, jp:'マフラー', en:'scarf'},
+    {lesson:22, jp:'てぶくろ', en:'gloves'},
+    {lesson:22, jp:'ふく', en:'clothes'},
+    {lesson:22, jp:'ようふく', en:'Western clothes'},
+    {lesson:22, jp:'きもの', en:'kimono'},
+    {lesson:22, jp:'いろ', en:'color'},
+    {lesson:22, jp:'あか', en:'red'},
+    {lesson:22, jp:'あお', en:'blue'},
+    {lesson:22, jp:'しろ', en:'white'},
+    {lesson:22, jp:'くろ', en:'black'},
+    {lesson:22, jp:'きいろ', en:'yellow'},
+    {lesson:22, jp:'ちゃいろ', en:'brown'},
+    {lesson:22, jp:'みどり', en:'green'},
+    {lesson:22, jp:'むらさき', en:'purple'},
+    {lesson:22, jp:'ピンク', en:'pink'},
+    {lesson:22, jp:'オレンジ', en:'orange'},
+    {lesson:22, jp:'グレー', en:'gray'},
+    {lesson:22, jp:'にほん', en:'Japan'},
+    {lesson:22, jp:'がいこく', en:'foreign country'},
+    {lesson:22, jp:'アジア', en:'Asia'},
+    {lesson:22, jp:'ヨーロッパ', en:'Europe'},
+    {lesson:22, jp:'アフリカ', en:'Africa'},
+    {lesson:22, jp:'〜に　すんでいます', en:'live in ~'},
+    {lesson:22, jp:'〜が　あります', en:'have ~, there is ~'},
+    
+    // Lesson 23
+    {lesson:23, jp:'ききます', en:'ask'},
+    {lesson:23, jp:'まわします', en:'turn, rotate'},
+    {lesson:23, jp:'ひきます', en:'pull'},
+    {lesson:23, jp:'おします', en:'push'},
+    {lesson:23, jp:'かえます', en:'change, exchange'},
+    {lesson:23, jp:'さわります', en:'touch'},
+    {lesson:23, jp:'でます', en:'come out, appear'},
+    {lesson:23, jp:'うごきます', en:'move'},
+    {lesson:23, jp:'あるきます', en:'walk'},
+    {lesson:23, jp:'わたります', en:'cross'},
+    {lesson:23, jp:'まがります', en:'turn'},
+    {lesson:23, jp:'なおします', en:'fix, repair'},
+    {lesson:23, jp:'だします', en:'take out'},
+    {lesson:23, jp:'いれます', en:'put in'},
+    {lesson:23, jp:'おります', en:'fold'},
+    {lesson:23, jp:'しまいます', en:'put away'},
+    {lesson:23, jp:'とります', en:'take'},
+    {lesson:23, jp:'せんたくします', en:'do laundry'},
+    {lesson:23, jp:'アイロンをかけます', en:'iron (clothes)'},
+    {lesson:23, jp:'コピーします', en:'make a copy'},
+    {lesson:23, jp:'でんき', en:'electricity'},
+    {lesson:23, jp:'スイッチ', en:'switch'},
+    {lesson:23, jp:'ボタン', en:'button'},
+    {lesson:23, jp:'つまみ', en:'knob, dial'},
+    {lesson:23, jp:'いれぐち', en:'entrance'},
+    {lesson:23, jp:'でぐち', en:'exit'},
+    {lesson:23, jp:'とおく', en:'far away'},
+    {lesson:23, jp:'ちかく', en:'near'},
+    {lesson:23, jp:'どうろ', en:'road'},
+    {lesson:23, jp:'こうさてん', en:'intersection'},
+    {lesson:23, jp:'しんごう', en:'traffic light'},
+    {lesson:23, jp:'おうだんほどう', en:'crosswalk'},
+    {lesson:23, jp:'みち', en:'road, path'},
+    {lesson:23, jp:'かど', en:'corner'},
+    {lesson:23, jp:'まっすぐ', en:'straight'},
+    {lesson:23, jp:'みぎ', en:'right'},
+    {lesson:23, jp:'ひだり', en:'left'},
+    {lesson:23, jp:'〜て', en:'~ (te-form)'},
+    {lesson:23, jp:'〜と', en:'when ~, if ~'},
+    {lesson:23, jp:'すみません、〜は　どこですか', en:'excuse me, where is ~?'},
+    
+    // Lesson 24
+    {lesson:24, jp:'くれます', en:'give (me)'},
+    {lesson:24, jp:'もらいます', en:'receive'},
+    {lesson:24, jp:'あげます', en:'give'},
+    {lesson:24, jp:'つれてきます', en:'bring (person)'},
+    {lesson:24, jp:'もってきます', en:'bring (thing)'},
+    {lesson:24, jp:'おくります', en:'send, escort'},
+    {lesson:24, jp:'しょうかいします', en:'introduce'},
+    {lesson:24, jp:'あんないします', en:'guide, show around'},
+    {lesson:24, jp:'せつめいします', en:'explain'},
+    {lesson:24, jp:'おしえます', en:'teach, tell'},
+    {lesson:24, jp:'かします', en:'lend'},
+    {lesson:24, jp:'てつだいます', en:'help'},
+    {lesson:24, jp:'よびます', en:'call'},
+    {lesson:24, jp:'みせます', en:'show'},
+    {lesson:24, jp:'プレゼント', en:'present, gift'},
+    {lesson:24, jp:'にもつ', en:'luggage'},
+    {lesson:24, jp:'しゃしん', en:'photograph'},
+    {lesson:24, jp:'はな', en:'flower'},
+    {lesson:24, jp:'おかね', en:'money'},
+    {lesson:24, jp:'きっぷ', en:'ticket'},
+    {lesson:24, jp:'ケーキ', en:'cake'},
+    {lesson:24, jp:'おみやげ', en:'souvenir'},
+    {lesson:24, jp:'メール', en:'email'},
+    {lesson:24, jp:'でんわ', en:'phone call'},
+    {lesson:24, jp:'じょうほう', en:'information'},
+    {lesson:24, jp:'おかあさん', en:'mother'},
+    {lesson:24, jp:'おとうさん', en:'father'},
+    {lesson:24, jp:'こども', en:'child'},
+    {lesson:24, jp:'ともだち', en:'friend'},
+    {lesson:24, jp:'せんせい', en:'teacher'},
+    {lesson:24, jp:'しゃちょう', en:'company president'},
+    {lesson:24, jp:'〜に　〜を　もらいます', en:'receive ~ from ~'},
+    {lesson:24, jp:'〜に　〜を　あげます', en:'give ~ to ~'},
+    {lesson:24, jp:'〜に　〜を　くれます', en:'~ gives (me) ~'},
+    {lesson:24, jp:'ありがとうございます', en:'thank you'},
+    {lesson:24, jp:'どういたしまして', en:'you\'re welcome'},
+    {lesson:24, jp:'おせわになりました', en:'thank you for your help'},
+    
+    // Lesson 25
+    {lesson:25, jp:'もしもし', en:'hello (on phone)'},
+    {lesson:25, jp:'でんわ', en:'telephone'},
+    {lesson:25, jp:'ばんごう', en:'number'},
+    {lesson:25, jp:'でんわばんごう', en:'telephone number'},
+    {lesson:25, jp:'でんわします', en:'make a phone call'},
+    {lesson:25, jp:'でんわをかけます', en:'make a phone call'},
+    {lesson:25, jp:'でんわがきます', en:'receive a call'},
+    {lesson:25, jp:'メッセージ', en:'message'},
+    {lesson:25, jp:'ライン', en:'LINE (app)'},
+    {lesson:25, jp:'れんらくします', en:'contact'},
+    {lesson:25, jp:'おもいます', en:'think'},
+    {lesson:25, jp:'いいます', en:'say'},
+    {lesson:25, jp:'かんがえます', en:'consider, think'},
+    {lesson:25, jp:'きめます', en:'decide'},
+    {lesson:25, jp:'しらせます', en:'inform, notify'},
+    {lesson:25, jp:'ききます', en:'ask'},
+    {lesson:25, jp:'こたえます', en:'answer'},
+    {lesson:25, jp:'わすれます', en:'forget'},
+    {lesson:25, jp:'おぼえます', en:'remember'},
+    {lesson:25, jp:'よやくします', en:'make a reservation'},
+    {lesson:25, jp:'りょこう', en:'travel'},
+    {lesson:25, jp:'てんき', en:'weather'},
+    {lesson:25, jp:'よほう', en:'forecast'},
+    {lesson:25, jp:'てんきよほう', en:'weather forecast'},
+    {lesson:25, jp:'あめ', en:'rain'},
+    {lesson:25, jp:'ゆき', en:'snow'},
+    {lesson:25, jp:'かぜ', en:'wind'},
+    {lesson:25, jp:'はれ', en:'sunny'},
+    {lesson:25, jp:'くもり', en:'cloudy'},
+    {lesson:25, jp:'たぶん', en:'probably'},
+    {lesson:25, jp:'きっと', en:'surely, certainly'},
+    {lesson:25, jp:'もしかしたら', en:'perhaps, possibly'},
+    {lesson:25, jp:'ぜひ', en:'by all means'},
+    {lesson:25, jp:'もちろん', en:'of course'},
+    {lesson:25, jp:'ほんとう', en:'really, truly'},
+    {lesson:25, jp:'うそ', en:'lie, false'},
+    {lesson:25, jp:'〜とおもいます', en:'I think ~'},
+    {lesson:25, jp:'〜かもしれません', en:'might ~, maybe ~'},
+    {lesson:25, jp:'〜でしょう', en:'probably ~'},
+    {lesson:25, jp:'もし〜たら', en:'if ~'},
+    {lesson:25, jp:'げんきですか', en:'how are you?'},
+    {lesson:25, jp:'おげんきですか', en:'how are you? (polite)'},
+    {lesson:25, jp:'またあとで', en:'talk to you later'},
+    {lesson:25, jp:'しつれいします', en:'goodbye (on phone)'}
+];
+
+// --- GRAMMAR (Minna no Nihongo Lessons 1-25) [N5 Kanji Only] ---
+const grammarData = [
+    {
+        lesson: 1,
+        points: [
+            {
+                jp:'〜は〜です', 
+                en:'A is B (noun predicate)',
+                detail: "This is the most fundamental sentence pattern in Japanese, used to state that topic A is equal to or has the property of B. The particle は (pronounced 'wa' when used as a particle) marks the topic of the sentence, establishing what we are talking about. The noun that follows, combined with です (the polite copula), acts as the predicate, defining or describing the topic. です indicates politeness and the present or future tense. This pattern is used for introducing oneself (わたしはマイクです - I am Mike), stating professions (たなかさんは先生です - Mr. Tanaka is a teacher), identifying objects (これは本です - This is a book), and expressing nationalities (リーさんは中国の人です - Mr. Lee is Chinese). The topic particle は can sometimes be omitted in casual speech when the topic is clear from context, but in polite conversation, keeping it ensures clarity and formality. The negative form of this pattern is 〜は〜ではありません, and the interrogative is 〜は〜ですか.",
+                examples: [
+                    {jp: "わたしはかいしゃいんです。", en: "I am a company employee."},
+                    {jp: "これはじしょです。", en: "This is a dictionary."},
+                    {jp: "あの人はたなか先生です。", en: "That person is Professor Tanaka."},
+                    {jp: "今日はわたしのたんじょう日です。", en: "Today is my birthday."},
+                    {jp: "とうきょうは日本のしゅとです。", en: "Tokyo is the capital of Japan."}
+                ]
+            },
+            {
+                jp:'〜は〜ではありません', 
+                en:'A is not B',
+                detail: "This is the negative form of the copula sentence, used to deny that A equals B. ではありません is the polite negative of です. It attaches directly after the predicate noun to negate the statement. In casual speech, ではありません often becomes じゃありません or simply じゃない. This form is crucial for correcting misconceptions or stating falsehoods. For example, if someone mistakes your profession, you would say わたしは学生ではありません (I am not a student). It is also used when contrasting two things, like saying something is not X but Y. The sentence structure remains identical to the affirmative pattern; only the copula changes. Remember that the negative past form is 〜は〜ではありませんでした (A was not B). Mastering the negative allows for more complex conversations involving denials, corrections, and contrasts.",
+                examples: [
+                    {jp: "わたしはおいしゃさんではありません。", en: "I am not a doctor."},
+                    {jp: "これはわたしのかさではありません。", en: "This is not my umbrella."},
+                    {jp: "あのたてものはとしょかんではありません。", en: "That building is not a library."},
+                    {jp: "かれは日本人ではありません。", en: "He is not Japanese."},
+                    {jp: "今日は休みの日ではありません。", en: "Today is not a holiday."}
+                ]
+            },
+            {
+                jp:'〜は〜ですか', 
+                en:'Is A B?',
+                detail: "This is the interrogative form of the copula sentence, used to ask a yes/no question. Simply adding the particle か to the end of the affirmative sentence turns it into a question. Japanese does not require a question mark, though one is often used in informal writing. The question 〜は〜ですか asks whether the topic (marked by は) is equivalent to the predicate noun. The answer typically begins with はい (yes) or いいえ (no). When answering affirmatively, you repeat the predicate: はい、〜です. When answering negatively, you use いいえ、〜ではありません. The か particle acts purely as a question marker and does not translate to a separate word in English. Intonation typically rises at the end of the question, similar to English.",
+                examples: [
+                    {jp: "おしごとは何ですか。", en: "What is your occupation?"},
+                    {jp: "それはあなたのかばんですか。", en: "Is that your bag?"},
+                    {jp: "あの人はどなたですか。", en: "Who is that person?"},
+                    {jp: "今日は月よう日ですか。", en: "Is today Monday?"},
+                    {jp: "これはいくらですか。", en: "How much is this?"}
+                ]
+            },
+            {
+                jp:'の (possessive)', 
+                en:'particle indicating possession or affiliation',
+                detail: "The particle の functions as a possessive marker, roughly equivalent to the English apostrophe-s ('s) or the preposition 'of'. It connects two nouns, where the first noun possesses or modifies the second. The structure is: [Possessor] の [Possessed item]. For example, わたしの本 means 'my book' (literally 'I の book'). の has a broader usage than simple possession, however. It can indicate affiliation (かいしゃの社いん - company employee), location (とうきょうのかいしゃ - company in Tokyo), type (日本語の本 - Japanese language book), creator (ゴッホのえ - a painting by Van Gogh), and material (木のつくえ - wooden desk). Essentially, it links any two nouns where one modifies the other in an associative, possessive, or descriptive way.",
+                examples: [
+                    {jp: "これはわたしの車です。", en: "This is my car."},
+                    {jp: "かのじょは大学のきょうじゅです。", en: "She is a university professor."},
+                    {jp: "それはだれのコートですか。", en: "Whose coat is that?"},
+                    {jp: "これは日本のカメラです。", en: "This is a Japanese camera."},
+                    {jp: "つくえの上にねこがいます。", en: "There is a cat on the desk."}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 2,
+        points: [
+            {
+                jp:'これ・それ・あれ', 
+                en:'this / that / that over there (thing)',
+                detail: "これ, それ, and あれ are demonstrative pronouns used to refer to objects without naming them directly. They follow a strict distance-based rule relative to the speaker and listener. これ means 'this' and refers to an object near the speaker. それ means 'that' and refers to an object near the listener but away from the speaker. あれ means 'that over there' and refers to an object far away from both speaker and listener. When asking a question to identify an unknown object, 何 (なん/なに) is used: これは何ですか (What is this?). When answering, you replace the demonstrative with それ or これ depending on the new distance relationship. This system is fundamental to spatial orientation in Japanese conversation.",
+                examples: [
+                    {jp: "これはわたしのけいたい電話です。", en: "This is my cell phone."},
+                    {jp: "それはあなたのかぎですか。", en: "Is that your key?"},
+                    {jp: "あれはとうきょうタワーです。", en: "That over there is Tokyo Tower."},
+                    {jp: "これは何ですか。", en: "What is this?"},
+                    {jp: "それ、かしてください。", en: "Please lend me that."}
+                ]
+            },
+            {
+                jp:'この〜・その〜・あの〜', 
+                en:'this ~ / that ~ / that ~ over there (modifier)',
+                detail: "この, その, and あの are demonstrative adjectives that must be followed by a noun. They cannot stand alone. The distance rules are identical to これ・それ・あれ: この + Noun means 'this Noun' (near speaker), その + Noun means 'that Noun' (near listener), and あの + Noun means 'that Noun over there' (far from both). The distinction between これ (pronoun) and この (adjective) is critical. You cannot say これ本; you must say この本 (this book). This pattern allows you to specify particular items within a shared physical context, making it extremely useful for pointing out and referencing objects in everyday conversation.",
+                examples: [
+                    {jp: "この本はとてもおもしろいです。", en: "This book is very interesting."},
+                    {jp: "そのかばんは重いですか。", en: "Is that bag heavy?"},
+                    {jp: "あの山はふじ山ですか。", en: "Is that mountain over there Mt. Fuji?"},
+                    {jp: "このカメラはだれのですか。", en: "Whose camera is this?"},
+                    {jp: "あの人を知っていますか。", en: "Do you know that person over there?"}
+                ]
+            },
+            {
+                jp:'〜の〜 (modifier)', 
+                en:'~ of ~ (descriptive modification)',
+                detail: "Building upon the possessive の from Lesson 1, this grammar point extends の's function to broader modification. の serves as a general noun-modifier linker. While simple possession is common, の also expresses: material (かみのふくろ - paper bag), content (日本語の新聞 - Japanese language newspaper), location (おおさかのかいしゃ - company in Osaka), time (明日のかいぎ - tomorrow's meeting), and category (いちごのケーキ - strawberry cake). The fundamental structure is always [Modifying Noun] の [Main Noun]. The modifying noun specifies a property, origin, or type of the main noun. This particle is extremely productive and forms the basis of many compound noun phrases in Japanese.",
+                examples: [
+                    {jp: "それはすずきさんのかさです。", en: "That is Mr. Suzuki's umbrella."},
+                    {jp: "これはかわのさいふです。", en: "This is a leather wallet."},
+                    {jp: "英語のじしょがほしいです。", en: "I want an English dictionary."},
+                    {jp: "つくえのひきだしの中にあります。", en: "It's inside the desk drawer."},
+                    {jp: "ともだちのお兄さんに会いました。", en: "I met a friend's older brother."}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 3,
+        points: [
+            {
+                jp:'ここ・そこ・あそこ', 
+                en:'here / there / over there (place)',
+                detail: "ここ (here), そこ (there near listener), and あそこ (over there, far from both) are demonstrative pronouns indicating location. They follow the same ko-so-a-do spatial pattern as the demonstratives for objects. ここ is the place where the speaker is. そこ is the place where the listener is. あそこ is a place distant from both. To ask about a location, the interrogative どこ (where) is used: ここはどこですか (Where is here? / Where are we?). These words are often used with the location-existence pattern 〜に〜があります (there is X at location Y). They are essential for navigating spaces and discussing locations of people and things.",
+                examples: [
+                    {jp: "ここはわたしのせきです。", en: "Here is my seat."},
+                    {jp: "すみません、トイレはどこですか。", en: "Excuse me, where is the restroom?"},
+                    {jp: "そこに立ってください。", en: "Please stand there."},
+                    {jp: "あそこに銀行があります。", en: "There is a bank over there."},
+                    {jp: "出口はこちらです。", en: "The exit is this way."}
+                ]
+            },
+            {
+                jp:'〜はどこですか', 
+                en:'Where is ~?',
+                detail: "This is the standard pattern for asking the location of a person, place, or object. The topic marked by は is the thing whose location is sought, followed by the interrogative word どこ (where) and the copula ですか. This structure yields a polite question meaning 'Where is X?'. The answer often uses location words like ここ, そこ, あそこ, or specific locations combined with particles like に (at) and あります (exists for inanimate objects) or います (exists for animate beings). For example, when asking for directions or searching for lost items, this phrase is indispensable.",
+                examples: [
+                    {jp: "駅はどこですか。", en: "Where is the station?"},
+                    {jp: "たなかさんはどこにいますか。", en: "Where is Mr. Tanaka?"},
+                    {jp: "わたしのめがねはどこですか。", en: "Where are my glasses?"},
+                    {jp: "すみません、びょういんはどこですか。", en: "Excuse me, where is the hospital?"},
+                    {jp: "かいぎしつはどこにありますか。", en: "Where is the meeting room?"}
+                ]
+            },
+            {
+                jp:'〜も', 
+                en:'~ also / too',
+                detail: "The particle も means 'also' or 'too'. It replaces particles such as は, が, and を to indicate that a statement applies similarly to another item. When you want to say 'X is Y' and also 'Z is Y', the second sentence uses も instead of は: ZもYです. For example, わたしは学生です (I am a student), かれも学生です (He is also a student). も cannot generally be used after に or で directly in standard grammar; instead, combinations like にも or でも are used. も is also used for listing multiple items inclusively, suggesting 'both X and Y'. In negative sentences, も emphasizes a complete absence, similar to 'not even one'.",
+                examples: [
+                    {jp: "わたしも行きます。", en: "I will go too."},
+                    {jp: "これもわたしのです。", en: "This is also mine."},
+                    {jp: "コーヒーもこう茶もあります。", en: "We have both coffee and tea."},
+                    {jp: "だれもいません。", en: "There is no one (not even one person)."},
+                    {jp: "かのじょも英語をべんきょうしています。", en: "She is also studying English."}
+                ]
+            },
+            {
+                jp:'〜がいます・あります', 
+                en:'there is ~ (living/non-living)',
+                detail: "This pattern expresses existence. あります is used for inanimate objects, plants, and abstract concepts. います is used for animate beings like people and animals. The thing that exists is marked by the particle が (subject marker). The pattern is Location に Thing が あります/います (There is Thing at Location) or Thing は Location に あります/います (As for Thing, it's at Location). This distinction between ある and いる is a core concept in Japanese and does not exist in English. Mastering it is essential for describing environments, rooms, and the presence of people.",
+                examples: [
+                    {jp: "こうえんに子どもたちがいます。", en: "There are children in the park."},
+                    {jp: "つくえの上に本があります。", en: "There is a book on the desk."},
+                    {jp: "へやにだれがいますか。", en: "Who is in the room?"},
+                    {jp: "れいぞうこに何がありますか。", en: "What is in the refrigerator?"},
+                    {jp: "にわにさくらの木があります。", en: "There is a cherry tree in the garden."}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 4,
+        points: [
+            {
+                jp:'今〜時〜分です', 
+                en:"It is ~ o'clock ~ minute now",
+                detail: "This pattern expresses time using the structure: 今 (now) + [hour]時 + [minute]分 + です. Hours are counted using the counter 時 (じ), and minutes using 分 (ふん/ぷん). This pattern is a straightforward nominal sentence where the predicate is a specific time. Knowing how to tell time is fundamental for scheduling, appointments, and daily conversation. The verb is simply です, as the time itself is the predicate. When asking the time, you use 何時ですか (What time is it?). The word 午前 (ごぜん - a.m.) and 午後 (ごご - p.m.) are placed before the time to specify the half-day, such as 午前8時30分です (It is 8:30 a.m.).",
+                examples: [
+                    {jp: "今は午前9時15分です。", en: "It is 9:15 a.m. now."},
+                    {jp: "かいぎは午後2時からです。", en: "The meeting is from 2 p.m."},
+                    {jp: "今、何時ですか。", en: "What time is it now?"},
+                    {jp: "電車は11時半に出っぱつします。", en: "The train departs at 11:30."},
+                    {jp: "今はちょうど12時です。", en: "It is exactly 12 o'clock now."}
+                ]
+            },
+            {
+                jp:'〜から〜まで', 
+                en:'from ~ to ~',
+                detail: "から and まで are particles that mark the starting and ending points, respectively, of a time period or spatial range. から means 'from', and まで means 'until' or 'as far as'. They can be used together in the pattern 〜から〜まで, or independently. With time, they indicate the duration of an event: 9時から5時まではたらきます (I work from 9 to 5). With places, they indicate a journey's start and end: とうきょうからおおさかまで (from Tokyo to Osaka). They are essential for specifying limits and ranges in both temporal and physical contexts. から can also mean 'because' in more advanced grammar, but in this lesson, it strictly relates to starting points.",
+                examples: [
+                    {jp: "かいぎは1時から3時までです。", en: "The meeting is from 1 to 3."},
+                    {jp: "家から駅まで歩いて10分です。", en: "It is a 10-minute walk from home to the station."},
+                    {jp: "夏休みは7月から8月までです。", en: "Summer vacation is from July to August."},
+                    {jp: "銀行は9時からあいています。", en: "The bank is open from 9 o'clock."},
+                    {jp: "ここからそこまでどのくらいですか。", en: "How far is it from here to there?"}
+                ]
+            },
+            {
+                jp:'〜に (time particle)', 
+                en:'at (specific time)',
+                detail: "The particle に marks a specific time point at which an action occurs. It is placed after the time expression and before the verb. It is used with specific times (時, 分), days of the week (よう日), and dates (日にち). However, に is NOT used with relative time words like 今日 (today), 明日 (tomorrow), きのう (yesterday), 今しゅう (this week), or general times like 毎日 (every day). This distinction is crucial. Saying 明日に行きます is grammatically incorrect; it should be 明日行きます. The particle に pins down the exact temporal location of the verb's action. For asking 'at what time', use 何時に.",
+                examples: [
+                    {jp: "毎あさ6時におきます。", en: "I get up at 6 every morning."},
+                    {jp: "来しゅうの金よう日にしけんがあります。", en: "There is an exam next Friday."},
+                    {jp: "何時にねますか。", en: "What time do you go to sleep?"},
+                    {jp: "3月21日に日本に来ました。", en: "I came to Japan on March 21st."},
+                    {jp: "昼休みはいつも12時に休みます。", en: "I always take my lunch break at 12."}
+                ]
+            },
+            {
+                jp:'ます・ません', 
+                en:'present/polite affirmative/negative',
+                detail: "Verbs in Japanese have a polite form ending in ます (affirmative) and ません (negative). This is the polite non-past form, used for present and future actions, as well as habitual actions. The verb stem (the part before ます) carries the core meaning. For example, 食べます (eat/will eat), 飲みます (drink/will drink), べんきょうします (study/will study). The negative ません attaches similarly: 食べません (do not eat/will not eat). The ます form is taught first as it's universally polite, safe for use with strangers, superiors, and in formal settings. It conjugates for tense (non-past and past) but not for person: I go, you go, he goes are all 行きます. This lesson introduces the basics of verb conjugations in polite speech.",
+                examples: [
+                    {jp: "毎日コーヒーを飲みます。", en: "I drink coffee every day."},
+                    {jp: "明日は早くおきません。", en: "I will not wake up early tomorrow."},
+                    {jp: "日本語の新聞を読みますか。", en: "Do you read Japanese newspapers?"},
+                    {jp: "週まつはいつも買い物をします。", en: "I always go shopping on weekends."},
+                    {jp: "すみません、タバコはすいません。", en: "Sorry, I don't smoke."}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 5,
+        points: [
+            {
+                jp:'〜へ行きます', 
+                en:'go to ~ (direction particle へ)',
+                detail: "The particle へ (pronounced 'e') marks the direction or destination of movement verbs like 行きます (go), 来ます (come), and 帰ります (return). It emphasizes the direction of movement more than the specific destination. While に can also mark a destination, に focuses on the final location, whereas へ highlights the path toward a direction. In practice, they are often interchangeable for destinations. The sentence pattern is: Place へ Verb (movement). When the topic is established, it comes before the destination. To ask where someone is going, use どこへ行きますか.",
+                examples: [
+                    {jp: "夏休みに日本へ行きます。", en: "I will go to Japan during summer vacation."},
+                    {jp: "明日、どこへ行きますか。", en: "Where are you going tomorrow?"},
+                    {jp: "かれはよくとしょかんへ行きます。", en: "He often goes to the library."},
+                    {jp: "来年、アメリカへりゅう学します。", en: "I will study abroad in America next year."},
+                    {jp: "駅へはどうやって行きますか。", en: "How do you go to the station?"}
+                ]
+            },
+            {
+                jp:'〜で行きます', 
+                en:'go by ~ (means of transport)',
+                detail: "The particle で, when attached to a noun indicating a mode of transport, means 'by means of'. This pattern specifies how you go somewhere. Common nouns include 電車 (train), バス (bus), 車 (car), じてん車 (bicycle), タクシー (taxi), and ひこうき (airplane). The structure is: Means of Transport で Place へ 行きます/来ます/帰ります. For walking, the word 歩いて (on foot) is used instead of the particle で; you do not say とほで行きます in polite conversation. で is a versatile particle that can also mean location of action, instrument, and cause, but here it focuses on transportation means.",
+                examples: [
+                    {jp: "学校へバスで行きます。", en: "I go to school by bus."},
+                    {jp: "おおさかまで電車で行きました。", en: "I went to Osaka by train."},
+                    {jp: "かいしゃへはじてん車で行きます。", en: "I go to work by bicycle."},
+                    {jp: "家から駅まで歩いて行きます。", en: "I walk from home to the station."},
+                    {jp: "ほっかいどうへひこうきで行くつもりです。", en: "I plan to go to Hokkaido by plane."}
+                ]
+            },
+            {
+                jp:'〜と行きます', 
+                en:'go with ~',
+                detail: "The particle と means 'with' when indicating a companion. The structure is: Person (or animal) と Verb. This specifies that the action is performed together with someone. The verb is often a movement verb like 行く, 来る, or 帰る, but と can be used with any action verb to indicate joint participation. Do not confuse this with the conditional と (if/when) from Lesson 25. This companion と follows nouns directly. When asking who someone is going with, use だれと. If the action is done alone, use 一人で (ひとりで - alone/ by oneself) without the と particle.",
+                examples: [
+                    {jp: "きのう、ともだちとえいがを見ました。", en: "I watched a movie with a friend yesterday."},
+                    {jp: "だれと日本へ来ましたか。", en: "With whom did you come to Japan?"},
+                    {jp: "かぞくと一しょにりょ行したいです。", en: "I want to travel together with my family."},
+                    {jp: "かのじょとしょくじに行きます。", en: "I'm going out to eat with my girlfriend."},
+                    {jp: "一人で買い物に行きました。", en: "I went shopping alone."}
+                ]
+            },
+            {
+                jp:'〜を (particle)', 
+                en:'direct object particle',
+                detail: "The particle を (pronounced 'o') marks the direct object of a transitive verb. It indicates what is being acted upon by the subject. The direct object is the noun that receives the action of the verb. In the sentence ごはんを食べます (I eat rice), ごはん is the direct object of 食べます, thus it is marked by を. を is also used with movement verbs like 出ます (leave) and おります (get off) to indicate a starting point or a surface being exited. Its pronunciation is distinct from the kana お and is one of the few particles with an irregular pronunciation.",
+                examples: [
+                    {jp: "毎あさ、新聞を読みます。", en: "I read the newspaper every morning."},
+                    {jp: "何を食べますか。", en: "What will you eat?"},
+                    {jp: "ここでしゃしんをとってもいいですか。", en: "May I take photos here?"},
+                    {jp: "7時に家を出ます。", en: "I leave home at 7 o'clock."},
+                    {jp: "駅で電車をおります。", en: "I get off the train at the station."}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 6,
+        points: [
+            {
+                jp:'〜を〜ます', 
+                en:'verb + object (direct object particle を)',
+                detail: "Reinforcing the use of を from Lesson 5, this lesson applies the direct object particle to a wider range of common transitive verbs such as 読みます (read), 書きます (write), 聞きます (listen/hear), 見ます (watch/see), 作ります (make), 買います (buy), and とります (take a photo). The fundamental pattern remains Noun を Verb. The direct object is the entity that directly receives the action. Intransitive verbs, like ねます (sleep) or おきます (wake up), do not take を for a direct object. This structure is the backbone for describing daily activities and expressing what one does. Asking questions involves inserting 何 (what) before を: 何をしますか (What will you do?).",
+                examples: [
+                    {jp: "きのう、手がみを書きました。", en: "I wrote a letter yesterday."},
+                    {jp: "パーティーで歌を歌いました。", en: "I sang a song at the party."},
+                    {jp: "家で何をしますか。", en: "What do you do at home?"},
+                    {jp: "かれはいつもニュースを見ます。", en: "He always watches the news."},
+                    {jp: "CDをよく聞きますか。", en: "Do you often listen to CDs?"}
+                ]
+            },
+            {
+                jp:'〜で (means)', 
+                en:'by means of ~',
+                detail: "Expanding on the transport で, this lesson shows で indicating the means or instrument used to perform an action. It answers the question 'how?' or 'by what means?'. Common nouns include language (日本語ではなす - speak in Japanese), tools (はしで食べる - eat with chopsticks), instruments (ペンで書く - write with a pen), and methods (メールでおくる - send by email). The structure is Noun で Verb. This is a highly productive particle for expressing the tool or method of action. Do not confuse it with the location-of-action で (eat at restaurant), which will appear later.",
+                examples: [
+                    {jp: "日本語ではなしてください。", en: "Please speak in Japanese."},
+                    {jp: "はしですしを食べます。", en: "I eat sushi with chopsticks."},
+                    {jp: "えんぴつで名前を書きました。", en: "I wrote my name with a pencil."},
+                    {jp: "インターネットでしらべました。", en: "I researched it on the internet."},
+                    {jp: "電話でともだちとはなしました。", en: "I talked with a friend on the phone."}
+                ]
+            },
+            {
+                jp:'〜をください', 
+                en:'please give me ~',
+                detail: "This is a polite request form meaning 'Please give me X'. It is used when ordering food, buying items in a shop, or asking for something tangible. The particle を marks the desired item, and ください is the imperative-like form of くださる (to give - honorific). The structure is simply Item を ください. It can also be used with quantities to specify amounts: ビールを二つください (Two beers, please). When the context is clear, you can omit を in casual speech, but it is standard to include it for politeness. This is arguably one of the most immediately useful phrases for a learner in Japan.",
+                examples: [
+                    {jp: "すみません、お水をください。", en: "Excuse me, water please."},
+                    {jp: "この赤いペンをください。", en: "Please give me this red pen."},
+                    {jp: "コーヒーとケーキをください。", en: "Coffee and cake, please."},
+                    {jp: "ハンバーガーを二つください。", en: "Two hamburgers, please."},
+                    {jp: "りょうしゅう書をください。", en: "Please give me a receipt."}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 7,
+        points: [
+            {
+                jp:'〜であげます', 
+                en:'give (to someone)',
+                detail: "This verb means 'to give' from the speaker's in-group perspective. It is used when someone gives something to another person, and the giver is either the speaker, a member of the speaker's in-group, or the action is viewed from the giver's viewpoint. The recipient is marked by に, and the object given by を. Social nuance is critical: あげる implies giving to an equal or inferior. When giving to a superior, さしあげる is more appropriate. Thus, わたしは友だちにプレゼントをあげました (I gave a present to my friend) is fine, but using あげる for a boss may be impolite. This verb is central to the complex Japanese giving/receiving system.",
+                examples: [
+                    {jp: "母のたんじょう日に花をあげました。", en: "I gave flowers to my mother for her birthday."},
+                    {jp: "ともだちにおみやげをあげるつもりです。", en: "I plan to give souvenirs to my friends."},
+                    {jp: "だれにその本をあげましたか。", en: "To whom did you give that book?"},
+                    {jp: "かのじょはおとうとにおかしをあげました。", en: "She gave sweets to her younger brother."},
+                    {jp: "先生にCDをさしあげました。", en: "I gave a CD to my teacher (humble)."}
+                ]
+            },
+            {
+                jp:'〜にもらいます', 
+                en:'receive (from someone)',
+                detail: "もらう means 'to receive', and the giver is marked by に or から. It is used when the subject is the receiver, and typically the receiver is the speaker or in-group member. The structure is Receiver は/が Giver に/から Object を もらいます. When the giver is a person of higher status, the humble form いただく is preferred. から specifically emphasizes 'from' the source, while に is more neutral. This verb contrasts with くれる, where the subject is the giver. もらう is used to express receiving favors, not just objects. This is a core element of expressing gratitude and relationships in Japanese.",
+                examples: [
+                    {jp: "わたしは母からセーターをもらいました。", en: "I received a sweater from my mother."},
+                    {jp: "だれにその時けいをもらいましたか。", en: "From whom did you receive that watch?"},
+                    {jp: "たんじょう日に何をもらいましたか。", en: "What did you receive for your birthday?"},
+                    {jp: "これはともだちにもらったペンです。", en: "This is a pen I received from a friend."},
+                    {jp: "先生にすいせんじょうをいただきました。", en: "I received a letter of recommendation from my teacher."}
+                ]
+            },
+            {
+                jp:'〜に (indirect object)', 
+                en:'to/for ~ (indirect object particle)',
+                detail: "The particle に marks the indirect object, the recipient of an action. With giving verbs like あげる and receiving verbs like もらう, に marks the recipient. The full pattern is: Giver は/が Recipient に Object を あげます. With some verbs like 教える (teach), かす (lend), おくる (send), 電話する (call), the recipient or target is also marked by に. This particle is multi-functional, also marking location of existence (〜にある), specific time (〜時に), and direction (〜に行く). Distinguishing these uses is key to correct sentence construction.",
+                examples: [
+                    {jp: "ともだちに本をかしました。", en: "I lent a book to my friend."},
+                    {jp: "先生に日本語をおしえていただきました。", en: "I was taught Japanese by my teacher."},
+                    {jp: "母に手がみをおくります。", en: "I will send a letter to my mother."},
+                    {jp: "かのじょに電話をかけましたが、出ませんでした。", en: "I called her, but she didn't answer."},
+                    {jp: "こうはいに仕事をせつめいしました。", en: "I explained the work to my junior."}
+                ]
+            },
+            {
+                jp:'もう〜ました', 
+                en:'already did ~',
+                detail: "The adverb もう means 'already'. Combined with the past tense polite verb form (ました), it expresses that an action has been completed. The sentence structure is: もう + Past tense verb. The opposite is まだ + Negative verb (まだ〜ていません - haven't done yet). もう often implies that something happened sooner than expected or earlier than a reference point. When asking a question, もう〜ましたか means 'Have you already done X?'. This adverb is essential for discussing task completion, daily schedules, and confirming status.",
+                examples: [
+                    {jp: "もう昼ごはんを食べましたか。", en: "Have you already eaten lunch?"},
+                    {jp: "はい、もう食べました。", en: "Yes, I've already eaten."},
+                    {jp: "レポートはもうていしゅつしました。", en: "I have already submitted the report."},
+                    {jp: "もうしゅく題をしましたか。", en: "Have you done your homework yet?"},
+                    {jp: "えいがはもう始まりました。", en: "The movie has already started."}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 8,
+        points: [
+            {
+                jp:'〜は〜がわかります', 
+                en:'I understand ~',
+                detail: "This pattern expresses understanding of something. The thing understood is marked by the subject particle が, and the person who understands is marked by は. It literally means 'As for [Topic], [Thing] is understandable'. This is because わかる is an intransitive verb meaning 'to be understandable', not 'to understand'. Thus, わたしは日本語がわかります is literally 'As for me, Japanese is understandable'. Other similar intransitive verbs requiring が include できる (can do), いる (need), and ある (have/possess). The が particle often highlights a specific object of potential, ability, or necessity in these constructions. This structure is fundamental for expressing states rather than direct actions.",
+                examples: [
+                    {jp: "わたしはフランス語が少しわかります。", en: "I understand a little French."},
+                    {jp: "もんだいのいみがわかりますか。", en: "Do you understand the meaning of the problem?"},
+                    {jp: "かれはじょうだんがわからなかった。", en: "He didn't understand the joke."},
+                    {jp: "このきかいのつかい方がわかりますか。", en: "Do you know how to use this machine?"},
+                    {jp: "何がわからないのですか。", en: "What is it that you don't understand?"}
+                ]
+            },
+            {
+                jp:'〜は〜ができます', 
+                en:'can do ~',
+                detail: "The potential verb できる means 'can do' or 'is able to do'. The ability or skill is marked by が. The structure is Person は Skill/Thing が できます. For example, りょうりができます (can cook), うんてんができます (can drive). できる can also be used for events or things that 'happen' or 'are made', but in this lesson, it focuses on personal ability. Nouns often combine with する-verbs (like りょうりする) where the noun form is used before ができる. There is also the verb-potential form (e.g., 書ける), but ことができる is the more formal equivalent. できる is one of the most versatile verbs in Japanese.",
+                examples: [
+                    {jp: "わたしはピアノができます。", en: "I can play the piano."},
+                    {jp: "りょうりができますか。", en: "Can you cook?"},
+                    {jp: "かのじょはスペイン語ができます。", en: "She can speak Spanish."},
+                    {jp: "いいえ、車のうんてんができません。", en: "No, I cannot drive a car."},
+                    {jp: "明日、かいぎをすることができますか。", en: "Can we have a meeting tomorrow?"}
+                ]
+            },
+            {
+                jp:'〜がすきです', 
+                en:'like ~',
+                detail: "The adjective 好き (すき - liked/likable) is a な-adjective that expresses liking. It literally means 'is liked' or 'is pleasing'. Therefore, the thing liked is marked by the subject particle が, not を. The structure is Person は Liked Object が 好きです. This is similar in logic to わかる and できる. 大好き (だいすき) means 'like very much' or 'love'. To ask, use 何が好きですか (What do you like?). Degree adverbs like とても (very), 少し (a little), and あまり (not much, with negative) are commonly used.",
+                examples: [
+                    {jp: "わたしはねこが好きです。", en: "I like cats."},
+                    {jp: "あなたは何のおんがくが好きですか。", en: "What kind of music do you like?"},
+                    {jp: "あまいものが大好きです。", en: "I love sweet things."},
+                    {jp: "かれはべんきょうがあまり好きではありません。", en: "He doesn't like studying very much."},
+                    {jp: "どのスポーツが一ばん好きですか。", en: "Which sport do you like the most?"}
+                ]
+            },
+            {
+                jp:'〜がきらいです', 
+                en:'dislike ~',
+                detail: "The opposite of 好き is きらい, also a な-adjective. It means 'disliked' or 'hateful', and the grammatical structure is identical: Thing が きらいです. Note that きらい can be a strong word, akin to 'dislike' or 'hate'. To soften it, the negative of 好き (好きではありません - don't like) is often used instead in polite conversation, as きらい can sound too direct. However, for strong preferences, きらい is appropriate. Both 好き and きらい are vital for expressing personal tastes and preferences.",
+                examples: [
+                    {jp: "わたしは虫がきらいです。", en: "I hate bugs."},
+                    {jp: "どんな食べ物がきらいですか。", en: "What kind of food do you dislike?"},
+                    {jp: "かれは早おきが大きらいです。", en: "He absolutely hates waking up early."},
+                    {jp: "トマトがあまり好きじゃありません。", en: "I don't really like tomatoes (softer phrasing)."},
+                    {jp: "人ごみがきらいなんです。", en: "I dislike crowds."}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 9,
+        points: [
+            {
+                jp:'〜があります', 
+                en:'there is ~ (thing)',
+                detail: "The verb ある is used to express the existence of inanimate objects. When stating that you possess something, the structure is Person は Thing が あります. This literally translates to 'As for Person, Thing exists'. This is a very common pattern for expressing ownership or possession, rather than using a verb 'to have' which doesn't exist in Japanese in the same way. For example, わたしは車があります (I have a car - lit. As for me, a car exists). This contrasts with the direct possession pattern from Lesson 3 using あります. Here, the focus shifts slightly from location to possession.",
+                examples: [
+                    {jp: "わたしはお金がたくさんあります。", en: "I have a lot of money."},
+                    {jp: "しつもんがありますか。", en: "Do you have a question?"},
+                    {jp: "いいえ、とくにありません。", en: "No, I have nothing in particular."},
+                    {jp: "かのじょはかい外のともだちがいます。", en: "She has friends overseas."},
+                    {jp: "明日、大じなしけんがあります。", en: "I have an important exam tomorrow."}
+                ]
+            },
+            {
+                jp:'〜がいます', 
+                en:'there is ~ (living thing)',
+                detail: "Just as ある is for inanimate possession, いる is for animate possession, i.e., having friends, family, pets, etc. The structure is Person は Living Thing が います. The animate subject includes people, animals, and sometimes robots with human-like qualities. When talking about family members, using います is standard. The difference between います for living things and あります for objects is a grammatical pillar of Japanese.",
+                examples: [
+                    {jp: "わたしはきょうだいが三人います。", en: "I have three siblings."},
+                    {jp: "ねこがいますか。", en: "Do you have a cat?"},
+                    {jp: "かのじょは子どもが二人います。", en: "She has two children."},
+                    {jp: "にわにとりがたくさんいます。", en: "There are many birds in the garden."},
+                    {jp: "となりの家に犬がいます。", en: "There is a dog in the neighboring house."}
+                ]
+            },
+            {
+                jp:'〜に〜があります', 
+                en:'~ has ~ / there is ~ at ~',
+                detail: "This pattern expresses the existence of something at a specific location. The location is marked by the particle に, and the existing thing by が. The structure is Location に Thing が あります/います. For inanimate things, use あります; for animate, use います. This is fundamental for describing rooms, cities, or any environment. The location can be general (Tokyo) or specific (つくえの上 - on the desk). The topic marker は can replace に if the location is the topic.",
+                examples: [
+                    {jp: "つくえの上に本があります。", en: "There is a book on the desk."},
+                    {jp: "こうえんに大きな池があります。", en: "There is a big pond in the park."},
+                    {jp: "へやにだれかいますか。", en: "Is there anyone in the room?"},
+                    {jp: "ここにスーパーはありません。", en: "There is no supermarket here."},
+                    {jp: "わたしの家にはにわがあります。", en: "My house has a garden."}
+                ]
+            },
+            {
+                jp:'い形容詞', 
+                en:'i-adjectives (end with い)',
+                detail: "I-adjectives are adjectives that end in い in their dictionary form and directly modify nouns. They can also act as predicates at the end of a sentence. For example, 高い (たかい - expensive/tall), 安い (やすい - cheap), 大きい (おおきい - big), 小さい (ちいさい - small), 新しい (あたらしい - new), 古い (ふるい - old), おいしい (delicious), むずかしい (difficult). When placed before a noun, they attach directly: 高い本 (expensive book). When used as a predicate, the polite form adds です: この本は高いです (This book is expensive). The negative form replaces い with くない: 高くないです (is not expensive). I-adjectives are a distinct class from な-adjectives.",
+                examples: [
+                    {jp: "このリンゴはとてもおいしいです。", en: "This apple is very delicious."},
+                    {jp: "今日はあつくないです。", en: "It is not hot today."},
+                    {jp: "新しいくつを買いました。", en: "I bought new shoes."},
+                    {jp: "あのビルは高いですね。", en: "That building is tall, isn't it?"},
+                    {jp: "日本語のぶんぽうはむずかしいですか。", en: "Is Japanese grammar difficult?"}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 10,
+        points: [
+            {
+                jp:'〜に〜があります', 
+                en:'~ is in/on ~ (location)',
+                detail: "A continuation and expansion of existence patterns. This lesson emphasizes the specificity of location using nouns like 上 (うえ - above/on top of), 下 (した - under), 中 (なか - inside), 外 (そと - outside), 前 (まえ - in front of), 後ろ (うしろ - behind), となり (next to), 近く (ちかく - near). The pattern Location の Position に Thing が あります precisely describes where something is. For example, つくえの上に本があります (There is a book on top of the desk). The position word is treated as a noun, and the particle の links the reference object to the position word.",
+                examples: [
+                    {jp: "銀行はゆうびん局のとなりにあります。", en: "The bank is next to the post office."},
+                    {jp: "ねこはいすの下にいます。", en: "The cat is under the chair."},
+                    {jp: "れいぞうこの中に何がありますか。", en: "What is inside the refrigerator?"},
+                    {jp: "駅の前にコンビニがあります。", en: "There is a convenience store in front of the station."},
+                    {jp: "わたしのアパートはこうえんの近くにあります。", en: "My apartment is near the park."}
+                ]
+            },
+            {
+                jp:'〜の上・下・中', 
+                en:'on / under / inside of ~',
+                detail: "These are location nouns (position words). They function grammatically as nouns. To specify a location relative to an object, the pattern is Reference Object の Position Noun. 上 means 'on' or 'above', 下 means 'under' or 'below', and 中 means 'inside'. It is crucial to remember these are nouns, not prepositions. Therefore, they follow the object they reference. For instance, はこの中 means 'the inside of the box'. When combined with the existence verb, the full pattern becomes Reference の Position に あります/います.",
+                examples: [
+                    {jp: "本はつくえの上です。", en: "The book is on the desk."},
+                    {jp: "ねこが車の下にいます。", en: "A cat is under the car."},
+                    {jp: "しょるいはひきだしの中にあります。", en: "The documents are inside the drawer."},
+                    {jp: "とりがやねの上にとまっています。", en: "A bird is perched on the roof."},
+                    {jp: "かぎはドアの下におちていました。", en: "The key had fallen under the door."}
+                ]
+            },
+            {
+                jp:'〜と〜 (and)', 
+                en:'particle for listing nouns',
+                detail: "The particle と connects two or more nouns in an exhaustive list. It means 'and' between nouns. For example, つくえの上に本とペンがあります (There is a book and a pen on the desk). This implies that these are the specific items. It differs from the particle や, which is used for non-exhaustive lists ('things like A and B'). と is used when you list everything. You cannot use と to connect adjectives or sentences; for those, you use the て-form or other conjunctions.",
+                examples: [
+                    {jp: "れいぞうこに牛にゅうとたまごがあります。", en: "There is milk and eggs in the fridge."},
+                    {jp: "わたしは英語と日本語をはなします。", en: "I speak English and Japanese."},
+                    {jp: "土よう日と日よう日は休みです。", en: "Saturday and Sunday are holidays."},
+                    {jp: "かれとかのじょはきょうだいです。", en: "He and she are siblings."},
+                    {jp: "パンとスープをちゅうもんしました。", en: "I ordered bread and soup."}
+                ]
+            },
+            {
+                jp:'な形容詞', 
+                en:'na-adjectives (need な before noun)',
+                detail: "Na-adjectives are adjectives that do not end in い, such as しずか (quiet), べんり (convenient), 元気 (healthy/energetic), 有名 (famous), 好き (liked). When modifying a noun directly, they require な to be added: しずかな町 (a quiet town). When used as a predicate at the end of a sentence, だ or です follows without な: この町はしずかです (This town is quiet). The negative form is 〜ではありません (or じゃない in casual). The distinction between i-adjectives and na-adjectives is fundamental for correct modification.",
+                examples: [
+                    {jp: "ここはとてもしずかなところですね。", en: "This is a very quiet place, isn't it?"},
+                    {jp: "べんりなアプリを見つけました。", en: "I found a convenient app."},
+                    {jp: "かのじょはしんせつな人です。", en: "She is a kind person."},
+                    {jp: "これはかんたんなもんだいです。", en: "This is a simple problem."},
+                    {jp: "どんなスポーツが好きですか。", en: "What kind of sports do you like?"}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 11,
+        points: [
+            {
+                jp:'〜がいます (family)', 
+                en:'have ~ (family members)',
+                detail: "This pattern specifically extends the use of います to talk about having family members. The structure is Person は Family Member が います. This is the standard way to discuss how many brothers, sisters, parents, children, etc., one has. The counting of family members uses specific counters, like 一人 (ひとり - one person), 二人 (ふたり - two people), and then the standard 〜人 (にん) counter from three upwards. When referring to one's own family members to outsiders, different (humble) terms are often used: 母 (はは) instead of お母さん, 父 (ちち) instead of お父さん. However, the grammar structure remains the same.",
+                examples: [
+                    {jp: "わたしは兄が一人います。", en: "I have one older brother."},
+                    {jp: "ごきょうだいは何人いますか。", en: "How many siblings do you have?"},
+                    {jp: "かれはむすめさんが三人います。", en: "He has three daughters."},
+                    {jp: "一人っ子なので、きょうだいがいません。", en: "I am an only child, so I have no siblings."},
+                    {jp: "おじとおばがいます。", en: "I have an uncle and an aunt."}
+                ]
+            },
+            {
+                jp:'〜の (number)', 
+                en:'quantity phrase marker',
+                detail: "When a quantity or number directly modifies a noun, it often takes the particle の. This structure is Quantity の Noun. For example, 三つのりんご (three apples), 多くの人 (many people). This is common with native Japanese numbers (ひとつ, ふたつ, みっつ) and general quantifiers like たくさん (many). It connects the quantity to the noun it describes. While 三つの本 is correct, you can also use counters directly without の, like 三さつの本. The choice depends on the counter and the specific nuance of description versus direct counting.",
+                examples: [
+                    {jp: "れいぞうこにたまごが六つあります。", en: "There are six eggs in the fridge."},
+                    {jp: "六つのたまごを買いました。", en: "I bought six eggs."},
+                    {jp: "多くの学生がとしょかんにいます。", en: "Many students are in the library."},
+                    {jp: "三つのねがいをかなえてください。", en: "Please grant me three wishes."},
+                    {jp: "二つのハンバーガーをください。", en: "Two hamburgers, please."}
+                ]
+            },
+            {
+                jp:'人数の数え方', 
+                en:'counting people (ひとり、ふたり、〜にん)',
+                detail: "Counting people in Japanese uses unique words for one and two people, and then a standard pattern. 一人 (ひとり) means one person, 二人 (ふたり) means two people. From three onwards, it's the number + 人 (にん): 三人 (さんにん - three people), 四人 (よにん - four people - note irregular reading), 五人 (ごにん - five people). When asking 'how many people?', use 何人 (なんにん). This counter is essential for restaurant reservations, describing family size, and group activities. It is one of the most fundamental counters in Japanese.",
+                examples: [
+                    {jp: "かぞくは五人です。", en: "There are five people in my family."},
+                    {jp: "パーティーに何人来ますか。", en: "How many people are coming to the party?"},
+                    {jp: "二人でえいがを見に行きました。", en: "We went to see a movie as a pair (two people)."},
+                    {jp: "わたしは一人ぐらしです。", en: "I live alone."},
+                    {jp: "レストランで四人のせきをよやくしました。", en: "I reserved a table for four at the restaurant."}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 12,
+        points: [
+            {
+                jp:'〜は〜が〜 (superlative)', 
+                en:'A is the ~est',
+                detail: "This pattern expresses the superlative degree, meaning 'A is the most ~'. The structure is Noun は [Category] で 一ばん Adjective が [Predicate]. Or more simply, to say 'A is the most X', we use a comparative structure where the category is marked by で and the specific superior quality by が. For example, かれはクラスで一ばんせが高いです (He is the tallest in the class). Here, クラスで defines the domain, 一ばん (most) marks the superlative, and せが高い (tall) is the quality. The subject of the quality (height) is marked by が.",
+                examples: [
+                    {jp: "かれは学校で一ばんあたまがいいです。", en: "He is the smartest in the school."},
+                    {jp: "冬で一ばん好きなスポーツは何ですか。", en: "What is your most favorite sport in winter?"},
+                    {jp: "ふじ山は日本で一ばん高い山です。", en: "Mt. Fuji is the tallest mountain in Japan."},
+                    {jp: "これがみせで一ばん安い時けいです。", en: "This is the cheapest watch in the store."},
+                    {jp: "かぞくの中でだれが一ばん早くおきますか。", en: "Who wakes up earliest in the family?"}
+                ]
+            },
+            {
+                jp:'〜より〜のほうが', 
+                en:'~ is more ~ than ~',
+                detail: "This is the comparative pattern 'A is more X than B'. The structure is A は B より [Adjective] です, or with emphasis, A のほうが B より [Adjective] です. より marks the comparison standard (the thing being compared against). ほうが marks the subject being compared as superior. For example, 今日はきのうよりあついです (Today is hotter than yesterday). If the comparison objects are clear from context, のほうが can be used to signal that one option is preferable. The opposite, 'less than', uses ほど with a negative.",
+                examples: [
+                    {jp: "このへやはあのへやより広いです。", en: "This room is more spacious than that room."},
+                    {jp: "犬よりねこのほうが好きです。", en: "I like cats more than dogs."},
+                    {jp: "わたしは肉より魚のほうがよく食べます。", en: "I eat fish more often than meat."},
+                    {jp: "電車はバスよりべんりです。", en: "Trains are more convenient than buses."},
+                    {jp: "日本では、コーラよりお茶のほうが人気があります。", en: "In Japan, tea is more popular than cola."}
+                ]
+            },
+            {
+                jp:'〜でいちばん', 
+                en:'the most ~ in ~',
+                detail: "This is the explicit superlative form 'the most ~ in [category]'. The category (a group, place, or time) is marked by the particle で, which here means 'within' or 'among'. The word 一ばん means 'number one' or 'most'. It can be combined with any i-adjective or na-adjective. For na-adjectives, 一ばん好き (most liked) is common. This pattern is incredibly useful for expressing opinions and comparing items, people, or places within a defined set.",
+                examples: [
+                    {jp: "クラスでだれが一ばんせが高いですか。", en: "Who is the tallest in the class?"},
+                    {jp: "くだものの中で何が一ばん好きですか。", en: "What fruit do you like the most?"},
+                    {jp: "一年でいつが一ばんあついですか。", en: "When is the hottest time of the year?"},
+                    {jp: "この中でどれが一ばんむずかしいですか。", en: "Which of these is the most difficult?"},
+                    {jp: "日本で一ばん有名なお寺はどこですか。", en: "Where is the most famous temple in Japan?"}
+                ]
+            },
+            {
+                jp:'比較表現', 
+                en:'comparison expressions',
+                detail: "This encompasses all comparative structures in Japanese. In addition to より and ほうが, there are other comparison patterns. ほど (as much as) is used with negatives to mean 'not as X as Y': かれはわたしほどせが高くない (He is not as tall as me). The pattern AとBとどちらが〜ですか (Between A and B, which is ~?) is the standard way to ask a comparison question. The answer uses のほうが or both are equal (どちらも). Another important expression is 同じ (same), as in AはBと同じです (A is the same as B).",
+                examples: [
+                    {jp: "りんごとみかんとどちらが好きですか。", en: "Which do you prefer, apples or oranges?"},
+                    {jp: "とうきょうはおおさかより人が多いです。", en: "Tokyo has more people than Osaka."},
+                    {jp: "今年の冬はきょ年ほどさむくない。", en: "This winter is not as cold as last year's."},
+                    {jp: "この二つは同じねだんです。", en: "These two are the same price."},
+                    {jp: "バスで行くのと電車で行くのとどちらが早いですか。", en: "Which is faster, going by bus or by train?"}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 13,
+        points: [
+            {
+                jp:'〜がほしい', 
+                en:'want ~ (object)',
+                detail: "This expression means 'to want something'. The desired object is marked by the particle が. The i-adjective ほしい literally means 'is desired'. Therefore, the sentence structure is Person は Object が ほしいです (I want Object). This is used only for the first-person ('I want') or when asking questions ('Do you want?'). When speaking about a third person's wants, you must use other forms like ほしがっている, as stating someone else's inner desires directly is considered presumptuous. ほしい cannot be used for wanting to do an action; for actions, use 〜たい.",
+                examples: [
+                    {jp: "新しいパソコンがほしいです。", en: "I want a new computer."},
+                    {jp: "今、何が一ばんほしいですか。", en: "What do you want the most right now?"},
+                    {jp: "わたしはお金がほしくない。", en: "I don't want money."},
+                    {jp: "たんじょう日に何がほしいですか。", en: "What do you want for your birthday?"},
+                    {jp: "かのじょは高いバッグをほしがっている。", en: "She wants an expensive bag."}
+                ]
+            },
+            {
+                jp:'〜たい', 
+                en:'want to do ~ (verb stem + たい)',
+                detail: "This auxiliary adjective attaches to the masu-stem of a verb to express the desire to do that action. For example, 食べます (to eat) becomes 食べたい (want to eat). It conjugates like an i-adjective: negative 〜たくない (don't want to do), past 〜たかった (wanted to do). As with ほしい, the 〜たい form is generally used for the speaker's own desires or in questions. For third-person desires, the suffix 〜たがっている is often used. The object of the desired verb can optionally be marked by を or が; が emphasizes the object of desire more strongly.",
+                examples: [
+                    {jp: "すしを食べたいです。", en: "I want to eat sushi."},
+                    {jp: "夏休みに海でおよぎたい。", en: "I want to swim in the sea during summer vacation."},
+                    {jp: "何をしたいですか。", en: "What do you want to do?"},
+                    {jp: "今は何も食べたくない。", en: "I don't want to eat anything now."},
+                    {jp: "かれは日本にすみたがっています。", en: "He wants to live in Japan."}
+                ]
+            },
+            {
+                jp:'〜に行く・来る', 
+                en:'go/come to do ~',
+                detail: "This expresses the purpose of movement. The structure is Verb (masu-stem) + に + motion verb (行く/来る/帰る). For example, ごはんを食べに行く (go to eat). The masu-stem of the verb (the part before ます) becomes a noun-like element indicating purpose. The particle に marks this purpose. It literally translates to 'go for the purpose of doing X'. This pattern is extremely common and essential for talking about daily plans: 買い物に行く (go shopping), あそびに来る (come to hang out).",
+                examples: [
+                    {jp: "明日、えいがを見に行きます。", en: "Tomorrow, I will go to see a movie."},
+                    {jp: "日本へ日本語をべんきょうに来ました。", en: "I came to Japan to study Japanese."},
+                    {jp: "昼ごはんを食べにしょくどうへ行きました。", en: "I went to the cafeteria to eat lunch."},
+                    {jp: "ともだちがあそびに来ました。", en: "A friend came to visit (to hang out)."},
+                    {jp: "わすれ物を取りに家に帰った。", en: "I went back home to get something I forgot."}
+                ]
+            },
+            {
+                jp:'目的表現', 
+                en:'purpose expressions',
+                detail: "Expanding on 〜に行く, this covers general ways to express purpose. One key pattern is using の (or こと) to nominalize a verb or sentence, followed by に: Verb (dict.) のに or ことに 〜 (in order to do). For instance, りょうりをするのに使う (use it for cooking). Another way is using ため (に): Nounのため (for the sake of Noun) or Verb(dict.) ために (for the purpose of doing). ため expresses a stronger sense of benefit or goal. Understanding these allows for complex sentences explaining why actions are taken.",
+                examples: [
+                    {jp: "このハサミは花を切るのに使います。", en: "These scissors are used for cutting flowers."},
+                    {jp: "けんこうのためにうんどうしています。", en: "I exercise for my health."},
+                    {jp: "日本にりゅう学するためにちょ金しています。", en: "I am saving money in order to study abroad in Japan."},
+                    {jp: "駅に行くには、この道をまっすぐ行ってください。", en: "To go to the station, please go straight down this street."},
+                    {jp: "しけんにごうかくするために、毎日べんきょうしています。", en: "I study every day in order to pass the exam."}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 14,
+        points: [
+            {
+                jp:'〜てください', 
+                en:'please do ~ (request)',
+                detail: "The て-form of a verb combined with ください (please give me) forms a polite request. The structure is Verb (て-form) + ください. This literally means 'Give me the action of doing X', but it's the standard 'Please do X'. The て-form for each verb group must be memorized: Group 1 verbs change the final sound based on a song (う・つ・る → って; む・ぶ・ぬ → んで; く → いて; ぐ → いで; す → して). Group 2 verbs simply replace る with て. Irregular verbs are する → して; 来る → きて. This is perhaps the most important conjugation to master.",
+                examples: [
+                    {jp: "名前をここに書いてください。", en: "Please write your name here."},
+                    {jp: "ちょっと待ってください。", en: "Please wait a moment."},
+                    {jp: "このくすりを1日3回のんでください。", en: "Please take this medicine three times a day."},
+                    {jp: "すみません、英語をはなしてください。", en: "Excuse me, please speak English."},
+                    {jp: "しゃしんを見せてください。", en: "Please show me the photo."}
+                ]
+            },
+            {
+                jp:'〜てもいいです', 
+                en:'may do ~ (permission)',
+                detail: "This pattern grants permission: 'You may do X' or 'It's okay to do X'. The structure is Verb (て-form) + もいいです. も means 'even', and いい means 'good'. So literally: 'Even doing X is good'. To ask for permission, add か: 〜てもいいですか (May I do X?). The answer can be はい、いいです (Yes, it's fine) or はい、どうぞ (Yes, please go ahead). For denial, a softer ちょっと… (It's a bit…) is often used to avoid direct refusal.",
+                examples: [
+                    {jp: "ここでタバコをすってもいいですか。", en: "May I smoke here?"},
+                    {jp: "この本をかりてもいいですか。", en: "May I borrow this book?"},
+                    {jp: "はい、食べてもいいですよ。", en: "Yes, you may eat it."},
+                    {jp: "まどをあけてもいいですか。", en: "May I open the window?"},
+                    {jp: "ここにすわってもいいです。", en: "You may sit here."}
+                ]
+            },
+            {
+                jp:'〜てはいけません', 
+                en:'must not do ~ (prohibition)',
+                detail: "This is the strong negative command form: 'You must not do X' or 'Do not do X'. The structure is Verb (て-form) + はいけません. It combines the て-form with the particle は (wa) and the verb いけません (from いける, potential of 行く, meaning 'cannot go' in the sense of being unacceptable). This is a statement of prohibition, often used in rules or by authority figures. It is strong and direct, so learners should be mindful of the context when using it to avoid sounding harsh.",
+                examples: [
+                    {jp: "ここに車をとめてはいけません。", en: "You must not park the car here."},
+                    {jp: "としょかんで大きな声ではなしてはいけません。", en: "You must not speak loudly in the library."},
+                    {jp: "このへやに入ってはいけません。", en: "You must not enter this room."},
+                    {jp: "しけん中にけいたいをつかってはいけません。", en: "You must not use your mobile phone during the exam."},
+                    {jp: "学校でお酒をのんではいけません。", en: "You must not drink alcohol at school."}
+                ]
+            },
+            {
+                jp:'〜てから', 
+                en:'after doing ~',
+                detail: "This pattern indicates a sequence of actions where the second action occurs after the first is completed. The structure is Verb A (て-form) + から + Verb B. It translates to 'After doing A, do B'. It emphasizes that A must be fully completed before B begins. This is different from the simple て-form connection (which can just list sequential actions without strict ordering) and 〜たあとで (another after construction). 〜てから implies a stronger logical or temporal sequence.",
+                examples: [
+                    {jp: "手をあらってからごはんを食べます。", en: "After washing my hands, I eat."},
+                    {jp: "仕事がおわってから飲みに行きませんか。", en: "Won't you go for a drink after work finishes?"},
+                    {jp: "よくかんがえてからはなしてください。", en: "Please speak after thinking carefully."},
+                    {jp: "しゅく題をしてからテレビを見ます。", en: "After doing homework, I watch TV."},
+                    {jp: "国へ帰ってからしゅうしょくするつもりです。", en: "I plan to find a job after returning to my country."}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 15,
+        points: [
+            {
+                jp:'〜ています (progressive)', 
+                en:'doing ~ (present continuous)',
+                detail: "The て-form combined with います expresses an action in progress, equivalent to the English present continuous ('is doing'). The structure is Verb (て-form) + います. It describes an ongoing action at the current moment. For example, 今、雨がふっています (It is raining now). The negative is 〜ていません, and the past is 〜ていました. In casual speech, いる often drops the い: 食べてる. This is one of the most frequently used verb forms in daily Japanese conversation.",
+                examples: [
+                    {jp: "今、何をしていますか。", en: "What are you doing now?"},
+                    {jp: "母は台所でりょうりをしています。", en: "My mother is cooking in the kitchen."},
+                    {jp: "かれは今、電話をかけています。", en: "He is making a phone call right now."},
+                    {jp: "雨が強くふっています。", en: "It's raining heavily."},
+                    {jp: "いもうとはへやでおんがくを聞いています。", en: "My younger sister is listening to music in her room."}
+                ]
+            },
+            {
+                jp:'〜ています (state)', 
+                en:'state / current condition',
+                detail: "Beyond progressive action, 〜ています also expresses a current state resulting from a past change. This is used with punctual verbs (instantaneous change-of-state verbs) like けっこんする (get married), 住む (to start living), 知る (to get to know). The ている form of these verbs describes the ongoing state: けっこんしています (I am married - state of having married), おおさかに住んでいます (I live in Osaka - state of having moved there), 知っています (I know - state of having come to know). This is a crucial distinction from English, where 'I know' is simple present.",
+                examples: [
+                    {jp: "たなかさんを知っていますか。", en: "Do you know Mr. Tanaka?"},
+                    {jp: "わたしはとうきょうに住んでいます。", en: "I live in Tokyo."},
+                    {jp: "かのじょはけっこんしています。", en: "She is married."},
+                    {jp: "めがねをかけています。", en: "I am wearing glasses. (state of having put them on)"},
+                    {jp: "デパートはもうしまっています。", en: "The department store is already closed."}
+                ]
+            },
+            {
+                jp:'〜ています (habit)', 
+                en:'habitual action',
+                detail: "The 〜ています form can also express a habitual or regular action. This is often accompanied by adverbs like いつも (always) or 毎日 (every day). It describes something that the subject does on a regular basis. For example, 毎あさジョギングをしています (I jog every morning). This usage overlaps somewhat with the simple present (ジョギングをします), but ています implies a continuous, ongoing habit or a lifestyle choice that has been established.",
+                examples: [
+                    {jp: "毎日、日本語をべんきょうしています。", en: "I study Japanese every day."},
+                    {jp: "週まつはいつもアルバイトをしています。", en: "I always work part-time on weekends."},
+                    {jp: "かれは毎あさ新聞を読んでいます。", en: "He reads the newspaper every morning."},
+                    {jp: "週に2回ジムにかよっています。", en: "I go to the gym twice a week."},
+                    {jp: "父は毎ばんさんぽをしています。", en: "My father takes a walk every evening."}
+                ]
+            },
+            {
+                jp:'てもいいですか', 
+                en:'may I ~? (asking permission)',
+                detail: "A review and expansion of Lesson 14's permission pattern, this specifically focuses on the interrogative form for asking permission: 'May I do X?'. The polite request structure is Verb (て-form) + もいいですか. To make it even more polite, you can use the negative てもよろしいですか or てはいけませんか. Answering 'No, you may not' politely often requires the softer 〜てはいけません or ちょっと…, as a direct いいえ、だめです can be blunt.",
+                examples: [
+                    {jp: "このいすにすわってもいいですか。", en: "May I sit in this chair?"},
+                    {jp: "まどをしめてもいいですか。", en: "May I close the window?"},
+                    {jp: "ここに車をとめてもいいですか。", en: "May I park the car here?"},
+                    {jp: "このパンフレットをもらってもいいですか。", en: "May I take this brochure?"},
+                    {jp: "しゃしんをとってもよろしいですか。", en: "Would it be alright to take a photo? (more polite)"}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 16,
+        points: [
+            {
+                jp:'〜てから (sequence)', 
+                en:'after doing ~ (sequence)',
+                detail: "An extension of the てから pattern, emphasizing that the second action happens strictly after the first is completed. The nuance is that the first action is a prerequisite. The structure is Verb1 (て-form) + から, Verb2. It is very commonly used for giving sequential instructions or describing daily routines. For verbs like 出かける, you might say あさごはんを食べてから出かけます (I go out after eating breakfast). This pattern is distinct from the simple て-form sequential list, which doesn't emphasize the completion prerequisite as strongly.",
+                examples: [
+                    {jp: "しゅく題をしてからあそびに行きます。", en: "I will go play after doing my homework."},
+                    {jp: "はをみがいてからねます。", en: "I brush my teeth and then go to bed."},
+                    {jp: "よくかんがえてからへんじをください。", en: "Please reply after thinking carefully."},
+                    {jp: "シャワーをあびてからあさごはんを食べます。", en: "I eat breakfast after taking a shower."},
+                    {jp: "マニュアルを読んでからつかってください。", en: "Please read the manual before using it."}
+                ]
+            },
+            {
+                jp:'〜ないでください', 
+                en:'please don\'t do ~',
+                detail: "This is the negative request form, meaning 'Please don't do X'. It uses the ない-form (negative plain form) of the verb, plus でください. The structure is Verb (ない-form) + でください. This replaces the て-form in the affirmative request. For example, 行かないでください (Please don't go). To form the ない-form: Group 1 verbs change the final 'u' to 'a' and add ない (e.g., 書く → 書かない). Group 2 verbs drop る and add ない (食べる → 食べない). Irregulars: する → しない, 来る → こない. This pattern is crucial for polite prohibitions in everyday life.",
+                examples: [
+                    {jp: "ここでしゃしんをとらないでください。", en: "Please don't take pictures here."},
+                    {jp: "タバコをすわないでください。", en: "Please don't smoke."},
+                    {jp: "そのきかいにさわらないでください。", en: "Please don't touch that machine."},
+                    {jp: "大きな声ではなさないでください。", en: "Please don't speak loudly."},
+                    {jp: "しんぱいしないでください。", en: "Please don't worry."}
+                ]
+            },
+            {
+                jp:'〜なければなりません', 
+                en:'must do ~',
+                detail: "This expresses obligation or duty: 'I must do X' or 'I have to do X'. It is formed from the ない-form by replacing ない with なければなりません (literally: 'if I don't do X, it won't become/won't be acceptable'). The full process: Verb (ない-form) minus い + ければなりません. For example, 食べる → 食べない → 食べなければなりません. This construction is formal and often shortened to 〜なきゃ (casual) or 〜なくてはいけません. A similar, slightly softer form is 〜なければいけません.",
+                examples: [
+                    {jp: "明日、早くおきなければなりません。", en: "I must wake up early tomorrow."},
+                    {jp: "レポートを金よう日までにていしゅつしなければなりません。", en: "I must submit the report by Friday."},
+                    {jp: "学生はまじめにべんきょうしなければなりません。", en: "Students must study seriously."},
+                    {jp: "このくすりをのまなければなりませんか。", en: "Must I take this medicine?"},
+                    {jp: "やくそくをまもらなければなりません。", en: "You must keep your promises."}
+                ]
+            },
+            {
+                jp:'〜なくてもいいです', 
+                en:'don\'t have to do ~',
+                detail: "The opposite of obligation: 'It is not necessary to do X' or 'You don't have to do X'. The structure is Verb (ない-form) minus い + くてもいいです (literally: 'even if you don't do, it's good'). For example, 食べる → 食べない → 食べなくてもいいです (You don't have to eat). もいい indicates permission, and the negative verb form makes it permission to not do the action. This pattern offers freedom from a duty or requirement and is a polite way to relieve someone of an obligation.",
+                examples: [
+                    {jp: "日よう日は学校へ来なくてもいいです。", en: "You don't have to come to school on Sunday."},
+                    {jp: "ぜんぶ食べなくてもいいですよ。", en: "You don't have to eat it all."},
+                    {jp: "むりにさんかしなくてもいいです。", en: "You don't have to force yourself to join."},
+                    {jp: "明日は早くおきなくてもいいから、おそくまでおきていよう。", en: "I don't have to wake up early tomorrow, so let's stay up late."},
+                    {jp: "へんじはいそがなくてもいいです。", en: "You don't have to rush your reply."}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 17,
+        points: [
+            {
+                jp:'〜たことがあります', 
+                en:'have done ~ before (experience)',
+                detail: "This expresses past experience: 'I have done X before'. The structure is Verb (た-form, past plain) + ことがあります. こと means a nominalized 'thing' or 'experience'. The pattern literally means 'I have the experience of having done X'. The た-form is the plain past form, used before こと. To ask, use たことがありますか. The negative is たことがありません (I have never done X). This is distinct from the simple past (which just states an action happened) and the present perfect (which can imply a connection to the present). It purely describes life experience.",
+                examples: [
+                    {jp: "ふじ山にのぼったことがありますか。", en: "Have you ever climbed Mt. Fuji?"},
+                    {jp: "いいえ、一ども行ったことがありません。", en: "No, I have never been there."},
+                    {jp: "すしを食べたことがあります。", en: "I have eaten sushi before."},
+                    {jp: "かれはかい外ではたらいたことがあります。", en: "He has experience working overseas."},
+                    {jp: "こんなに美しい夕日を見たことがない。", en: "I have never seen such a beautiful sunset."}
+                ]
+            },
+            {
+                jp:'〜たり〜たりする', 
+                en:'do things like ~',
+                detail: "This pattern lists multiple activities non-exhaustively, meaning 'do things such as A and B'. The structure is Verb1 (た-form) + り + Verb2 (た-form) + り + する. It conveys a sense of 'doing various things, including...'. The activities listed are representative examples, not an exhaustive list. する at the end carries the tense: したりします (present/future), したりしました (past). It can also be used with a single verb + り to imply doing things like that among other things.",
+                examples: [
+                    {jp: "週まつはえいがを見たり、買い物をしたりします。", en: "On weekends, I do things like watch movies and go shopping."},
+                    {jp: "きのう、本を読んだり、手がみを書いたりしました。", en: "Yesterday, I did things like reading a book and writing letters."},
+                    {jp: "こうえんで走ったり、さけんだりしてはいけません。", en: "You must not run around or shout in the park."},
+                    {jp: "休みの日は、家でゴロゴロしたり、ゲームをしたりしてすごします。", en: "On my days off, I spend time lazing around and playing games."},
+                    {jp: "ともだちとカラオケに行ったり、ごはんを食べたりするのが好きです。", en: "I like doing things like going to karaoke and eating out with friends."}
+                ]
+            },
+            {
+                jp:'〜た形', 
+                en:'ta-form (past tense plain form)',
+                detail: "The た-form is the plain (casual) past tense affirmative form of verbs. Its conjugation rules are identical to the て-form, but with た/だ replacing て/で. For Group 1 verbs: 書く → 書いた, 読む → 読んだ, 話す → 話した, etc. For Group 2: 食べる → 食べた. Irregulars: する → した, 来る → きた. The た-form is used before grammar patterns like ことがある, り (for たり), あとで, ら (conditional), and is the foundation of casual past-tense sentences (e.g., ごはん食べた? - Did you eat?). Mastering the た-form is essential for intermediate grammar.",
+                examples: [
+                    {jp: "もう昼ごはんを食べた。", en: "I already ate lunch. (casual)"},
+                    {jp: "きのうのえいが、見た？", en: "Did you see the movie yesterday? (casual)"},
+                    {jp: "手がみはもう出した？", en: "Did you already send the letter? (casual)"},
+                    {jp: "この本、読んだことがありますか。", en: "Have you ever read this book? (polite)"},
+                    {jp: "れんしゅうしたあとで、しあいをします。", en: "We will play the match after we practice."}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 18,
+        points: [
+            {
+                jp:'〜ことができる', 
+                en:'can do ~ (potential form)',
+                detail: "This is a formal way to express ability or potential. The structure is Verb (dictionary form) + ことができる. For example, およぐことができる (can swim). It is semantically identical to the potential verb form (およげる), but ことができる is more formal and often used in written language or formal speech. When conjugating, できる changes: ことができます (polite), ことができない (negative plain), ことができません (negative polite), ことができた (past). It literally means 'The thing of doing X is possible'.",
+                examples: [
+                    {jp: "あなたは日本語をはなすことができますか。", en: "Can you speak Japanese?"},
+                    {jp: "わたしはりょうりをすることができません。", en: "I cannot cook."},
+                    {jp: "ここでインターネットをつかうことができます。", en: "You can use the internet here."},
+                    {jp: "かれは100メートルを11びょうで走ることができる。", en: "He can run 100 meters in 11 seconds."},
+                    {jp: "このとしょかんでは本をかりることができません。", en: "You cannot borrow books at this library."}
+                ]
+            },
+            {
+                jp:'〜こと', 
+                en:'nominalization of verbs',
+                detail: "The nominalizer こと turns a verb or a verb phrase into a noun phrase. By placing こと after the plain form of a verb, you can treat the action as a concept or thing. This is essential for making verb phrases the topic or object of a sentence. For example, わたしはえいがを見ることが好きです (I like watching movies). Here, えいがを見る (to watch movies) becomes the object of 好き thanks to こと. Other nominalizers include の, which is often more subjective or immediate, while こと is more abstract or general.",
+                examples: [
+                    {jp: "わたしのしゅみはしゃしんをとることです。", en: "My hobby is taking photos."},
+                    {jp: "かん字をおぼえることはむずかしいです。", en: "Remembering kanji is difficult."},
+                    {jp: "大せつなのはけんこうでいることです。", en: "The important thing is to be healthy."},
+                    {jp: "かれがせいこうしたことはすばらしい。", en: "The fact that he succeeded is wonderful."},
+                    {jp: "お金をためることは大せつです。", en: "Saving money is important."}
+                ]
+            },
+            {
+                jp:'〜前に', 
+                en:'before doing ~',
+                detail: "This pattern means 'before doing X'. It uses the dictionary form of the verb (non-past plain) plus 前に. The structure is Verb (dict.) + 前に, Action. For example, ねる前に本を読みます (Before sleeping, I read a book). Note that even if the main verb is past tense, the verb before 前に stays non-past. For nouns, use Noun + の前に. This pattern is essential for describing sequences and routines.",
+                examples: [
+                    {jp: "ごはんを食べる前に手をあらいます。", en: "I wash my hands before eating."},
+                    {jp: "出かける前にかぎをしめました。", en: "I locked the door before going out."},
+                    {jp: "日本に来る前に、少し日本語をべんきょうしました。", en: "Before coming to Japan, I studied Japanese a little."},
+                    {jp: "りょ行の前にチケットをよやくします。", en: "I reserve tickets before the trip."},
+                    {jp: "ねる前に歯をみがきなさい。", en: "Brush your teeth before going to bed."}
+                ]
+            },
+            {
+                jp:'〜後で', 
+                en:'after doing ~',
+                detail: "This pattern means 'after doing X'. The structure is Verb (た-form) + 後で, Action. Unlike 前に, the verb before 後 must be in the past plain form (た-form), because the action must have been completed. For example, ごはんを食べた後で、さんぽします (After eating, I take a walk). For nouns, use Noun + の後で. This form is very similar to 〜てから, but あとで separates the clauses more distinctly and can refer to less immediate sequences.",
+                examples: [
+                    {jp: "仕事がおわった後で、飲みに行きませんか。", en: "Won't you go for a drink after work?"},
+                    {jp: "えいがを見た後で、レストランに行きました。", en: "After watching the movie, we went to a restaurant."},
+                    {jp: "大学をそつぎょうした後で、何をしたいですか。", en: "What do you want to do after graduating from university?"},
+                    {jp: "よくかんがえた後できめます。", en: "I will decide after thinking carefully."},
+                    {jp: "雨がやんだ後でしゅっぱつしましょう。", en: "Let's depart after the rain stops."}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 19,
+        points: [
+            {
+                jp:'〜ない形', 
+                en:'nai-form (negative plain form)',
+                detail: "The ない-form is the plain (casual) negative form of verbs. It is fundamental for casual speech and many grammar constructions. Conjugation rules: Group 1 verbs change the final 'u' to the 'a' row and add ない (e.g., 書く → 書かない, 読む → 読まない, 話す → 話さない, ある → ない!). Verbs ending in う change to わない: 買う → 買わない. Group 2 verbs simply drop る and add ない: 食べる → 食べない, 見る → 見ない. Irregulars: する → しない, 来る → こない. This form is used for the casual negative (食べない - I don't eat) and attaches to patterns like ないでください, なければならない, and なくてもいい.",
+                examples: [
+                    {jp: "わたしはあさごはんを食べない。", en: "I don't eat breakfast. (casual)"},
+                    {jp: "かれは野さいをまったく食べない。", en: "He doesn't eat vegetables at all."},
+                    {jp: "まだ何もきまっていない。", en: "Nothing has been decided yet."},
+                    {jp: "その話はだれにも話さないでください。", en: "Please don't tell that story to anyone."},
+                    {jp: "お酒は飲まないことにしている。", en: "I make it a rule not to drink alcohol."}
+                ]
+            },
+            {
+                jp:'〜ないでください', 
+                en:'please don\'t (negative request)',
+                detail: "Reinforcing the negative request form from Lesson 16. It uses the ない-form of the verb plus でください. This is the standard polite way to ask someone not to do something. The structure Verb (ない-form) + でください is vital for giving prohibitive instructions politely. It's often heard in announcements, signs, and daily conversation when cautioning or restricting behavior.",
+                examples: [
+                    {jp: "ここであそばないでください。", en: "Please don't play here."},
+                    {jp: "わすれないでください。", en: "Please don't forget."},
+                    {jp: "そのしょるいにさわらないでください。", en: "Please don't touch those documents."},
+                    {jp: "教室で物を食べないでください。", en: "Please don't eat things in the classroom."},
+                    {jp: "むりをしないでくださいね。", en: "Please don't overwork yourself."}
+                ]
+            },
+            {
+                jp:'〜なければなりません', 
+                en:'must (obligation)',
+                detail: "Reinforcing the obligation pattern. This double-negative construction literally means 'if I don't do X, it won't become', expressing strong necessity. The pattern is Verb (ない-form minus い) + ければなりません. While polite and correct, in spoken casual Japanese it is often contracted to 〜なきゃいけない or just 〜なきゃ. For instance, 行かなければなりません becomes 行かなきゃ (I gotta go). This is a core grammar point for expressing responsibilities and duties.",
+                examples: [
+                    {jp: "もう帰らなければなりません。", en: "I must go home now."},
+                    {jp: "レポートを書かなければなりませんでした。", en: "I had to write a report."},
+                    {jp: "やくそくはまもらなければなりません。", en: "You must keep your promises."},
+                    {jp: "明日しけんがあるから、今ばんべんきょうしなければならない。", en: "I have an exam tomorrow, so I have to study tonight."},
+                    {jp: "すぐにこの手がみを出さなければなりませんか。", en: "Must I send this letter immediately?"}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 20,
+        points: [
+            {
+                jp:'〜た形 (past plain)', 
+                en:'ta-form for casual past',
+                detail: "Further solidification of the た-form. This lesson emphasizes its use in casual conversations for the simple past. In polite speech, we use 〜ました, but in casual speech with friends and family, the た-form ends the sentence. For example, きのう何した？ (What did you do yesterday?). えいが見た (I watched a movie). The た-form is also used extensively in relative clauses to describe nouns in the past tense: きのう買った本 (the book I bought yesterday). Its versatility makes it one of the most important verb forms to master.",
+                examples: [
+                    {jp: "もうその本読んだ？", en: "Have you already read that book?"},
+                    {jp: "うん、きのう読んだ。", en: "Yeah, I read it yesterday."},
+                    {jp: "だれがケーキを食べた？", en: "Who ate the cake?"},
+                    {jp: "きのう、何した？", en: "What did you do yesterday?"},
+                    {jp: "先しゅう、新しいスマホを買ったんだ。", en: "I bought a new smartphone last week. (explanatory tone)"}
+                ]
+            },
+            {
+                jp:'〜ことがある', 
+                en:'have done ~ before (experience)',
+                detail: "Reinforcing the experiential pattern 〜たことがある. The combination of the た-form (past plain) and こと (abstract thing) followed by ある (to exist) creates the meaning 'have the experience of doing X'. This pattern is fundamental for discussing life experiences. The negative, 〜たことがない (have never done), is equally important. The ある part conjugates for politeness and tense: あります, ありません, ありました.",
+                examples: [
+                    {jp: "かい外りょ行をしたことがありますか。", en: "Have you ever traveled abroad?"},
+                    {jp: "さしみは食べたことがありません。", en: "I have never eaten sashimi."},
+                    {jp: "かれに一ど会ったことがある。", en: "I have met him once."},
+                    {jp: "かぶきを見たことがありますか。", en: "Have you ever seen Kabuki?"},
+                    {jp: "そんな話は聞いたことがない。", en: "I've never heard such a story."}
+                ]
+            },
+            {
+                jp:'〜り〜りする', 
+                en:'listing representative actions',
+                detail: "An expanded look at the 〜たり〜たりする pattern for listing representative actions. This structure implies an non-exhaustive list of activities. The tense of the entire sentence is carried by the final する. It's often used to describe how one spends time or general activities. You can also use a single verb with たりする to suggest you do things like that among others: 休みの日は本を読んだりします (On days off, I do things like reading books).",
+                examples: [
+                    {jp: "日よう日はよくこうえんをさんぽしたり、カフェで本を読んだりします。", en: "On Sundays, I often do things like walking in the park and reading books at cafes."},
+                    {jp: "きのうはともだちと話したり、ゲームをしたりして楽しかった。", en: "Yesterday, I had fun talking with friends and playing games."},
+                    {jp: "へやで歌ったりおどったりしてはいけません。", en: "You must not sing or dance in your room."},
+                    {jp: "ひまなときはたいていおんがくを聞いたりしています。", en: "When I have free time, I usually listen to music and things like that."},
+                    {jp: "ぶっかが上がったり下がったりしています。", en: "Prices keep going up and down."}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 21,
+        points: [
+            {
+                jp:'〜と思います', 
+                en:'I think ~',
+                detail: "This pattern expresses the speaker's personal thought or opinion: 'I think that ~'. The structure is Clause (plain form) + と思います. For nouns and na-adjectives in the present tense, だ is used before と: しずかだと思います (I think it's quiet). For i-adjectives and verbs, the plain form attaches directly: 高いと思う, 行くと思う. The content before と must be in the plain form (casual), never polite. The negative can be either inside the clause (行かないと思う - I think I won't go) or outside (行くと思わない - I don't think I will go), with slightly different nuances; the latter is a stronger denial of the thought.",
+                examples: [
+                    {jp: "明日は雨がふると思います。", en: "I think it will rain tomorrow."},
+                    {jp: "このえいがはおもしろいと思いました。", en: "I thought this movie was interesting."},
+                    {jp: "かれは来ないと思います。", en: "I think he won't come."},
+                    {jp: "それはいいかんがえだと思います。", en: "I think that's a good idea."},
+                    {jp: "このへやは少しせまいと思いませんか。", en: "Don't you think this room is a little small?"}
+                ]
+            },
+            {
+                jp:'〜と言います', 
+                en:'say that ~',
+                detail: "This pattern reports speech: 'Someone says that ~'. The structure is Person は + Quoted Clause (plain form) + と言います. The quoted clause is marked by the quotation particle と. For direct quotation, the exact words can be quoted: かれは「はい」と言いました (He said 'Yes'). For indirect quotation, the plain form of the verb/adjective is used. When reporting what someone said, the tense of 言う changes to 言いました (said), 言っています (is saying), etc. The source can also be marked with によると (according to).",
+                examples: [
+                    {jp: "かのじょは来年けっこんすると言いました。", en: "She said she will get married next year."},
+                    {jp: "先生は明日しけんをすると言いました。", en: "The teacher said there will be an exam tomorrow."},
+                    {jp: "天気よほうによると、明日は雪だそうです。", en: "According to the weather forecast, it will snow tomorrow. (hearsay)"},
+                    {jp: "かれは何と言いましたか。", en: "What did he say?"},
+                    {jp: "電話で母が、元気だと言っていました。", en: "My mother said on the phone that she is fine."}
+                ]
+            },
+            {
+                jp:'〜でしょう', 
+                en:'probably / I suppose',
+                detail: "でしょう (or だろう in casual) expresses speculation or probability. It translates to 'probably' or 'I think/guess'. It is attached to the plain form of a verb, i-adjective, or noun/na-adjective (without だ). For example, 明日ははれるでしょう (It will probably be sunny tomorrow). It is also used as a tag question for seeking agreement, with a rising intonation: そうでしょう？ (Right? / Isn't it?). でしょう is the polite form; the plain form だろう is used in casual male speech or writing.",
+                examples: [
+                    {jp: "明日はたぶん雨でしょう。", en: "It will probably rain tomorrow."},
+                    {jp: "このもんだいはかんたんでしょう。", en: "This problem is probably easy, right?"},
+                    {jp: "かれはもうすぐ来るでしょう。", en: "He will probably come soon."},
+                    {jp: "これ、おいしいでしょう？", en: "This is delicious, isn't it?"},
+                    {jp: "それはむりでしょう。", en: "That's probably impossible."}
+                ]
+            },
+            {
+                jp:'〜かもしれません', 
+                en:'maybe / might ~',
+                detail: "This expresses possibility, but with a lower probability than でしょう. It translates to 'might' or 'maybe'. The structure is Clause (plain form) + かもしれません. For nouns and na-adjectives in the present affirmative, だ is dropped: しずかかもしれません (It might be quiet). か is the question particle, and も means 'even', so the literal sense is 'one cannot even know if...'. This form acknowledges uncertainty and is very useful for hedging statements politely. In casual speech, it becomes かもしれない.",
+                examples: [
+                    {jp: "今日は早く帰れるかもしれません。", en: "I might be able to go home early today."},
+                    {jp: "やくそくの時間にまにあわないかもしれません。", en: "I might not be in time for the appointment."},
+                    {jp: "このパソコンはもうこわれているのかもしれません。", en: "This computer may already be broken."},
+                    {jp: "かれはその事じつを知らないかもしれない。", en: "He might not know that fact."},
+                    {jp: "もしかしたら、それはかれのかばんかもしれません。", en: "Perhaps that might be his bag."}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 22,
+        points: [
+            {
+                jp:'〜て形 (te-forms)', 
+                en:'te-form for requests and connection',
+                detail: "A comprehensive review and deepening of the te-form. The te-form is the most versatile conjugation in Japanese. It connects clauses (食べて、ねる - eat and sleep), forms polite requests (食べてください), is used in continuous actions (食べている), asking permission (食べてもいい), and giving reasons (食べてはいけない). Mastery requires memorizing the conjugation rules: U-verbs (〜う・つ・る → って; 〜む・ぶ・ぬ → んで; 〜く → いて; 〜ぐ → いで; 〜す → して), Ru-verbs (drop る add て), and irregulars (する→して, 来る→きて).",
+                examples: [
+                    {jp: "毎あさ7時におきて、あさごはんを食べます。", en: "I wake up at 7 every morning and eat breakfast."},
+                    {jp: "すみません、ちょっと待ってください。", en: "Excuse me, please wait a moment."},
+                    {jp: "このたんごのいみをしらべてみました。", en: "I tried looking up the meaning of this word."},
+                    {jp: "かさを持って行ったほうがいいですよ。", en: "You should take an umbrella with you."},
+                    {jp: "つかれて、何もできなかった。", en: "I was tired and couldn't do anything."}
+                ]
+            },
+            {
+                jp:'〜ている', 
+                en:'progressive / continuous',
+                detail: "Reviewing the ている form for ongoing actions (progressive), habitual actions, and resultant states. The te-form + いる indicates a continuing state. For dynamic verbs (e.g., 食べる), it's progressive: 食べている (is eating). For instantaneous change verbs (e.g., けっこんする), it's the resultant state: けっこんしている (is married). For habitual actions, it describes a lifestyle pattern: 毎日走っている (runs every day). The verb いる conjugates for politeness and tense: ていました (was doing), ていません (not doing).",
+                examples: [
+                    {jp: "今、英語をべんきょうしています。", en: "I am studying English now."},
+                    {jp: "ドアが開いています。", en: "The door is open. (resultant state)"},
+                    {jp: "わたしはこの町に住んでいます。", en: "I live in this town. (state)"},
+                    {jp: "子どもたちがにわであそんでいます。", en: "The children are playing in the garden."},
+                    {jp: "さいきん、早くねるようにしています。", en: "Lately, I've been trying to go to bed early. (habitual effort)"}
+                ]
+            },
+            {
+                jp:'〜てある', 
+                en:'state resulting from action',
+                detail: "This pattern describes a state that exists because someone performed an action intentionally for a purpose. It translates roughly to 'has been done'. The structure is Transitive Verb (て-form) + ある. The subject of the sentence is the object of the action, marked by が. For example, まどがあけてある (The window has been left open / is open because someone opened it on purpose). This contrasts with まどがあいている, which simply states the window is open, without implying intentional human agency. てある emphasizes the deliberate preparation or intention behind the current state.",
+                examples: [
+                    {jp: "テーブルの上に花がかざってあります。", en: "Flowers have been arranged on the table. (someone placed them there)"},
+                    {jp: "かべにカレンダーがかけてあります。", en: "A calendar is hung on the wall."},
+                    {jp: "れいぞうこにビールがひやしてありますよ。", en: "Beer has been chilled in the fridge. (for you/us)"},
+                    {jp: "りょかんのよやくはもうしてあります。", en: "The ryokan reservation has been made."},
+                    {jp: "手がみがつくえの上においてあった。", en: "A letter had been left on the desk."}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 23,
+        points: [
+            {
+                jp:'〜とき', 
+                en:'when / at the time of ~',
+                detail: "This pattern means 'when' or 'at the time of'. It is attached to the plain form of verbs, i-adjectives, and nouns/na-adjectives. The structure is Modifying Clause + とき + Main Clause. The tense of the verb before とき depends on the sequence of events. If the main clause action happens 'while' or 'before' the とき action, the verb before とき is in the non-past (dictionary form), even if the whole sentence is in the past. For example, 日本に行くとき、カメラを買った (I bought a camera when I went to Japan / before going). If the action in the modifying clause is completed before the main clause, use the past tense: 日本に行ったとき、しゃしんをとった (I took pictures when I had gone to Japan).",
+                examples: [
+                    {jp: "時間がないときは、ファストフードを食べます。", en: "When I don't have time, I eat fast food."},
+                    {jp: "さびしいときはともだちに電話します。", en: "When I'm lonely, I call a friend."},
+                    {jp: "日本に来たとき、空港でスーツケースをなくした。", en: "When I came to Japan, I lost my suitcase at the airport."},
+                    {jp: "わかいとき、よくりょ行をしました。", en: "When I was young, I traveled often."},
+                    {jp: "ねるとき、「おやすみ」と言います。", en: "When I go to bed, I say 'Good night'."}
+                ]
+            },
+            {
+                jp:'〜ながら', 
+                en:'while doing ~',
+                detail: "This pattern expresses doing two actions simultaneously. The structure is Verb (masu-stem) + ながら + Main Verb. The main verb is the primary action, and the ながら action is secondary or background. For example, おんがくを聞きながらべんきょうします (I study while listening to music). It is important that the subject of both actions is the same. The ながら clause cannot be used for two strictly sequential actions, nor is it typically used for very short, instantaneous actions. It adds a sense of efficiency or multitasking.",
+                examples: [
+                    {jp: "コーヒーを飲みながら新聞を読みます。", en: "I read the newspaper while drinking coffee."},
+                    {jp: "歩きながら電話してはいけません。", en: "You must not talk on the phone while walking."},
+                    {jp: "かのじょはなきながら自分のけいけんを話した。", en: "She talked about her experience while crying."},
+                    {jp: "じしょを見ながら日本語のきじを読む。", en: "I read Japanese articles while consulting a dictionary."},
+                    {jp: "テレビを見ながらしょくじをするのが好きじゃない。", en: "I don't like eating while watching TV."}
+                ]
+            },
+            {
+                jp:'〜やすい/〜にくい', 
+                en:'easy to ~ / hard to ~',
+                detail: "These are auxiliary adjectives attached to the masu-stem of verbs. 〜やすい means 'easy to do' or 'prone to happen'. 〜にくい means 'difficult to do' or 'hard to happen'. They conjugate as i-adjectives. For example, わかる → わかりやすい (easy to understand), 食べる → 食べにくい (difficult to eat). These forms are extremely productive and used to describe the nature of objects, tasks, or situations. An opposite of にくい is 〜づらい, which also means difficult but implies a subjective, emotional hardship, whereas にくい is often an objective physical difficulty.",
+                examples: [
+                    {jp: "このペンはとても書きやすいです。", en: "This pen is very easy to write with."},
+                    {jp: "このガラスのコップはわれやすいから気をつけて。", en: "These glass cups break easily, so be careful."},
+                    {jp: "かれのせつめいはわかりにくかった。", en: "His explanation was hard to understand."},
+                    {jp: "すべりやすいので、ゆっくり歩いてください。", en: "The floor is slippery, so please walk slowly."},
+                    {jp: "魚のほねは食べにくいです。", en: "Fish bones are hard to eat."}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 24,
+        points: [
+            {
+                jp:'〜くれる/あげる/もらう', 
+                en:'giving / receiving verbs',
+                detail: "This lesson focuses deeply on the giving and receiving verbs, which are deeply tied to social relationships and in-group/out-group status. あげる: The giver gives to the recipient. The giver is the subject. Use it when giving to someone of equal or lower status, or when talking about others giving. くれる: Someone gives to the speaker (or someone in the speaker's in-group). The giver is the subject, and the receiver is typically わたし. This verb implies gratitude or a favor from the giver. もらう: The receiver (usually speaker) receives from someone. The giver is marked by に or から. This is the 'receiving' perspective. Choosing the correct verb depends on the flow of the object and the social relationship.",
+                examples: [
+                    {jp: "わたしはともだちにプレゼントをあげた。", en: "I gave a present to my friend."},
+                    {jp: "ともだちが（わたしに）おみやげをくれた。", en: "My friend gave me a souvenir."},
+                    {jp: "わたしはともだちにおみやげをもらった。", en: "I received a souvenir from my friend."},
+                    {jp: "だれがあなたにその時けいをくれたのですか。", en: "Who gave you that watch?"},
+                    {jp: "これは母からもらったゆび輪です。", en: "This is a ring I received from my mother."}
+                ]
+            },
+            {
+                jp:'〜てもらう', 
+                en:'receive the favor of doing ~',
+                detail: "This is the receiving version of a favor: 'to have someone do something for you (and you benefit)'. The structure is Person に Verb (て-form) + もらう. It implies that you requested or received a beneficial action. For example, ともだちに手つだってもらった (I had a friend help me). The 'giver' of the action is marked by に. This contrasts with 〜てくれる, where the giver is the subject who does the favor for you spontaneously. With てもらう, the focus is on the receiver's perspective and often implies the receiver initiated the action or requested it.",
+                examples: [
+                    {jp: "たなかさんに日本語をおしえてもらいました。", en: "I received the favor of being taught Japanese by Mr. Tanaka."},
+                    {jp: "すみません、ちょっと手つだってもらえますか。", en: "Excuse me, could I have you help me a bit? (potential form for request)"},
+                    {jp: "この手がみを後で出してもらいたいんですが。", en: "I would like you to mail this letter for me later."},
+                    {jp: "おいしゃさんにみてもらったほうがいいですよ。", en: "You should have a doctor look at you."},
+                    {jp: "かれにひっこしを手つだってもらうやくそくをした。", en: "I made a promise to get him to help me move."}
+                ]
+            },
+            {
+                jp:'〜てくれる', 
+                en:'do ~ for me (giving favor)',
+                detail: "This is the giving version of a favor: 'Someone does something for me / my in-group'. The structure is Person は/が Verb (て-form) + くれる. This carries a strong nuance of appreciation and gratitude for the action performed by the other person for the speaker's benefit. For example, 母がべんとうを作ってくれた (My mother made me a lunch). If you want to ask for a favor using くれる, you can use 〜てくれませんか or 〜てくれますか. It contrasts with 〜てあげる, which is doing a favor for someone else; using てあげる directly can sound condescending if not careful.",
+                examples: [
+                    {jp: "かれが駅まで車でおくってくれた。", en: "He gave me a ride to the station."},
+                    {jp: "おばあちゃんがいつもおいしいりょうりを作ってくれます。", en: "My grandmother always makes delicious food for me."},
+                    {jp: "ちょっとこのしゃしんを見てくれませんか。", en: "Could you take a look at this photo for me?"},
+                    {jp: "ともだちがおちこんでいる時にはげましてくれた。", en: "My friend cheered me up when I was feeling down."},
+                    {jp: "ぶちょうがすいせんじょうを書いてくれました。", en: "The department manager wrote a letter of recommendation for me."}
+                ]
+            }
+        ]
+    },
+    {
+        lesson: 25,
+        points: [
+            {
+                jp:'〜たら', 
+                en:'if / when ~ (conditional)',
+                detail: "The たら conditional is formed by adding ら to the past plain form (た-form). It means 'if' or 'when', and implies that the main clause occurs after the condition is realized. Structure: Verb/Adj (た-form) + ら. For nouns/na-adjectives: Noun/Na-adj だったら. It often has a stronger sense of a specific, one-time condition or a hypothetical situation. Example: 雨がふったら、出かけません (If it rains, I won't go out). It's also very common for suggestions and hypotheticals (お金があったら、りょ行したい - If I had money, I'd want to travel). It is one of the most versatile conditional forms.",
+                examples: [
+                    {jp: "駅に着いたら電話してください。", en: "Please call me when you arrive at the station."},
+                    {jp: "もしたからくじが当たったら、家を買います。", en: "If I win the lottery, I will buy a house."},
+                    {jp: "時間がなかったら、タクシーで行こう。", en: "If we don't have time, let's go by taxi."},
+                    {jp: "よかったら、一しょにしょくじしませんか。", en: "If it's alright with you, won't you have a meal with me?"},
+                    {jp: "夏休みになったら、海に行きたい。", en: "When summer vacation comes, I want to go to the sea."}
+                ]
+            },
+            {
+                jp:'〜ば', 
+                en:'if (ba-form conditional)',
+                detail: "The ば conditional is formed by changing the final 'u' of the verb to the 'e' row and adding ば. For Group 1: 行く → 行けば, 読む → 読めば. Group 2: 食べる → 食べれば. Irregulars: する → すれば, 来る → 来れば. For i-adjectives: 高ければ. For negatives: なければ. The ば form typically implies a general logical condition or an assumption: 'if X, then Y (as a natural consequence)'. It's often used for general truths or when the speaker is stating a condition objectively. Unlike たら, it cannot be used for suggestions or commands in the main clause unless the predicate expresses a state or potential (ただしければ、つかえばいい - If it's correct, you can use it).",
+                examples: [
+                    {jp: "春になれば、さくらがさきます。", en: "When spring comes, cherry blossoms bloom. (natural consequence)"},
+                    {jp: "わからなければ、先生に聞いてください。", en: "If you don't understand, please ask the teacher."},
+                    {jp: "いそげば、さいしゅう電車にまにあうかもしれない。", en: "If we hurry, we might catch the last train."},
+                    {jp: "天気がよければ、ふじ山が見えます。", en: "If the weather is good, you can see Mt. Fuji."},
+                    {jp: "お金があれば、何でも買えるというわけではない。", en: "It's not true that if you have money, you can buy anything."}
+                ]
+            },
+            {
+                jp:'〜と (conditional)', 
+                en:'when / if (natural consequence)',
+                detail: "This conditional と is attached to the dictionary form of verbs and i-adjectives, and the plain form of nouns/na-adjectives (with だ). It expresses a constant, natural, or inevitable consequence: 'Whenever X, Y happens'. Example: 春が来ると、花がさく (Whenever spring comes, flowers bloom). It cannot be used for commands, requests, or volitional expressions in the main clause. The result must be an automatic, unavoidable, or habitual outcome. If you push a button, the light turns on: ボタンをおすと、電気がつきます. Using と for personal intentions (e.g., 家へ帰ると、すぐビールを飲む - When I get home, I habitually drink beer) is permissible only as a habitual past action.",
+                examples: [
+                    {jp: "この道をまっすぐ行くと、こうさ点があります。", en: "If you go straight down this road, you will find an intersection."},
+                    {jp: "秋になると、木の葉が赤くなる。", en: "When autumn comes, the leaves turn red."},
+                    {jp: "お金を入れてボタンをおすと、切っぷが出ます。", en: "When you insert money and press the button, a ticket comes out."},
+                    {jp: "あのかどをまがると、ゆう便局が見えます。", en: "If you turn that corner, you can see the post office."},
+                    {jp: "早く家を出ないと、ちこくするよ。", en: "If I don't leave home soon, I'll be late. (casual, ないと as a warning)"}
+                ]
+            },
+            {
+                jp:'〜なら', 
+                en:'if (topic conditional)',
+                detail: "なら is the contextual conditional, meaning 'if it is the case that' or 'if what you say is true'. It is attached directly to nouns, na-adjective stems, and the plain form of verbs/i-adjectives. Unlike other conditionals, なら often picks up a topic introduced by the listener and gives advice or information about it. For example, 日本に行くなら、京都がいいですよ (If you are going to Japan (and since you brought it up), Kyoto is nice). It emphasizes that the statement is based on a condition established by the context. It is often used for giving recommendations or suggestions based on a specific scenario.",
+                examples: [
+                    {jp: "日本語をべんきょうするなら、このじしょがべんりですよ。", en: "If you are going to study Japanese, this dictionary is handy."},
+                    {jp: "安いなら、買います。", en: "If it's cheap, I'll buy it. (assuming what you say about it being cheap is true)"},
+                    {jp: "かれが来るなら、わたしは行かない。", en: "If it's the case that he's coming, I'm not going."},
+                    {jp: "りょ行に行くなら、どこがいいですか。", en: "If I were to travel, where would be a good place?"},
+                    {jp: "ひまなら、ちょっと手つだってください。", en: "If you are free (and since you seem to be), please help me a little."}
+                ]
+            }
+        ]
+    }
+];
+
+// ===================== RENDER FUNCTIONS =====================
+
+// Render Kana
+function renderKana(containerId, data) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';
+    data.forEach(([char, romaji]) => {
+        const div = document.createElement('div');
+        div.className = 'kana-cell';
+        div.innerHTML = `${char}<span class="romaji">${romaji}</span>`;
+        container.appendChild(div);
+    });
+}
+
+// Render Kanji
+function renderKanji() {
+    const grid = document.getElementById('kanjiGrid');
+    grid.innerHTML = '';
+    n5Kanji.forEach(k => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        div.innerHTML = `
+            <div class="kanji-char rainbow-text">${k.char}</div>
+            <div class="text-xs text-slate-400 mt-1">音: ${k.on}</div>
+            <div class="text-xs text-slate-400">訓: ${k.kun || '—'}</div>
+            <div class="text-sm font-medium text-indigo-600 dark:text-indigo-400 mt-1">${k.meaning}</div>
+        `;
+        grid.appendChild(div);
+    });
+}
+
+// Render Vocabulary
+function renderVocab(filterLesson, searchQuery) {
+    const tbody = document.getElementById('vocabTableBody');
+    const count = document.getElementById('vocabCount');
+    let filtered = vocabData;
+
+    if (filterLesson) {
+        filtered = filtered.filter(v => v.lesson === filterLesson);
+    }
+    if (searchQuery) {
+        const q = searchQuery.toLowerCase();
+        filtered = filtered.filter(v =>
+            v.jp.toLowerCase().includes(q) ||
+            v.en.toLowerCase().includes(q)
+        );
+    }
+
+    tbody.innerHTML = '';
+    filtered.forEach(v => {
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-gray-100 dark:border-slate-700 hover:bg-indigo-50 dark:hover:bg-slate-800/50 transition';
+        tr.innerHTML = `
+            <td class="py-2 px-2 text-sm text-slate-500 dark:text-slate-400">${v.lesson}</td>
+            <td class="py-2 px-2 font-medium text-lg rainbow-text">${v.jp}</td>
+            <td class="py-2 px-2 text-red-700 dark:text-red-400 font-medium">${v.en}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+    count.textContent = `Showing ${filtered.length} of ${vocabData.length} words`;
+}
+
+// Render Lesson Filters
+function renderLessonFilters() {
+    const container = document.getElementById('lessonFilters');
+    const lessons = [...new Set(vocabData.map(v => v.lesson))].sort((a,b) => a-b);
+    container.innerHTML = `<button class="filter-btn active" data-lesson="0">All</button>`;
+    lessons.forEach(l => {
+        const btn = document.createElement('button');
+        btn.className = 'filter-btn';
+        btn.textContent = `L${l}`;
+        btn.dataset.lesson = l;
+        container.appendChild(btn);
+    });
+}
+
+// Render Grammar
+function renderGrammar() {
+    const container = document.getElementById('grammarContent');
+    container.innerHTML = '';
+    grammarData.forEach(g => {
+        const block = document.createElement('div');
+        block.className = 'grammar-block mb-8';
+        block.innerHTML = `<h3 class="text-xl font-bold text-indigo-600 dark:text-indigo-400 mb-3">📘 Lesson ${g.lesson}</h3>`;
+        const inner = document.createElement('div');
+        inner.className = 'space-y-2';
+        g.points.forEach((p, idx) => {
+            const pointDiv = document.createElement('div');
+            pointDiv.className = 'grammar-point';
+            
+            // Header (clickable)
+            const header = document.createElement('div');
+            header.className = 'grammar-point-header';
+            header.dataset.pointIndex = idx;
+            header.innerHTML = `
+                <div>
+                    <span class="jp-label rainbow-text">${p.jp}</span>
+                    <span class="en-label">— ${p.en}</span>
+                </div>
+                <span class="toggle-icon">▼</span>
+            `;
+            
+            // Body (hidden by default)
+            const body = document.createElement('div');
+            body.className = 'grammar-point-body';
+            
+            // Detail description
+            if (p.detail) {
+                const detailP = document.createElement('div');
+                detailP.className = 'grammar-detail';
+                detailP.textContent = p.detail;
+                body.appendChild(detailP);
+            }
+            
+            // Examples table
+            if (p.examples && p.examples.length > 0) {
+                const table = document.createElement('table');
+                table.className = 'grammar-examples';
+                table.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th style="width:45%">Japanese</th>
+                            <th style="width:55%">English</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                `;
+                const tbody = table.querySelector('tbody');
+                p.examples.forEach(ex => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="jp-example rainbow-text">${ex.jp}</td>
+                        <td class="en-example">${ex.en}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+                body.appendChild(table);
+            }
+            
+            // Click toggle
+            header.addEventListener('click', function() {
+                const isOpen = body.classList.contains('open');
+                body.classList.toggle('open');
+                this.querySelector('.toggle-icon').classList.toggle('open');
+            });
+            
+            pointDiv.appendChild(header);
+            pointDiv.appendChild(body);
+            inner.appendChild(pointDiv);
+        });
+        block.appendChild(inner);
+        container.appendChild(block);
+    });
+    
+    // Optionally open the first grammar point of each lesson automatically
+    document.querySelectorAll('.grammar-point').forEach((gp, i) => {
+        if (i < 5) { // open first few to show it's interactive
+            gp.querySelector('.grammar-point-body').classList.add('open');
+            gp.querySelector('.toggle-icon').classList.add('open');
+        }
+    });
+}
+
+
+// ===================== INTERACTIVITY =====================
+
+// Tab Navigation
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+        document.getElementById(`tab-${this.dataset.tab}`).classList.add('active');
+    });
+});
+
+// Dark/Light Mode
+document.getElementById('themeToggle').addEventListener('click', function() {
+    document.body.classList.toggle('dark-mode');
+    document.body.classList.toggle('light-mode');
+    this.textContent = document.body.classList.contains('dark-mode') ? '☀️' : '🌙';
+});
+
+// Vocab search
+document.getElementById('vocabSearch').addEventListener('input', function() {
+    const activeLesson = parseInt(document.querySelector('.filter-btn.active')?.dataset.lesson) || 0;
+    renderVocab(activeLesson, this.value);
+});
+
+// Vocab filter buttons
+document.getElementById('lessonFilters').addEventListener('click', function(e) {
+    if (e.target.classList.contains('filter-btn')) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        e.target.classList.add('active');
+        const lesson = parseInt(e.target.dataset.lesson) || 0;
+        const search = document.getElementById('vocabSearch').value;
+        renderVocab(lesson, search);
+    }
+});
+
+
+// ===================== INIT =====================
+renderKana('hiraganaGrid', hiraganaChars);
+renderKana('katakanaGrid', katakanaChars);
+renderKana('hiraganaDakutenGrid', hiraganaDakuten);
+renderKana('hiraganaHandakutenGrid', hiraganaHandakuten);
+renderKana('hiraganaYoonGrid', hiraganaYoon);
+renderKana('katakanaDakutenGrid', katakanaDakuten);
+renderKana('katakanaHandakutenGrid', katakanaHandakuten);
+renderKana('katakanaYoonGrid', katakanaYoon);
+renderKanji();
+renderLessonFilters();
+renderVocab(0, '');
+renderGrammar();
+
+console.log('🎌 Kakkoi Nihongo loaded! かっこいい日本語へようこそ！');
+</script>
+
+</body>
+</html>
