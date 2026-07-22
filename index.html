@@ -4,21 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>KAKKOI NIHONGO – かっこいい日本語</title>
-    
-    <!-- Security Meta Tags -->
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="Referrer-Policy" content="no-referrer">
-    
-    <!-- Content Security Policy -->
-    <meta http-equiv="Content-Security-Policy" 
-          content="default-src 'self'; 
-                   script-src 'self' 'unsafe-inline' 'unsafe-eval'; 
-                   style-src 'self' 'unsafe-inline'; 
-                   img-src 'self' data: https:; 
-                   connect-src 'self' https:;
-                   font-src 'self' https:;">
-    
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap" rel="stylesheet" />
     <style>
@@ -333,33 +318,6 @@
             display: block;
         }
 
-        /* Anti-scraping styles */
-        .fake-data {
-            display: none !important;
-        }
-        .protected-content {
-            user-select: none;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-        }
-        
-        .debug-warning {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: red;
-            color: white;
-            padding: 10px;
-            text-align: center;
-            z-index: 99999;
-        }
-        .debug-warning.visible {
-            display: block;
-        }
-
         /* Footer */
         .footer {
             background: linear-gradient(135deg, #1e1b4b, #312e81);
@@ -374,27 +332,9 @@
             .kana-cell { font-size: 1rem; padding: 6px 2px; }
             .kana-cell .romaji { font-size: 0.5rem; }
         }
-
-        /* Protection watermark */
-        body::after {
-            content: '🔒 Protected Content';
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            color: rgba(99,102,241,0.15);
-            font-size: 11px;
-            pointer-events: none;
-            z-index: 9999;
-            font-family: 'Noto Sans JP', sans-serif;
-        }
     </style>
 </head>
 <body class="light-mode">
-
-<!-- Security Warning Banner -->
-<div id="debugWarning" class="debug-warning">
-    ⚠️ Debug tools detected. This content is protected.
-</div>
 
 <!-- Dark/Light Toggle -->
 <button id="themeToggle" class="toggle-btn" aria-label="Toggle dark/light mode">🌙</button>
@@ -557,120 +497,10 @@
     </div>
 </footer>
 
-<!-- Honeypot elements -->
-<div class="fake-data" aria-hidden="true">
-    <span data-fake="true">㐀㐁㐂㐃㐄</span>
-    <span data-fake="true">䷀䷁䷂䷃䷄</span>
-    <span data-fake="true">𠀀𠀁𠀂𠀃𠀄</span>
-</div>
-
 <!-- ====================================================================== -->
-<!-- JAVASCRIPT – ALL DATA & LOGIC WITH PROTECTION -->
+<!-- JAVASCRIPT – ALL DATA & LOGIC -->
 <!-- ====================================================================== -->
 <script>
-// ===================== PROTECTION SYSTEM =====================
-(function() {
-    'use strict';
-    
-    // Prevent right-click
-    document.addEventListener('contextmenu', function(e) {
-        e.preventDefault();
-        return false;
-    });
-    
-    // Prevent text selection
-    document.addEventListener('selectstart', function(e) {
-        e.preventDefault();
-    });
-    
-    // Prevent copy
-    document.addEventListener('copy', function(e) {
-        e.preventDefault();
-        e.clipboardData.setData('text/plain', '🔒 Content protected by Kakkoi Nihongo');
-        return false;
-    });
-    
-    // Prevent cut
-    document.addEventListener('cut', function(e) {
-        e.preventDefault();
-        return false;
-    });
-    
-    // Prevent paste (optional)
-    document.addEventListener('paste', function(e) {
-        // Allow paste but log it
-        console.log('Paste attempted');
-    });
-    
-    // DevTools detection
-    let devtoolsOpen = false;
-    const threshold = 160;
-    
-    function checkDevTools() {
-        const widthDiff = window.outerWidth - window.innerWidth;
-        const heightDiff = window.outerHeight - window.innerHeight;
-        
-        if (widthDiff > threshold || heightDiff > threshold) {
-            if (!devtoolsOpen) {
-                devtoolsOpen = true;
-                document.getElementById('debugWarning').classList.add('visible');
-                // Optionally clear content
-                // document.body.innerHTML = '<h1 style="text-align:center;padding:50px;color:red;">🔒 Content Protected</h1>';
-            }
-        } else {
-            devtoolsOpen = false;
-            document.getElementById('debugWarning').classList.remove('visible');
-        }
-    }
-    
-    setInterval(checkDevTools, 1000);
-    window.addEventListener('resize', checkDevTools);
-    
-    // Prevent iframe embedding
-    if (window.top !== window.self) {
-        window.top.location = window.self.location;
-    }
-    
-    // Prevent keyboard shortcuts
-    document.addEventListener('keydown', function(e) {
-        // Ctrl+U (View Source)
-        if (e.ctrlKey && e.key === 'u') {
-            e.preventDefault();
-            return false;
-        }
-        // Ctrl+Shift+I (DevTools)
-        if (e.ctrlKey && e.shiftKey && e.key === 'I') {
-            e.preventDefault();
-            return false;
-        }
-        // Ctrl+Shift+J (Console)
-        if (e.ctrlKey && e.shiftKey && e.key === 'J') {
-            e.preventDefault();
-            return false;
-        }
-        // F12
-        if (e.key === 'F12') {
-            e.preventDefault();
-            return false;
-        }
-    });
-    
-    // Disable console.log for sensitive data
-    const originalLog = console.log;
-    console.log = function(...args) {
-        // Filter out sensitive data
-        const filtered = args.map(arg => {
-            if (typeof arg === 'string' && arg.length > 100) {
-                return '[Content hidden]';
-            }
-            return arg;
-        });
-        originalLog.apply(console, filtered);
-    };
-    
-    console.log('🔒 Protected content loaded.');
-})();
-
 // ===================== DATA =====================
 
 // --- HIRAGANA ---
@@ -3333,7 +3163,6 @@ const grammarData = [
 // Render Kana
 function renderKana(containerId, data) {
     const container = document.getElementById(containerId);
-    if (!container) return;
     container.innerHTML = '';
     data.forEach(([char, romaji]) => {
         const div = document.createElement('div');
@@ -3346,7 +3175,6 @@ function renderKana(containerId, data) {
 // Render Kanji
 function renderKanji() {
     const grid = document.getElementById('kanjiGrid');
-    if (!grid) return;
     grid.innerHTML = '';
     n5Kanji.forEach(k => {
         const div = document.createElement('div');
@@ -3365,8 +3193,6 @@ function renderKanji() {
 function renderVocab(filterLesson, searchQuery) {
     const tbody = document.getElementById('vocabTableBody');
     const count = document.getElementById('vocabCount');
-    if (!tbody || !count) return;
-    
     let filtered = vocabData;
 
     if (filterLesson) {
@@ -3397,7 +3223,6 @@ function renderVocab(filterLesson, searchQuery) {
 // Render Lesson Filters
 function renderLessonFilters() {
     const container = document.getElementById('lessonFilters');
-    if (!container) return;
     const lessons = [...new Set(vocabData.map(v => v.lesson))].sort((a,b) => a-b);
     container.innerHTML = `<button class="filter-btn active" data-lesson="0">All</button>`;
     lessons.forEach(l => {
@@ -3412,7 +3237,6 @@ function renderLessonFilters() {
 // Render Grammar
 function renderGrammar() {
     const container = document.getElementById('grammarContent');
-    if (!container) return;
     container.innerHTML = '';
     grammarData.forEach(g => {
         const block = document.createElement('div');
@@ -3424,6 +3248,7 @@ function renderGrammar() {
             const pointDiv = document.createElement('div');
             pointDiv.className = 'grammar-point';
             
+            // Header (clickable)
             const header = document.createElement('div');
             header.className = 'grammar-point-header';
             header.dataset.pointIndex = idx;
@@ -3435,9 +3260,11 @@ function renderGrammar() {
                 <span class="toggle-icon">▼</span>
             `;
             
+            // Body (hidden by default)
             const body = document.createElement('div');
             body.className = 'grammar-point-body';
             
+            // Detail description
             if (p.detail) {
                 const detailP = document.createElement('div');
                 detailP.className = 'grammar-detail';
@@ -3445,6 +3272,7 @@ function renderGrammar() {
                 body.appendChild(detailP);
             }
             
+            // Examples table
             if (p.examples && p.examples.length > 0) {
                 const table = document.createElement('table');
                 table.className = 'grammar-examples';
@@ -3469,6 +3297,7 @@ function renderGrammar() {
                 body.appendChild(table);
             }
             
+            // Click toggle
             header.addEventListener('click', function() {
                 const isOpen = body.classList.contains('open');
                 body.classList.toggle('open');
@@ -3483,9 +3312,9 @@ function renderGrammar() {
         container.appendChild(block);
     });
     
-    // Open first few grammar points
+    // Optionally open the first grammar point of each lesson automatically
     document.querySelectorAll('.grammar-point').forEach((gp, i) => {
-        if (i < 2) {
+        if (i < 5) { // open first few to show it's interactive
             gp.querySelector('.grammar-point-body').classList.add('open');
             gp.querySelector('.toggle-icon').classList.add('open');
         }
@@ -3501,8 +3330,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
         document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
         this.classList.add('active');
         document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
-        const target = document.getElementById(`tab-${this.dataset.tab}`);
-        if (target) target.classList.add('active');
+        document.getElementById(`tab-${this.dataset.tab}`).classList.add('active');
     });
 });
 
@@ -3532,22 +3360,22 @@ document.getElementById('lessonFilters').addEventListener('click', function(e) {
 
 
 // ===================== INIT =====================
-document.addEventListener('DOMContentLoaded', function() {
-    renderKana('hiraganaGrid', hiraganaChars);
-    renderKana('katakanaGrid', katakanaChars);
-    renderKana('hiraganaDakutenGrid', hiraganaDakuten);
-    renderKana('hiraganaHandakutenGrid', hiraganaHandakuten);
-    renderKana('hiraganaYoonGrid', hiraganaYoon);
-    renderKana('katakanaDakutenGrid', katakanaDakuten);
-    renderKana('katakanaHandakutenGrid', katakanaHandakuten);
-    renderKana('katakanaYoonGrid', katakanaYoon);
-    renderKanji();
-    renderLessonFilters();
-    renderVocab(0, '');
-    renderGrammar();
-});
+renderKana('hiraganaGrid', hiraganaChars);
+renderKana('katakanaGrid', katakanaChars);
+renderKana('hiraganaDakutenGrid', hiraganaDakuten);
+renderKana('hiraganaHandakutenGrid', hiraganaHandakuten);
+renderKana('hiraganaYoonGrid', hiraganaYoon);
+renderKana('katakanaDakutenGrid', katakanaDakuten);
+renderKana('katakanaHandakutenGrid', katakanaHandakuten);
+renderKana('katakanaYoonGrid', katakanaYoon);
+renderKanji();
+renderLessonFilters();
+renderVocab(0, '');
+renderGrammar();
 
 console.log('🎌 Kakkoi Nihongo loaded! かっこいい日本語へようこそ！');
 </script>
+
 </body>
 </html>
+
