@@ -1,0 +1,12 @@
+# ═══════════════════════════════════════════════
+#  KAKKOI NIHONGO – Robots Exclusion File
+#  Prevents search engines from indexing raw content
+# ═══════════════════════════════════════════════
+
+User-agent: *
+Disallow: /
+
+# Block all robots from accessing any content on this site.
+# This is a static HTML site with all data embedded client-side.
+# No indexing should occur as the content is intentionally
+# viewable only through the intended UI.
