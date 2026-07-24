@@ -1,4 +1,4 @@
-# Kakkoi Nihongo (かっこい日本語)
+# Kakkoi Nihongo (かっこいい日本語)
 
 **Kakkoi Nihongo** is a free web platform built to help learners master **JLPT N5** — Japan's introductory language proficiency level. It brings together hiragana, katakana, kanji, vocabulary, grammar, quizzes, flashcards, and listening practice in one clean, easy-to-use site.
 
