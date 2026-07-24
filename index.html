@@ -326,6 +326,135 @@
         }
         .dark .footer { background: linear-gradient(135deg, #0f172a, #1e293b); }
 
+        /* Quiz styles */
+        .quiz-category-btn {
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 2px solid #e2e8f0;
+            border-radius: 16px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            background: white;
+            min-height: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .quiz-category-btn:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(99,102,241,0.2);
+            border-color: #6366f1;
+        }
+        .quiz-category-btn .icon { font-size: 2.5rem; }
+        .quiz-category-btn .label { font-weight: 700; font-size: 1.1rem; color: #1e293b; }
+        .quiz-category-btn .desc { font-size: 0.8rem; color: #94a3b8; }
+        .dark .quiz-category-btn { background: #1e293b; border-color: #334155; }
+        .dark .quiz-category-btn:hover { border-color: #818cf8; box-shadow: 0 12px 30px rgba(129,140,248,0.15); }
+        .dark .quiz-category-btn .label { color: #e2e8f0; }
+        .dark .quiz-category-btn .desc { color: #64748b; }
+
+        .quiz-question-card {
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+            max-width: 640px;
+            margin: 0 auto;
+        }
+        .dark .quiz-question-card { background: #1e293b; box-shadow: 0 4px 24px rgba(0,0,0,0.3); }
+
+        .quiz-option-btn {
+            display: block;
+            width: 100%;
+            padding: 14px 20px;
+            margin-bottom: 10px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            text-align: left;
+            font-size: 1.05rem;
+            font-weight: 500;
+            background: white;
+            color: #1e293b;
+            cursor: pointer;
+            transition: all 0.25s;
+        }
+        .quiz-option-btn:hover:not(.disabled) {
+            border-color: #6366f1;
+            background: #eef2ff;
+            transform: translateX(4px);
+        }
+        .quiz-option-btn.correct {
+            border-color: #22c55e;
+            background: #dcfce7;
+            color: #166534;
+        }
+        .quiz-option-btn.wrong {
+            border-color: #ef4444;
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        .quiz-option-btn.disabled { cursor: default; opacity: 0.7; }
+        .dark .quiz-option-btn { background: #334155; border-color: #475569; color: #e2e8f0; }
+        .dark .quiz-option-btn:hover:not(.disabled) { border-color: #818cf8; background: #475569; }
+        .dark .quiz-option-btn.correct { background: #166534; border-color: #22c55e; color: #bbf7d0; }
+        .dark .quiz-option-btn.wrong { background: #7f1d1d; border-color: #ef4444; color: #fecaca; }
+
+        .quiz-progress-bar {
+            height: 8px;
+            border-radius: 999px;
+            background: #e2e8f0;
+            overflow: hidden;
+        }
+        .dark .quiz-progress-bar { background: #334155; }
+        .quiz-progress-fill {
+            height: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #6366f1, #818cf8);
+            transition: width 0.5s ease;
+        }
+
+        .quiz-timer {
+            font-size: 1.2rem;
+            font-weight: 700;
+            font-variant-numeric: tabular-nums;
+        }
+        .quiz-timer.warning { color: #f59e0b; }
+        .quiz-timer.danger { color: #ef4444; animation: pulse 0.5s infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .quiz-result-item {
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+        }
+        .dark .quiz-result-item { background: #1e293b; border-color: #334155; }
+        .quiz-result-item.correct { border-left: 4px solid #22c55e; }
+        .quiz-result-item.wrong { border-left: 4px solid #ef4444; }
+        .quiz-result-item .q-status { font-size: 1.3rem; flex-shrink: 0; }
+        .quiz-result-item .q-detail { flex: 1; }
+        .quiz-result-item .q-detail .q-jp { font-weight: 700; font-size: 1.1rem; }
+        .quiz-result-item .q-detail .q-en { font-size: 0.85rem; color: #64748b; }
+        .dark .quiz-result-item .q-detail .q-en { color: #94a3b8; }
+        .quiz-result-item .q-detail .q-answer { font-size: 0.85rem; }
+        .quiz-result-item .q-detail .q-answer .correct-ans { color: #22c55e; font-weight: 600; }
+        .quiz-result-item .q-detail .q-answer .user-ans { color: #ef4444; font-weight: 600; }
+
+        @media (max-width: 640px) {
+            .quiz-category-btn { padding: 1.25rem 1rem; min-height: 110px; }
+            .quiz-category-btn .icon { font-size: 2rem; }
+            .quiz-question-card { padding: 1.25rem; }
+        }
+
         /* Mobile nav */
         @media (max-width: 640px) {
             .tab-btn { font-size: 0.75rem; padding: 6px 10px; }
@@ -334,8 +463,10 @@
             .kana-cell .romaji { font-size: 0.5rem; }
         }
     </style>
+    <!-- Content Protection Module -->
+    <script src="protections.js"></script>
 </head>
-<body class="light-mode">
+<body class="light-mode" oncontextmenu="return false;" onselectstart="return false;" ondragstart="return false;">
 
 <!-- Dark/Light Toggle -->
 <button id="themeToggle" class="toggle-btn" aria-label="Toggle dark/light mode">🌙</button>
@@ -351,6 +482,7 @@
             <button class="tab-btn px-3 py-2 rounded-xl text-sm font-medium" data-tab="kanji">Kanji</button>
             <button class="tab-btn px-3 py-2 rounded-xl text-sm font-medium" data-tab="vocab">Vocabulary</button>
             <button class="tab-btn px-3 py-2 rounded-xl text-sm font-medium" data-tab="grammar">Grammar</button>
+            <button class="tab-btn px-3 py-2 rounded-xl text-sm font-medium" data-tab="quiz">🎯 Quiz</button>
         </nav>
     </div>
 </header>
@@ -477,6 +609,73 @@
         <div id="grammarContent"></div>
     </section>
 
+    <!-- ===== QUIZ ===== -->
+    <section id="tab-quiz" class="tab-content">
+        <div id="quizApp">
+            <!-- Category Selection -->
+            <div id="quizCategoryScreen">
+                <h2 class="text-3xl sm:text-4xl font-black rainbow-text mb-2">🎯 Quiz Game</h2>
+                <p class="text-slate-500 dark:text-slate-400 mb-8">Choose a category to test your Japanese knowledge!</p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 max-w-3xl mx-auto" id="quizCategoryGrid"></div>
+            </div>
+
+            <!-- Quiz Play Screen -->
+            <div id="quizPlayScreen" style="display:none;">
+                <div class="max-w-2xl mx-auto">
+                    <!-- Header: category, question #, timer, score -->
+                    <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
+                        <div>
+                            <span class="text-sm font-medium text-slate-500 dark:text-slate-400" id="quizCategoryLabel">Category</span>
+                            <span class="text-xs text-slate-400 ml-2" id="quizQuestionCount">Question 1/10</span>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="quiz-timer" id="quizTimer">⏱ 10s</div>
+                            <div class="text-lg font-bold text-indigo-600 dark:text-indigo-400" id="quizScoreDisplay">⭐ 0</div>
+                        </div>
+                    </div>
+
+                    <!-- Progress Bar -->
+                    <div class="quiz-progress-bar mb-6">
+                        <div class="quiz-progress-fill" id="quizProgressFill" style="width:0%"></div>
+                    </div>
+
+                    <!-- Question Card -->
+                    <div class="quiz-question-card">
+                        <div class="text-4xl text-center font-black rainbow-text mb-6" id="quizQuestionDisplay">?</div>
+                        <div id="quizOptionsContainer"></div>
+                    </div>
+
+                    <!-- Next Button (hidden until answer selected) -->
+                    <div class="text-center mt-6" id="quizNextBtnContainer" style="display:none;">
+                        <button id="quizNextBtn" class="px-8 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+                            Next Question →
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quiz Results Screen -->
+            <div id="quizResultsScreen" style="display:none;">
+                <div class="max-w-2xl mx-auto text-center">
+                    <h2 class="text-3xl sm:text-4xl font-black rainbow-text mb-2">🎉 Quiz Complete!</h2>
+                    <div class="text-6xl font-black my-6" id="quizFinalScore">0/10</div>
+                    <p class="text-slate-500 dark:text-slate-400 mb-6" id="quizResultMessage">Great effort!</p>
+
+                    <div class="text-left mb-8" id="quizResultsList"></div>
+
+                    <div class="flex flex-wrap justify-center gap-4">
+                        <button id="quizRetryBtn" class="px-8 py-3 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+                            🔄 Play Again
+                        </button>
+                        <button id="quizHomeBtn" class="px-8 py-3 rounded-xl bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold text-lg shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300">
+                            🏠 Choose Category
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 </main>
 
 <!-- ===== FOOTER ===== -->
@@ -494,7 +693,7 @@
                 <p class="text-2xl font-bold text-white">NIKHIL</p>
             </div>
         </div>
-        <p class="text-slate-400 text-sm mt-8">© 2026 Kakkoi Nihongo — Built with ❤️ for Japanese learners</p>
+        <p class="text-slate-400 text-sm mt-8">© 2025 Kakkoi Nihongo — Built with ❤️ for Japanese learners</p>
     </div>
 </footer>
 
@@ -6725,8 +6924,489 @@ renderVocab(0, '');
 renderGrammar();
 
 console.log('🎌 Kakkoi Nihongo loaded! かっこいい日本語へようこそ！');
+
+// ===================== QUIZ GAME =====================
+
+// --- Quiz Configuration ---
+const QUIZ_CONFIG = {
+    totalQuestions: 10,
+    timePerQuestion: 12, // seconds
+    categories: [
+        {
+            id: 'hiragana',
+            label: 'Hiragana',
+            icon: 'あ',
+            desc: 'Read hiragana characters',
+            color: 'from-indigo-500 to-purple-600',
+            bg: 'bg-indigo-50 dark:bg-indigo-900/30',
+            border: 'border-indigo-200 dark:border-indigo-700'
+        },
+        {
+            id: 'katakana',
+            label: 'Katakana',
+            icon: 'ア',
+            desc: 'Read katakana characters',
+            color: 'from-pink-500 to-rose-600',
+            bg: 'bg-pink-50 dark:bg-pink-900/30',
+            border: 'border-pink-200 dark:border-pink-700'
+        },
+        {
+            id: 'kanji',
+            label: 'Kanji',
+            icon: '漢',
+            desc: 'N5 kanji meanings & readings',
+            color: 'from-amber-500 to-orange-600',
+            bg: 'bg-amber-50 dark:bg-amber-900/30',
+            border: 'border-amber-200 dark:border-amber-700'
+        },
+        {
+            id: 'vocab',
+            label: 'Vocabulary',
+            icon: '語',
+            desc: 'Minna no Nihongo L1-25 vocab',
+            color: 'from-emerald-500 to-teal-600',
+            bg: 'bg-emerald-50 dark:bg-emerald-900/30',
+            border: 'border-emerald-200 dark:border-emerald-700'
+        },
+        {
+            id: 'grammar',
+            label: 'Grammar',
+            icon: '文',
+            desc: 'N5 grammar points',
+            color: 'from-cyan-500 to-blue-600',
+            bg: 'bg-cyan-50 dark:bg-cyan-900/30',
+            border: 'border-cyan-200 dark:border-cyan-700'
+        }
+    ]
+};
+
+// --- Quiz State ---
+const quizState = {
+    category: null,
+    questions: [],
+    currentIndex: 0,
+    score: 0,
+    answers: [], // { question, correct, userAnswer, correctAnswer, jp, en }
+    timer: null,
+    timeLeft: 0,
+    isAnswered: false
+};
+
+// --- Quiz Question Generators ---
+function generateHiraganaQuestions(count) {
+    const pool = hiraganaChars.concat(hiraganaDakuten, hiraganaHandakuten, hiraganaYoon);
+    const shuffled = shuffleArray(pool);
+    return shuffled.slice(0, count).map(([char, romaji]) => {
+        const wrongOptions = getWrongOptions(pool, char, 3);
+        return {
+            question: `What is the romaji for 「${char}」?`,
+            answer: romaji,
+            options: shuffleArray([romaji, ...wrongOptions]),
+            jp: char,
+            en: romaji
+        };
+    });
+}
+
+function generateKatakanaQuestions(count) {
+    const pool = katakanaChars.concat(katakanaDakuten, katakanaHandakuten, katakanaYoon);
+    const shuffled = shuffleArray(pool);
+    return shuffled.slice(0, count).map(([char, romaji]) => {
+        const wrongOptions = getWrongOptions(pool, char, 3);
+        return {
+            question: `What is the romaji for 「${char}」?`,
+            answer: romaji,
+            options: shuffleArray([romaji, ...wrongOptions]),
+            jp: char,
+            en: romaji
+        };
+    });
+}
+
+function generateKanjiQuestions(count) {
+    const shuffled = shuffleArray(n5Kanji);
+    return shuffled.slice(0, count).map(k => {
+        // Mix of meaning and reading questions
+        const askMeaning = Math.random() > 0.5;
+        const wrongItems = n5Kanji.filter(x => x.char !== k.char);
+        const wrongPool = shuffleArray(wrongItems);
+        
+        if (askMeaning) {
+            const wrongMeanings = wrongPool.slice(0, 3).map(x => x.meaning);
+            return {
+                question: `What does 「${k.char}」 mean?`,
+                answer: k.meaning,
+                options: shuffleArray([k.meaning, ...wrongMeanings]),
+                jp: k.char,
+                en: k.meaning
+            };
+        } else {
+            const wrongReadings = wrongPool.slice(0, 3).map(x => x.on);
+            return {
+                question: `What is an ON-reading of 「${k.char}」?`,
+                answer: k.on,
+                options: shuffleArray([k.on, ...wrongReadings]),
+                jp: k.char,
+                en: k.on
+            };
+        }
+    });
+}
+
+function generateVocabQuestions(count) {
+    const shuffled = shuffleArray(vocabData);
+    return shuffled.slice(0, count).map(v => {
+        const askJapanese = Math.random() > 0.5;
+        const wrongPool = vocabData.filter(x => x.jp !== v.jp);
+        const wrongItems = shuffleArray(wrongPool);
+        
+        if (askJapanese) {
+            const wrongEn = wrongItems.slice(0, 3).map(x => x.en);
+            return {
+                question: `What is the English for 「${v.jp}」?`,
+                answer: v.en,
+                options: shuffleArray([v.en, ...wrongEn]),
+                jp: v.jp,
+                en: v.en
+            };
+        } else {
+            const wrongJp = wrongItems.slice(0, 3).map(x => x.jp);
+            return {
+                question: `What is the Japanese for 「${v.en}」?`,
+                answer: v.jp,
+                options: shuffleArray([v.jp, ...wrongJp]),
+                jp: v.jp,
+                en: v.en
+            };
+        }
+    });
+}
+
+function generateGrammarQuestions(count) {
+    // Collect all grammar points with examples
+    const grammarPool = [];
+    grammarData.forEach(g => {
+        g.points.forEach(p => {
+            if (p.examples && p.examples.length > 0) {
+                p.examples.forEach(ex => {
+                    grammarPool.push({
+                        jp: ex.jp,
+                        en: ex.en,
+                        pointJp: p.jp,
+                        pointEn: p.en,
+                        lesson: g.lesson
+                    });
+                });
+            }
+        });
+    });
+
+    const shuffled = shuffleArray(grammarPool);
+    return shuffled.slice(0, Math.min(count, shuffled.length)).map(ex => {
+        const askEnglish = Math.random() > 0.5;
+        const wrongPool = grammarPool.filter(x => x.jp !== ex.jp && x.en !== ex.en);
+        const wrongItems = shuffleArray(wrongPool);
+
+        if (askEnglish) {
+            const wrongEn = wrongItems.slice(0, 3).map(x => x.en);
+            return {
+                question: `What does this mean? 「${ex.jp}」`,
+                answer: ex.en,
+                options: shuffleArray([ex.en, ...wrongEn]),
+                jp: ex.jp,
+                en: ex.en
+            };
+        } else {
+            const wrongJp = wrongItems.slice(0, 3).map(x => x.jp);
+            return {
+                question: `Which Japanese sentence means 「${ex.en}」?`,
+                answer: ex.jp,
+                options: shuffleArray([ex.jp, ...wrongJp]),
+                jp: ex.jp,
+                en: ex.en
+            };
+        }
+    });
+}
+
+// --- Helpers ---
+function shuffleArray(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+function getWrongOptions(pool, correctChar, count) {
+    const wrong = pool.filter(([c]) => c !== correctChar);
+    const shuffled = shuffleArray(wrong);
+    return shuffled.slice(0, count).map(([, r]) => r);
+}
+
+// --- Render Quiz Category Grid ---
+function renderQuizCategories() {
+    const grid = document.getElementById('quizCategoryGrid');
+    grid.innerHTML = '';
+    
+    QUIZ_CONFIG.categories.forEach(cat => {
+        const btn = document.createElement('div');
+        btn.className = `quiz-category-btn ${cat.bg} ${cat.border}`;
+        btn.dataset.category = cat.id;
+        btn.innerHTML = `
+            <div class="icon">${cat.icon}</div>
+            <div class="label">${cat.label}</div>
+            <div class="desc">${cat.desc}</div>
+        `;
+        btn.addEventListener('click', () => startQuiz(cat.id));
+        grid.appendChild(btn);
+    });
+}
+
+// --- Start Quiz ---
+function startQuiz(categoryId) {
+    const cat = QUIZ_CONFIG.categories.find(c => c.id === categoryId);
+    if (!cat) return;
+
+    quizState.category = cat;
+    quizState.currentIndex = 0;
+    quizState.score = 0;
+    quizState.answers = [];
+    quizState.isAnswered = false;
+
+    // Generate questions
+    switch (categoryId) {
+        case 'hiragana':
+            quizState.questions = generateHiraganaQuestions(QUIZ_CONFIG.totalQuestions);
+            break;
+        case 'katakana':
+            quizState.questions = generateKatakanaQuestions(QUIZ_CONFIG.totalQuestions);
+            break;
+        case 'kanji':
+            quizState.questions = generateKanjiQuestions(QUIZ_CONFIG.totalQuestions);
+            break;
+        case 'vocab':
+            quizState.questions = generateVocabQuestions(QUIZ_CONFIG.totalQuestions);
+            break;
+        case 'grammar':
+            quizState.questions = generateGrammarQuestions(QUIZ_CONFIG.totalQuestions);
+            break;
+        default:
+            quizState.questions = [];
+    }
+
+    // Show play screen
+    document.getElementById('quizCategoryScreen').style.display = 'none';
+    document.getElementById('quizResultsScreen').style.display = 'none';
+    document.getElementById('quizPlayScreen').style.display = 'block';
+
+    document.getElementById('quizCategoryLabel').textContent = `🎯 ${cat.label}`;
+    
+    showQuestion();
+}
+
+// --- Show Question ---
+function showQuestion() {
+    const q = quizState.questions[quizState.currentIndex];
+    if (!q) {
+        showResults();
+        return;
+    }
+
+    quizState.isAnswered = false;
+    document.getElementById('quizNextBtnContainer').style.display = 'none';
+
+    // Update progress
+    document.getElementById('quizQuestionCount').textContent = 
+        `Question ${quizState.currentIndex + 1}/${quizState.questions.length}`;
+    document.getElementById('quizProgressFill').style.width = 
+        `${((quizState.currentIndex) / quizState.questions.length) * 100}%`;
+    document.getElementById('quizScoreDisplay').textContent = `⭐ ${quizState.score}`;
+
+    // Display question
+    document.getElementById('quizQuestionDisplay').textContent = q.question;
+
+    // Render options
+    const container = document.getElementById('quizOptionsContainer');
+    container.innerHTML = '';
+    
+    q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-option-btn';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => handleAnswer(btn, opt, q));
+        container.appendChild(btn);
+    });
+
+    // Start timer
+    startTimer();
+}
+
+// --- Handle Answer ---
+function handleAnswer(clickedBtn, selected, q) {
+    if (quizState.isAnswered) return;
+    quizState.isAnswered = true;
+    clearInterval(quizState.timer);
+
+    const isCorrect = selected === q.answer;
+    if (isCorrect) quizState.score++;
+
+    // Highlight all options
+    const allBtns = document.querySelectorAll('.quiz-option-btn');
+    allBtns.forEach(btn => {
+        btn.classList.add('disabled');
+        if (btn.textContent === q.answer) {
+            btn.classList.add('correct');
+        } else if (btn === clickedBtn && !isCorrect) {
+            btn.classList.add('wrong');
+        }
+    });
+
+    // Record answer
+    quizState.answers.push({
+        question: q.question,
+        correct: isCorrect,
+        userAnswer: selected,
+        correctAnswer: q.answer,
+        jp: q.jp,
+        en: q.en
+    });
+
+    document.getElementById('quizScoreDisplay').textContent = `⭐ ${quizState.score}`;
+    document.getElementById('quizNextBtnContainer').style.display = 'block';
+}
+
+// --- Timer ---
+function startTimer() {
+    clearInterval(quizState.timer);
+    quizState.timeLeft = QUIZ_CONFIG.timePerQuestion;
+    updateTimerDisplay();
+    
+    const timerEl = document.getElementById('quizTimer');
+    timerEl.className = 'quiz-timer';
+
+    quizState.timer = setInterval(() => {
+        quizState.timeLeft--;
+        updateTimerDisplay();
+
+        if (quizState.timeLeft <= 0) {
+            clearInterval(quizState.timer);
+            if (!quizState.isAnswered) {
+                // Auto-submit as wrong
+                const q = quizState.questions[quizState.currentIndex];
+                quizState.isAnswered = true;
+                
+                const allBtns = document.querySelectorAll('.quiz-option-btn');
+                allBtns.forEach(btn => {
+                    btn.classList.add('disabled');
+                    if (btn.textContent === q.answer) {
+                        btn.classList.add('correct');
+                    }
+                });
+
+                quizState.answers.push({
+                    question: q.question,
+                    correct: false,
+                    userAnswer: '(timeout)',
+                    correctAnswer: q.answer,
+                    jp: q.jp,
+                    en: q.en
+                });
+
+                document.getElementById('quizScoreDisplay').textContent = `⭐ ${quizState.score}`;
+                document.getElementById('quizNextBtnContainer').style.display = 'block';
+            }
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const timerEl = document.getElementById('quizTimer');
+    timerEl.textContent = `⏱ ${quizState.timeLeft}s`;
+    timerEl.className = 'quiz-timer';
+    if (quizState.timeLeft <= 3) {
+        timerEl.classList.add('danger');
+    } else if (quizState.timeLeft <= 5) {
+        timerEl.classList.add('warning');
+    }
+}
+
+// --- Next Question ---
+document.getElementById('quizNextBtn').addEventListener('click', () => {
+    quizState.currentIndex++;
+    if (quizState.currentIndex >= quizState.questions.length) {
+        showResults();
+    } else {
+        showQuestion();
+    }
+});
+
+// --- Show Results ---
+function showResults() {
+    clearInterval(quizState.timer);
+    document.getElementById('quizPlayScreen').style.display = 'none';
+    document.getElementById('quizResultsScreen').style.display = 'block';
+
+    const total = quizState.questions.length;
+    const correct = quizState.score;
+    const pct = Math.round((correct / total) * 100);
+
+    document.getElementById('quizFinalScore').textContent = `${correct}/${total}`;
+    
+    let msg = '';
+    if (pct >= 90) msg = '🎊 完璧 (Perfect)! You\'re a Japanese master!';
+    else if (pct >= 70) msg = '👏 すごい (Amazing)! Great knowledge!';
+    else if (pct >= 50) msg = '👍 いい感じ (Good job)! Keep studying!';
+    else if (pct >= 30) msg = '💪 がんばれ (Keep trying)! Practice makes perfect!';
+    else msg = '📚 Keep studying! Review the materials and try again!';
+    document.getElementById('quizResultMessage').textContent = msg;
+
+    // Render results list
+    const listEl = document.getElementById('quizResultsList');
+    listEl.innerHTML = '<h3 class="text-lg font-bold text-slate-700 dark:text-slate-200 mb-3">📝 Answer Review</h3>';
+    
+    quizState.answers.forEach((a, i) => {
+        const div = document.createElement('div');
+        div.className = `quiz-result-item ${a.correct ? 'correct' : 'wrong'}`;
+        div.innerHTML = `
+            <div class="q-status">${a.correct ? '✅' : '❌'}</div>
+            <div class="q-detail">
+                <div class="q-jp rainbow-text">${a.jp}</div>
+                <div class="q-en">${a.en}</div>
+                ${!a.correct ? `<div class="q-answer">Your answer: <span class="user-ans">${a.userAnswer}</span> · Correct: <span class="correct-ans">${a.correctAnswer}</span></div>` : ''}
+            </div>
+        `;
+        listEl.appendChild(div);
+    });
+}
+
+// --- Retry & Home Buttons ---
+document.getElementById('quizRetryBtn').addEventListener('click', () => {
+    if (quizState.category) {
+        startQuiz(quizState.category.id);
+    } else {
+        resetToCategoryScreen();
+    }
+});
+
+document.getElementById('quizHomeBtn').addEventListener('click', resetToCategoryScreen);
+
+function resetToCategoryScreen() {
+    clearInterval(quizState.timer);
+    document.getElementById('quizPlayScreen').style.display = 'none';
+    document.getElementById('quizResultsScreen').style.display = 'none';
+    document.getElementById('quizCategoryScreen').style.display = 'block';
+    quizState.category = null;
+    quizState.questions = [];
+    quizState.currentIndex = 0;
+    quizState.score = 0;
+    quizState.answers = [];
+}
+
+// --- Initialize Quiz ---
+renderQuizCategories();
 </script>
 
 </body>
 </html>
-
